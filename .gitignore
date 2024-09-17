@@ -24,3 +24,5 @@ data/blasttest
 
 GWyldbore*
 S4323577*
+
+snakemake_pipeline/*.fasta
