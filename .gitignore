@@ -1,6 +1,6 @@
-ProjectPlan
+non-code
 
-Assessments
+
 
 GRASP
 
@@ -22,7 +22,6 @@ data/realignment
 data/duplicatesremoved
 data/blasttest
 
-GWyldbore*
-S4323577*
+
 
 snakemake_pipeline/*.fasta
