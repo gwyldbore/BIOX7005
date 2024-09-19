@@ -55,7 +55,9 @@ def generate_mutations(inputfile, outputfile, positions=None, seed=42):
     Assumes inputfile is fasta of two aligned sequences, 
     first is origin and second is target.
     """
-    random.seed(seed)
+
+
+    random.seed(random.random())
 
     mutated_seqs = []
 
@@ -117,4 +119,5 @@ def generate_mutations(inputfile, outputfile, positions=None, seed=42):
 
 
 # generate_mutations('NR1_NR4_ancestors.fasta', 'testoutput.fasta')
-generate_mutations('NR1_NR4_ancestors.fasta', 'testoutput.fasta', [0,1,2,3,4])
+# generate_mutations('NR1_NR4_ancestors.fasta', 'testoutput.fasta', [0,1,2,3,4])
+generate_mutations(snakemake.input.fasta, snakemake.output.generated_sequences, [0,1,2])
