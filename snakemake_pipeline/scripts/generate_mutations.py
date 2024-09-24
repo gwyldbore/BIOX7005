@@ -49,6 +49,27 @@ def get_specified_mutations(seq1, seq2, positions):
     return pos_mutation
 
 
+def remove_gaps(sequence):
+    """
+    Removes gaps from a sequence and returns the ungapped sequence
+    """
+
+    ungapped = ''
+    for character in sequence.seq:
+        if character == '-':
+            continue
+        else:
+            ungapped += character
+
+    record = SeqRecord(
+        Seq(ungapped),
+        id=f"{sequence.id}",
+        description=''
+    )
+
+    return record
+
+
 
 def generate_mutations(inputfile, outputfile, positions=None, seed=42):
     """
@@ -82,16 +103,19 @@ def generate_mutations(inputfile, outputfile, positions=None, seed=42):
 
     
     # insert first (unmutated) sequence
-    record = SeqRecord(
+    first = SeqRecord(
         Seq(str(origin.seq)),
         id=f"{origin.id}_{target.id}_0",
         description=''
     )
+
+    # remove gaps
+    record = remove_gaps(first)
+
     # store sequence as a mutable for alteration
     mutableseq = MutableSeq(str(origin.seq))
 
     mutated_seqs.append(record)
-
 
     i = 1
     for pos, mutation in possible_mutations:
@@ -105,8 +129,11 @@ def generate_mutations(inputfile, outputfile, positions=None, seed=42):
             description=''
         )
 
+        record = remove_gaps(record)
+
         mutated_seqs.append(record) 
         i += 1
+    print(type(mutated_seqs[5]))
 
     # write all sequences to output file
     SeqIO.write(mutated_seqs, outputfile, 'fasta')
@@ -118,6 +145,6 @@ def generate_mutations(inputfile, outputfile, positions=None, seed=42):
 # outputfile = snakemake.output
 
 
-# generate_mutations('NR1_NR4_ancestors.fasta', 'testoutput.fasta')
+# generate_mutations('../data/NR1_NR4_ancestors.fasta', '../data/testoutput.fasta')
 # generate_mutations('NR1_NR4_ancestors.fasta', 'testoutput.fasta', [0,1,2,3,4])
 generate_mutations(snakemake.input.fasta, snakemake.output.generated_sequences, [0,1,2])
