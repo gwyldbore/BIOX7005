@@ -31,10 +31,10 @@ rule all:
         rep=range(1, NUM_REPLICATES + 1),
         ),
 
-        plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
-        dataset_name=ALL_DATASET_NAMES,
-        rep=range(1, NUM_REPLICATES + 1),
-        ),
+#         plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
+#         dataset_name=ALL_DATASET_NAMES,
+#         rep=range(1, NUM_REPLICATES + 1),
+#         ),
 
 
 #         generate_sequences = expand(
@@ -88,7 +88,7 @@ rule run_blast:
 rule merge_outputs:
     input:
         interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
-        embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+#         embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
         blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
 
     output:
