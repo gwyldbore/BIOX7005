@@ -133,7 +133,6 @@ def generate_mutations(inputfile, outputfile, positions=None, seed=42):
 
         mutated_seqs.append(record) 
         i += 1
-    print(type(mutated_seqs[5]))
 
     # write all sequences to output file
     SeqIO.write(mutated_seqs, outputfile, 'fasta')
