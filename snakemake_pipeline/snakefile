@@ -13,10 +13,10 @@ try:
 except KeyError:
     ALL_DATASET_NAMES = ['NR4_NR1_ancestors_unaligned']
 
-try:
-    INTERPROSCAN_DIR = config['interproscan_dir']
-except KeyError:
-    INTERPROSCAN_DIR = '/media/WorkingSpace/Share/interproscan/interproscan-5.65-97.0'
+# try:
+#     INTERPROSCAN_DIR = config['interproscan_dir']
+# except KeyError:
+#     INTERPROSCAN_DIR = '/media/WorkingSpace/Share/interproscan/interproscan-5.65-97.0'
 
 
 rule all:
@@ -82,8 +82,16 @@ rule run_blast:
         generated_sequences="workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
     output:
         blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
-    script:
-        "scripts/run_blast.py"
+    shell:
+    '''
+        blastp -db BLAST/NR_blastdb 
+        -query {input.generated_sequences} 
+        -out {output.blast_df}  
+        -evalue 1e-50 
+        -num_threads 4 
+        -max_target_seqs 10000 
+        -outfmt "7 qseqid salltitles"
+    '''
 
 rule merge_outputs:
     input:
