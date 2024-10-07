@@ -148,5 +148,6 @@ def generate_mutations(inputfile, outputfile, positions=None, seed=42):
 # generate_mutations('NR1_NR4_ancestors.fasta', 'testoutput.fasta', [0,1,2,3,4])
 generate_mutations(snakemake.input.fasta, snakemake.output.generated_sequences, [0,1,2])
 
+
 # this can take snakemake.wildcards.method_name as an extra input (make this the method type as a string)
 # put this into the generate_mutations signature and do an if else statement for how to get the list of positions
