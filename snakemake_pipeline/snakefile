@@ -83,15 +83,15 @@ rule run_blast:
     output:
         blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
     shell:
-    '''
+    """
         blastp -db BLAST/NR_blastdb 
         -query {input.generated_sequences} 
         -out {output.blast_df}  
         -evalue 1e-50 
         -num_threads 4 
         -max_target_seqs 10000 
-        -outfmt "7 qseqid salltitles"
-    '''
+        -outfmt '7 qseqid salltitles'
+    """
 
 rule merge_outputs:
     input:
