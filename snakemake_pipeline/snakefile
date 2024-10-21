@@ -79,7 +79,7 @@ rule run_interproscan:
         """
         {params.interproscan_dir}/interproscan.sh \
         -dp \
-        -i {input.generated_sequences} \
+        -i {input.generated_sequences_ungapped} \
         -appl Gene3D,PRINTS \
         -f tsv -o {output.interproscan_df}
         """
@@ -98,7 +98,7 @@ rule run_blast:
     output:
         blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
     shell:
-        "blastp -db ../BLAST/NR_blastdb -query {input.generated_sequences} -out {output.blast_df} -evalue 1e-50 -num_threads 4 -max_target_seqs 10000 -outfmt '7 qseqid salltitles'"
+        "blastp -db ../BLAST/NR_blastdb -query {input.generated_sequences_ungapped} -out {output.blast_df} -evalue 1e-50 -num_threads 4 -max_target_seqs 10000 -outfmt '7 qseqid salltitles'"
 
 # rule parse_blast:
 #     pass
