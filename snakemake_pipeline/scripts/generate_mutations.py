@@ -186,7 +186,7 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
 
 # generate_mutations('../data/NR1_NR4_ancestors.fasta', '../data/testoutput.fasta')
 # generate_mutations('NR1_NR4_ancestors.fasta', 'testoutput.fasta', [0,1,2,3,4])
-generate_mutations(snakemake.input.fasta, snakemake.output.generated_sequences)
+generate_mutations(snakemake.input.fasta, snakemake.output.generated_sequences, 'random')
 
 # generate_mutations(snakemake.input.fasta, snakemake.output.fasta, snakemake.wildcards.method_name)
 
