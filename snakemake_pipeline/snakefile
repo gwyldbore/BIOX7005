@@ -26,22 +26,22 @@ except KeyError:
     INTERPROSCAN_DIR = '/media/WorkingSpace/Share/interproscan/interproscan-5.65-97.0'
 
 
-# rule all:
-#     input:
-#         interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
-#         dataset_name=ALL_DATASET_NAMES,
-#         rep=range(1, NUM_REPLICATES + 1),
-#         ),
+rule all:
+    input:
+        interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
+        dataset_name=ALL_DATASET_NAMES,
+        rep=range(1, NUM_REPLICATES + 1),
+        ),
 
-#         merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
-#         dataset_name=ALL_DATASET_NAMES,
-#         rep=range(1, NUM_REPLICATES + 1),
-#         ),
+        merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
+        dataset_name=ALL_DATASET_NAMES,
+        rep=range(1, NUM_REPLICATES + 1),
+        ),
 
-#         plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
-#         dataset_name=ALL_DATASET_NAMES,
-#         rep=range(1, NUM_REPLICATES + 1),
-#         ),
+        plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
+        dataset_name=ALL_DATASET_NAMES,
+        rep=range(1, NUM_REPLICATES + 1),
+        ),
 
 
 #         generate_sequences = expand(
