@@ -31,17 +31,17 @@ rule all:
         interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
         dataset_name=ALL_DATASET_NAMES,
         rep=range(1, NUM_REPLICATES + 1),
-        ),
+        )
 
-        merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
-        dataset_name=ALL_DATASET_NAMES,
-        rep=range(1, NUM_REPLICATES + 1),
-        ),
+        # merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
+        # dataset_name=ALL_DATASET_NAMES,
+        # rep=range(1, NUM_REPLICATES + 1),
+        # ),
 
-        plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
-        dataset_name=ALL_DATASET_NAMES,
-        rep=range(1, NUM_REPLICATES + 1),
-        ),
+        # plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
+        # dataset_name=ALL_DATASET_NAMES,
+        # rep=range(1, NUM_REPLICATES + 1),
+        # ),
 
 
 #         generate_sequences = expand(
@@ -60,21 +60,21 @@ rule generate_mutations:
         "scripts/generate_mutations.py"
 
 
-# rule run_interproscan:
-#     input:
-#         generated_sequences="workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta"
-#     output:
-#         interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv"
-#     params:
-#         interproscan_dir=INTERPROSCAN_DIR
-#     shell:
-#         """
-#         {params.interproscan_dir}/interproscan.sh \
-#         -dp \
-#         -i {input.generated_sequences} \
-#         -appl Gene3D,PRINTS \
-#         -f tsv -o {output.interproscan_df}
-#         """
+rule run_interproscan:
+    input:
+        generated_sequences="workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta"
+    output:
+        interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv"
+    params:
+        interproscan_dir=INTERPROSCAN_DIR
+    shell:
+        """
+        {params.interproscan_dir}/interproscan.sh \
+        -dp \
+        -i {input.generated_sequences} \
+        -appl Gene3D,PRINTS \
+        -f tsv -o {output.interproscan_df}
+        """
 
 # rule generate_embeddings:
 #     input:
