@@ -150,8 +150,8 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
     )
 
     # remove gaps
-    # record = remove_gaps(first)
-    record = first
+    record = remove_gaps(first)
+    # record = first
 
     # store sequence as a mutable for alteration
     mutableseq = MutableSeq(str(origin.seq))
@@ -170,7 +170,7 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
             description=''
         )
 
-        # record = remove_gaps(record)
+        record = remove_gaps(record)
 
         mutated_seqs.append(record) 
         i += 1
