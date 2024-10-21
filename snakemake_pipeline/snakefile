@@ -31,7 +31,7 @@ rule all:
         interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
         dataset_name=ALL_DATASET_NAMES,
         rep=range(1, NUM_REPLICATES + 1),
-        )
+        ),
 
         merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
         dataset_name=ALL_DATASET_NAMES,
