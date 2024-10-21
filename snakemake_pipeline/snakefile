@@ -96,12 +96,17 @@ rule run_blast:
     input:
         generated_sequences_ungapped="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
     output:
-        blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
+        blast_out="workflows/{dataset_name}/blast/{dataset_name}_{rep}.tsv",
     shell:
-        "blastp -db ../BLAST/NR_blastdb -query {input.generated_sequences_ungapped} -out {output.blast_df} -evalue 1e-50 -num_threads 4 -max_target_seqs 10000 -outfmt '7 qseqid salltitles'"
+        "blastp -db ../BLAST/NR_blastdb -query {input.generated_sequences_ungapped} -out {output.blast_out} -evalue 1e-50 -num_threads 4 -max_target_seqs 10000 -outfmt '7 qseqid salltitles'"
 
-# rule parse_blast:
-#     pass
+rule parse_blast:
+        input:
+        generated_sequences_ungapped="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
+    output:
+        blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
+    script:
+        "scripts/parse_blast.py"
 
 rule merge_outputs:
     input:
