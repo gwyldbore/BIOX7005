@@ -47,3 +47,6 @@ snakemake_pipeline/*.fasta
 snakemake_pipeline/notebooks
 snakemake_pipeline/workflows
 snakemake_pipeline/data/ancestor_embedding_df.csv
+
+snakemake_pipeline/BLAST/NRs_IPR_NCBI.fasta
+snakemake_pipeline/BLAST/identical_protein_group_NRs.fasta
