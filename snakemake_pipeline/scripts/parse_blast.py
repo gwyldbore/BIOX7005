@@ -20,7 +20,7 @@ def parse_results(filename):
 
 
 def main():
-    fasta = snakemake.input.generated_sequences
+    fasta = snakemake.input.generated_sequences_ungapped
     output_df = snakemake.output.blast_df
 
     seq_df = seq_utils.get_sequence_df(fasta)
