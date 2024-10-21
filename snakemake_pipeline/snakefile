@@ -18,7 +18,7 @@ try:
     ALL_DATASET_NAMES = config['all_dataset_names']
 except KeyError:
     # ALL_DATASET_NAMES = ['NR4_NR1_ancestors_unaligned']
-    ALL_DATASET_NAMES = ['NR_MSA_cd07_N6_N81.fasta']
+    ALL_DATASET_NAMES = ['NR_MSA_cd07_N6_N81']
 
 try:
     INTERPROSCAN_DIR = config['interproscan_dir']
