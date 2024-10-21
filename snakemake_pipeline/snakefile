@@ -33,15 +33,15 @@ rule all:
         rep=range(1, NUM_REPLICATES + 1),
         )
 
-        # merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
-        # dataset_name=ALL_DATASET_NAMES,
-        # rep=range(1, NUM_REPLICATES + 1),
-        # ),
+        merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
+        dataset_name=ALL_DATASET_NAMES,
+        rep=range(1, NUM_REPLICATES + 1),
+        ),
 
-        # plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
-        # dataset_name=ALL_DATASET_NAMES,
-        # rep=range(1, NUM_REPLICATES + 1),
-        # ),
+        plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
+        dataset_name=ALL_DATASET_NAMES,
+        rep=range(1, NUM_REPLICATES + 1),
+        ),
 
 
 #         generate_sequences = expand(
@@ -76,13 +76,13 @@ rule run_interproscan:
         -f tsv -o {output.interproscan_df}
         """
 
-# rule generate_embeddings:
-#     input:
-#         generated_sequences="workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
-#     output:
-#         embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
-#     script:
-#         "scripts/generate_embeddings.py"
+rule generate_embeddings:
+    input:
+        generated_sequences="workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
+    output:
+        embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+    script:
+        "scripts/generate_embeddings.py"
 
 rule run_blast:
     input:
@@ -95,21 +95,21 @@ rule run_blast:
 # rule parse_blast:
 #     pass
 
-# rule merge_outputs:
-#     input:
-#         interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
-#         embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
-#         blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
+rule merge_outputs:
+    input:
+        interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
+        embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+        blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
 
-#     output:
-#         merged_df="workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
-#     script:
-#         "scripts/merge_outputs.py"
+    output:
+        merged_df="workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
+    script:
+        "scripts/merge_outputs.py"
 
-# rule plot_pca:
-#     input:
-#         embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
-#     output:
-#         plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
-#     script:
-#         "scripts/plot_pca.py"
+rule plot_pca:
+    input:
+        embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+    output:
+        plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
+    script:
+        "scripts/plot_pca.py"
