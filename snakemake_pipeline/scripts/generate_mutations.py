@@ -72,7 +72,7 @@ def remove_gaps(sequence):
 def remove_common_gaps(seq1, seq2):
     """Removes gaps which are common to both sequences, preserving alignment."""
 
-    seq1_out, seq2_out = ''
+    seq1_out, seq2_out = '', ''
 
     for i, character in enumerate(seq1.seq):
         if character == '-' and seq2.seq[i] == '-':
