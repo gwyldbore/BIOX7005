@@ -69,6 +69,32 @@ def remove_gaps(sequence):
 
     return record
 
+def remove_common_gaps(seq1, seq2):
+    """Removes gaps which are common to both sequences, preserving alignment."""
+
+    seq1_out, seq2_out = ''
+
+    for i, character in enumerate(seq1.seq):
+        if character == '-' and seq2.seq[i] == '-':
+            continue
+        else:
+            seq1_out += character
+            seq2_out += seq2.seq[i]
+
+    seqrec1 = SeqRecord(
+        Seq(seq1_out),
+        id=f"{seq1.id}",
+        description='')
+    
+    seqrec2 = SeqRecord(
+        Seq(seq2_out),
+        id=f"{seq2.id}",
+        description='')
+    
+    return seqrec1, seqrec2
+
+
+
 
 def get_nonconservative_mutations(seq1, seq2):
     """
@@ -116,6 +142,11 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
 
     if len(origin.seq) != len(target.seq):
         raise ValueError("These sequences are not aligned")
+    
+
+    # remove the gaps that are common (i.e. gaps in both sequences)
+    origin, target = remove_common_gaps(origin, target)
+
 
 
     # get the possible mutations for the specified method
@@ -150,8 +181,8 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
     )
 
     # remove gaps
-    record = remove_gaps(first)
-    # record = first
+    # record = remove_gaps(first)
+    record = first
 
     # store sequence as a mutable for alteration
     mutableseq = MutableSeq(str(origin.seq))
@@ -170,7 +201,7 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
             description=''
         )
 
-        record = remove_gaps(record)
+        # record = remove_gaps(record)
 
         mutated_seqs.append(record) 
         i += 1

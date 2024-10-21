@@ -55,14 +55,22 @@ rule generate_mutations:
     input:
         fasta=DATASET_PATH + "/{dataset_name}.fasta"
     output:
-        generated_sequences="workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
+        generated_sequences="workflows/{dataset_name}/fasta/gapped/{dataset_name}_{rep}.fasta",
     script:
         "scripts/generate_mutations.py"
+
+rule remove_gaps:
+    input:
+        generated_sequences="workflows/{dataset_name}/fasta/gapped/{dataset_name}_{rep}.fasta"
+    output:
+        generated_sequences_ungapped="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta"
+    script:
+        "scripts/remove_gaps.py"
 
 
 rule run_interproscan:
     input:
-        generated_sequences="workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta"
+        generated_sequences_ungapped="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta"
     output:
         interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv"
     params:
@@ -78,7 +86,7 @@ rule run_interproscan:
 
 rule generate_embeddings:
     input:
-        generated_sequences="workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
+        generated_sequences="workflows/{dataset_name}/fasta/gapped/{dataset_name}_{rep}.fasta",
     output:
         embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
     script:
@@ -86,7 +94,7 @@ rule generate_embeddings:
 
 rule run_blast:
     input:
-        generated_sequences="workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
+        generated_sequences_ungapped="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
     output:
         blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
     shell:
