@@ -70,8 +70,36 @@ def remove_gaps(sequence):
     return record
 
 
+def get_nonconservative_mutations(seq1, seq2):
+    """
+    Get mutations along the whole sequence only if the mutation causes
+    the amino acide to change types, e.g. basic to acidic etc. 
+    """
+    AMINO_TYPES = {'A':'aliphatic', 'G':'aliphatic', 'I':'aliphatic', 
+                   'L':'aliphatic', 'P':'aliphatic', 'V':'aliphatic', 
+                   'F':'aromatic', 'W':'aromatic', 'Y':'aromatic', 
+                   'R':'basic', 'H':'basic', 'K':'basic', 
+                   'D':'acidic', 'E':'acidic', 'S':'', 
+                   'T':'polar', 'C':'polar', 'M':'polar', 
+                   'N':'polar', 'Q':'polar'}
 
-def generate_mutations(inputfile, outputfile, positions=None, seed=42):
+    pos_mutation = []
+
+    for i, seq1_char in enumerate(seq1.seq):
+        seq2_char = seq2.seq[i]
+
+        char1_type = AMINO_TYPES[seq1_char]
+        char2_type = AMINO_TYPES[seq2_char]
+
+        if char1_type != char2_type:
+            pos_mutation.append((i, seq2_char))
+
+    return pos_mutation
+
+
+
+
+def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=42):
     """
     Assumes inputfile is fasta of two aligned sequences, 
     first is origin and second is target.
@@ -90,11 +118,23 @@ def generate_mutations(inputfile, outputfile, positions=None, seed=42):
         raise ValueError("These sequences are not aligned")
 
 
-    # calculate allowed characters to mutate to
-    if positions is None:
+    # get the possible mutations for the specified method
+    if method_type == 'random':
         possible_mutations = calculate_differences(origin, target)
-    else:
+
+    elif method_type == 'specified':
+        if positions is None:
+            raise ValueError("positions were not specified")
         possible_mutations = get_specified_mutations(origin, target, positions)
+
+    elif method_type == 'nonconservative':
+        possible_mutations = get_nonconservative_mutations(origin, target)
+
+    # # calculate allowed characters to mutate to
+    # if positions is None:
+    #     possible_mutations = calculate_differences(origin, target)
+    # else:
+    #     possible_mutations = get_specified_mutations(origin, target, positions)
 
 
 
@@ -146,8 +186,9 @@ def generate_mutations(inputfile, outputfile, positions=None, seed=42):
 
 # generate_mutations('../data/NR1_NR4_ancestors.fasta', '../data/testoutput.fasta')
 # generate_mutations('NR1_NR4_ancestors.fasta', 'testoutput.fasta', [0,1,2,3,4])
-generate_mutations(snakemake.input.fasta, snakemake.output.generated_sequences, [0,1,2])
+generate_mutations(snakemake.input.fasta, snakemake.output.generated_sequences)
 
+# generate_mutations(snakemake.input.fasta, snakemake.output.fasta, snakemake.wildcards.method_name)
 
 # this can take snakemake.wildcards.method_name as an extra input (make this the method type as a string)
 # put this into the generate_mutations signature and do an if else statement for how to get the list of positions
