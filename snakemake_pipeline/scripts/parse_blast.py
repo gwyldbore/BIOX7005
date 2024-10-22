@@ -1,9 +1,11 @@
 import random
 import seq_utils
 
-def dummy_blast_results(seq_df, output_df):
+def dummy_blast_results(seq_df, output_df, blast_results):
     # Randomly assign either 'dummy_NR1' or 'dummy_NR4' to each sequence
-    seq_df['blast_results'] = [random.choice(['dummy_NR1', 'dummy_NR4']) for _ in range(len(seq_df))]
+    # seq_df['blast_results'] = [random.choice(['dummy_NR1', 'dummy_NR4']) for _ in range(len(seq_df))]
+
+    seq_df['blast_results'] = seq_df['info'].map(blast_results)
 
     seq_df.to_csv(output_df, index=False)
 
@@ -67,6 +69,18 @@ def parse_results(filename):
                         results[seq_id]['Other'] += 1
 
 
+    final_mapping = {}
+    for seq_id in results.keys():
+        most_frequent = ''
+        frequency = -1
+        for subfamily in results[seq_id].keys():
+            if results[seq_id][subfamily] > frequency:
+                most_frequent = subfamily
+        final_mapping[seq_id] = most_frequent
+
+    return final_mapping
+
+
 
 
 
@@ -78,7 +92,9 @@ def main():
 
     seq_df = seq_utils.get_sequence_df(fasta)
 
-    dummy_blast_results(seq_df, output_df)
+    result_map = parse_results(blast_results)
+
+    dummy_blast_results(seq_df, output_df, result_map)
 
 
 if __name__ == "__main__":
