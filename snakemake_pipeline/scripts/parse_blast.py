@@ -65,10 +65,10 @@ def parse_results(filename):
                         results[seq_id][USUAL_BLAST_OUTPUTS[key]] += 1
                         # continue
                         break
-                    else:
-                        # if not one of the found matches, assume its other
-                        results[seq_id]['Other'] += 1
-                        # print(f'fields on unmatched: {match_info}')
+                    # else:
+                    #     # if not one of the found matches, assume its other
+                    #     results[seq_id]['Other'] += 1
+                    #     # print(f'fields on unmatched: {match_info}')
 
     print(f'initial results: {results}')
     print()
