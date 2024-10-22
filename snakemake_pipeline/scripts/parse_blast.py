@@ -64,11 +64,11 @@ def parse_results(filename):
                         # increment the appropriate family in results 
                         results[seq_id][USUAL_BLAST_OUTPUTS[key]] += 1
                         continue
-                    # else:
-                    #     # if not one of the found matches, assume its other
-                    #     results[seq_id]['Other'] += 1
+                    else:
+                        # if not one of the found matches, assume its other
+                        results[seq_id]['Other'] += 1
 
-    print(f'initial results: {results}')
+    # print(f'initial results: {results}')
 
 
     final_mapping = {}
@@ -81,7 +81,7 @@ def parse_results(filename):
                 frequency = results[seq_id][subfamily]
         final_mapping[seq_id] = most_frequent
 
-    print(f'final mapping: {final_mapping}')
+    # print(f'final mapping: {final_mapping}')
 
     return final_mapping
 
