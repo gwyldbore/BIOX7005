@@ -64,9 +64,11 @@ def parse_results(filename):
                         # increment the appropriate family in results 
                         results[seq_id][USUAL_BLAST_OUTPUTS[key]] += 1
                         continue
-                    else:
-                        # if not one of the found matches, assume its other
-                        results[seq_id]['Other'] += 1
+                    # else:
+                    #     # if not one of the found matches, assume its other
+                    #     results[seq_id]['Other'] += 1
+
+    print(f'initial results: {results}')
 
 
     final_mapping = {}
