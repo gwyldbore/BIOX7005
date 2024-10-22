@@ -46,7 +46,7 @@ def parse_results(filename):
             elif line.startswith('#') or line == '\n' or line.startswith('Fields') or line.startswith('Processing'):
                 continue
             
-            # otherwise ilne contains results
+            # otherwise line contains results
             else:
                 # line is split by tabs
                 fields = line.split('\t')
@@ -62,6 +62,9 @@ def parse_results(filename):
                         # increment the appropriate family in results 
                         results[seq_id][USUAL_BLAST_OUTPUTS[key]] += 1
                         continue
+                    else:
+                        # if not one of the found matches, assume its other
+                        results[seq_id]['Other'] += 1
 
 
 
