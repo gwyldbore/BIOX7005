@@ -78,6 +78,7 @@ def parse_results(filename):
         for subfamily in results[seq_id].keys():
             if results[seq_id][subfamily] > frequency:
                 most_frequent = subfamily
+                frequency = results[seq_id][subfamily]
         final_mapping[seq_id] = most_frequent
 
     print(f'final mapping: {final_mapping}')
