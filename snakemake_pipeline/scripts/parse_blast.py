@@ -59,7 +59,6 @@ def parse_results(filename):
 
                 # check through the common outputs
                 for key in USUAL_BLAST_OUTPUTS.keys():
-                    print(f'key: {key}')
                     # if output found in result
                     if key in match_info:
                         # increment the appropriate family in results 
