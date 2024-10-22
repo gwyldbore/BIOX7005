@@ -14,15 +14,7 @@ def parse_results(filename):
 
     results = {}
 
-    USUAL_BLAST_OUTPUTS = {'probable nuclear hormone receptor': 'Other',
-                           'nuclear receptor related 1': 'Other',
-                           'nuclear receptor isoform x1': 'Other',
-                           'nuclear hormone receptor e75': 'Other',
-                           'nuclear receptor of the nerve growth': 'Other',
-                           'ligand-binding domain': 'Other',
-                           'subfamily 2': 'Other',
-
-                           'subfamily 4': 'NR4',
+    USUAL_BLAST_OUTPUTS = {'subfamily 4': 'NR4',
                            'sub 4': 'NR4', '4 ': 'NR4',
                            'hr38': 'NR4', ' 38 ': 'NR4',
                            'hzf-3': 'NR4', 'nurr1': 'NR4',
@@ -32,6 +24,14 @@ def parse_results(filename):
                            'subfamily 1': 'NR1', 
                            'retinoic acid receptor': 'NR1',
                            'oxysterol': 'NR1', 'LXR': 'NR1',
+
+                           'probable nuclear hormone receptor': 'Other',
+                           'nuclear receptor related 1': 'Other',
+                           'nuclear receptor isoform x1': 'Other',
+                           'nuclear hormone receptor e75': 'Other',
+                           'nuclear receptor of the nerve growth': 'Other',
+                           'ligand-binding domain': 'Other',
+                           'subfamily 2': 'Other'
                            }
 
     with open(filename) as file:
