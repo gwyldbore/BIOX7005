@@ -29,15 +29,15 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
 
     plt.figure(figsize=(20, 14))
 
-    # # Plot all points in gray first to show entries with no clade
-    # no_clade_df = all_embeddings_df[all_embeddings_df['Clade'].isna()]
-    # # probably a way to set colour=blue to be a gradient??
-    # plt.scatter(no_clade_df['pca1'], no_clade_df['pca2'], color='blue', alpha=0.5, label='No Clade')
+    # Plot all points in gray first to show entries with no clade
+    no_clade_df = all_embeddings_df[all_embeddings_df['Clade'].isna()]
+    # probably a way to set colour=blue to be a gradient??
+    plt.scatter(no_clade_df['pca1'], no_clade_df['pca2'], color='blue', alpha=0.5, label='No Clade')
 
-    # # Plot points with clades in different colors
-    # for clade, color in zip(clades_with_color, colors):
-    #     subset = all_embeddings_df[all_embeddings_df['Clade'] == clade]
-    #     plt.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
+    # Plot points with clades in different colors
+    for clade, color in zip(clades_with_color, colors):
+        subset = all_embeddings_df[all_embeddings_df['Clade'] == clade]
+        plt.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
 
 
 
@@ -48,7 +48,8 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     #     plt.scatter(mutated_subset['pca1'], mutated_subset['pca2'], c=mutated_subset['num_mutation'], cmap='Blues')
 
     mutation_df = all_embeddings_df.dropna(subset=['num_mutation'])
-    plt.scatter(mutation_df['pca1'], mutation_df['pca2'],label=mutation_df['num_mutation'], c=[int(x) for x in mutation_df['num_mutation']], cmap='Blues')
+    plt.scatter(mutation_df['pca1'], mutation_df['pca2'],label=mutation_df['num_mutation'], 
+                c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
 
     # Set plot titles and labels
     plt.title("PCA by Clade")
@@ -64,7 +65,7 @@ def main():
         embedding_df = pickle.load(input_file)
 
     nodes_to_label = embedding_df['info'].values
-    print('Nodes to label:', nodes_to_label)
+    # print('Nodes to label:', nodes_to_label)
 
     # Load previously calculated ancestor embeddings
     with open("./data/ancestor_embedding_df.csv", "rb") as input_file:
