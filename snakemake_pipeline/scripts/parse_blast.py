@@ -67,7 +67,7 @@ def parse_results(filename):
                     else:
                         # if not one of the found matches, assume its other
                         results[seq_id]['Other'] += 1
-                        print(f'fields on unmatched: {fields}')
+                        print(f'fields on unmatched: {match_info}')
 
     print(f'initial results: {results}')
 
