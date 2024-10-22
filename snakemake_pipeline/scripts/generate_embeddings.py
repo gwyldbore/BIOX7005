@@ -81,7 +81,7 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
             print(f"Failed to process sequence {sequence} with error: {e}")
 
     # add the no of mutations to sequence to dataframe
-    sequence_name_info = embedding_df['info'].split('_')
+    sequence_name_info = str(embedding_df['info']).split('_')
     sequence_no = sequence_name_info[-1]
     embedding_df['num_mutation'] = sequence_no
 
