@@ -80,6 +80,11 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
         except Exception as e:
             print(f"Failed to process sequence {sequence} with error: {e}")
 
+    # add the no of mutations to sequence to dataframe
+    sequence_name_info = embedding_df['info'].split('_')
+    sequence_no = sequence_name_info[-1]
+    embedding_df['num_mutation'] = sequence_no
+
     # Save embedding_df with full embeddings
     embedding_df.to_pickle(embedding_df_path)
     merged_df = pd.merge(df, embedding_df, on=['info', 'sequence'], how='left')

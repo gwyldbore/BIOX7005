@@ -31,12 +31,18 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
 
     # Plot all points in gray first to show entries with no clade
     no_clade_df = all_embeddings_df[all_embeddings_df['Clade'].isna()]
+    # probably a way to set colour=blue to be a gradient??
     plt.scatter(no_clade_df['pca1'], no_clade_df['pca2'], color='blue', alpha=0.5, label='No Clade')
 
     # Plot points with clades in different colors
     for clade, color in zip(clades_with_color, colors):
         subset = all_embeddings_df[all_embeddings_df['Clade'] == clade]
         plt.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
+
+    sequence_no_for_colour = all_embeddings_df['num_mutation'].dropna().unique()
+    for seq_no in sequence_no_for_colour:
+        mutated_subset = all_embeddings_df[all_embeddings_df['num_mutation'] == seq_no]
+        plt.scatter(mutated_subset['pca1'], mutated_subset['pca2'], label=seq_no, cmap='plasma')
 
     # Set plot titles and labels
     plt.title("PCA by Clade")

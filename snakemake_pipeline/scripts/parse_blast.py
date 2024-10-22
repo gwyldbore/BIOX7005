@@ -34,7 +34,7 @@ def parse_results(filename):
 
     with open(filename) as file:
         for line in file:
-            if line.startswith('# Query'):
+            if line.startswith('# Query'): # identifying which sequence
 
                 # get the sequence id from the query line
                 seq_id = line.split()[2]
