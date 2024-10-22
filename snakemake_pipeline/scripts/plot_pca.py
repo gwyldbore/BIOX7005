@@ -39,10 +39,16 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     #     subset = all_embeddings_df[all_embeddings_df['Clade'] == clade]
     #     plt.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
 
-    sequence_no_for_colour = all_embeddings_df['num_mutation'].dropna().unique()
-    for seq_no in sequence_no_for_colour:
-        mutated_subset = all_embeddings_df[all_embeddings_df['num_mutation'] == seq_no]
-        plt.scatter(mutated_subset['pca1'], mutated_subset['pca2'], c=mutated_subset['num_mutation'], cmap='Blues')
+
+
+    # sequence_no_for_colour = all_embeddings_df['num_mutation'].dropna().unique()
+    
+    # for seq_no in sequence_no_for_colour:
+    #     mutated_subset = all_embeddings_df[all_embeddings_df['num_mutation'] == seq_no]
+    #     plt.scatter(mutated_subset['pca1'], mutated_subset['pca2'], c=mutated_subset['num_mutation'], cmap='Blues')
+
+    mutation_df = all_embeddings_df.dropna(subset=['num_mutation'])
+    plt.scatter(mutation_df['pca1'], mutation_df['pca2'], c=mutation_df['num_mutation'], cmap='plasma')
 
     # Set plot titles and labels
     plt.title("PCA by Clade")

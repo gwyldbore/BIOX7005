@@ -67,8 +67,9 @@ def parse_results(filename):
                     else:
                         # if not one of the found matches, assume its other
                         results[seq_id]['Other'] += 1
+                        print(f'fields on unmatched: {fields}')
 
-    # print(f'initial results: {results}')
+    print(f'initial results: {results}')
 
 
     final_mapping = {}
