@@ -21,12 +21,14 @@ def parse_results(filename):
                            'nuclear receptor of the nerve growth': 'Other',
                            'ligand-binding domain': 'Other',
                            'subfamily 2': 'Other',
+
                            'subfamily 4': 'NR4',
                            'sub 4': 'NR4', '4 ': 'NR4',
                            'hr38': 'NR4', ' 38 ': 'NR4',
                            'hzf-3': 'NR4', 'nurr1': 'NR4',
                            'nur77': 'NR4', 'nr4': 'NR4',
                            'nor1': 'NR4', 
+
                            'subfamily 1': 'NR1', 
                            'retinoic acid receptor': 'NR1',
                            'oxysterol': 'NR1', 'LXR': 'NR1',
@@ -62,7 +64,8 @@ def parse_results(filename):
                     if key in match_info:
                         # increment the appropriate family in results 
                         results[seq_id][USUAL_BLAST_OUTPUTS[key]] += 1
-                        continue
+                        # continue
+                        break
                     else:
                         # if not one of the found matches, assume its other
                         results[seq_id]['Other'] += 1
