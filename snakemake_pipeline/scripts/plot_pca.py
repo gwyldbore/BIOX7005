@@ -42,7 +42,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     sequence_no_for_colour = all_embeddings_df['num_mutation'].dropna().unique()
     for seq_no in sequence_no_for_colour:
         mutated_subset = all_embeddings_df[all_embeddings_df['num_mutation'] == seq_no]
-        plt.scatter(mutated_subset['pca1'], mutated_subset['pca2'], c=all_embeddings_df['num_mutation'], cmap='Blues')
+        plt.scatter(mutated_subset['pca1'], mutated_subset['pca2'], c=sequence_no_for_colour, cmap='Blues')
 
     # Set plot titles and labels
     plt.title("PCA by Clade")

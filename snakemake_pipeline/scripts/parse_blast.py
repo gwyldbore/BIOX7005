@@ -78,6 +78,8 @@ def parse_results(filename):
                 most_frequent = subfamily
         final_mapping[seq_id] = most_frequent
 
+    print(f'final mapping: {final_mapping}')
+
     return final_mapping
 
 
