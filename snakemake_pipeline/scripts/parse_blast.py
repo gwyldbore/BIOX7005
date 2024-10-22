@@ -70,6 +70,7 @@ def parse_results(filename):
                         print(f'fields on unmatched: {match_info}')
 
     print(f'initial results: {results}')
+    print()
 
 
     final_mapping = {}
@@ -82,7 +83,7 @@ def parse_results(filename):
                 frequency = results[seq_id][subfamily]
         final_mapping[seq_id] = most_frequent
 
-    # print(f'final mapping: {final_mapping}')
+    print(f'final mapping: {final_mapping}')
 
     return final_mapping
 
