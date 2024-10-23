@@ -70,8 +70,8 @@ def parse_results(filename):
                     #     results[seq_id]['Other'] += 1
                     #     # print(f'fields on unmatched: {match_info}')
 
-    print(f'initial results: {results}')
-    print()
+    # print(f'initial results: {results}')
+    # print()
 
 
     final_mapping = {}
@@ -84,7 +84,7 @@ def parse_results(filename):
                 frequency = results[seq_id][subfamily]
         final_mapping[seq_id] = most_frequent
 
-    print(f'final mapping: {final_mapping}')
+    # print(f'final mapping: {final_mapping}')
 
     return final_mapping
 
@@ -102,6 +102,8 @@ def main():
 
     result_map = parse_results(blast_results)
 
+    # these aren't actually dummy results anymore
+    # but we love a legacy name
     dummy_blast_results(seq_df, output_df, result_map)
 
 

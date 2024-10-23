@@ -45,6 +45,18 @@ def parse_seq_info(info):
     return mutation_no
 
 
+def load_mutation_positions(filepath):
+
+    with open(filepath, 'r') as file:
+        all_mutations = []
+        i = 0
+        for line in file:
+            line_array = line.split(',')
+            all_mutations.append(line_array)
+
+    return all_mutations
+
+
 def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
 
     model = AutoModel.from_pretrained(model_name, output_hidden_states=True)
@@ -89,6 +101,10 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
 
     # add the no of mutations to sequence to dataframe
     embedding_df['num_mutation'] = embedding_df['info'].apply(parse_seq_info)
+
+    # also add the mutation position list
+    # because why not while we're updating the dataframe in one place
+
 
     # Save embedding_df with full embeddings
     embedding_df.to_pickle(embedding_df_path)

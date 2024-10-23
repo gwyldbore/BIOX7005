@@ -21,6 +21,31 @@ def load_interproscan_df(path):
     return interpro_df
 
 
+
+def load_mutation_positions(filepath):
+
+    with open(filepath, 'r') as file:
+        all_mutations = []
+        i = 0
+        for line in file:
+            line_array = line.split(',')
+            all_mutations.append(line_array)
+
+    return all_mutations
+
+def get_mutation_positions(mutation_list, index):
+    return mutation_list[index]
+
+
+def parse_seq_info(info):
+    split_info = info.split('_')
+    mutation_no = split_info[-1]
+
+    return mutation_no
+
+
+
+
 def main():
     # Load the dataframes
     blast_df = pd.read_csv(snakemake.input.blast_df)
@@ -43,6 +68,16 @@ def main():
 
     final_df['has_subfamily_4'] = final_df['PRINTS'].str.contains('subfamily 4', na=False)
     final_df['has_subfamily_1'] = final_df['PRINTS'].str.contains('subfamily 1', na=False)
+
+    # add the no of mutations to sequence to dataframe
+    final_df['num_mutation'] = final_df['info'].apply(parse_seq_info)
+
+    # also add the mutation position list
+    mutation_positions = load_mutation_positions(snakemake.input.mutationfile)
+    # because why not while we're updating the dataframe in one place
+    final_df['mutated_positions'] = final_df['num_mutation'].apply(
+        lambda x: get_mutation_positions(mutation_positions, x)
+    )
 
     # Save the merged dataframe
     final_df.to_csv(snakemake.output.merged_df, index=False)
