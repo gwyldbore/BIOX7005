@@ -90,7 +90,9 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
 
 
 def main():
-    df = seq_utils.get_sequence_df(snakemake.input.generated_sequences_padded, alignment=True)
+    # df = seq_utils.get_sequence_df(snakemake.input.generated_sequences_padded, alignment=True)
+    df = seq_utils.get_sequence_df(snakemake.input.generated_sequences_padded)
+
 
     # Set model name and output paths
     bert_model_name = "yarongef/DistilProtBert"
