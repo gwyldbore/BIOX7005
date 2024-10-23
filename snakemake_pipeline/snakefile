@@ -94,7 +94,7 @@ rule run_interproscan:
 
 rule generate_embeddings:
     input:
-        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
+        generated_sequences_padded="workflows/{dataset_name}/fasta/padded/{dataset_name}_{rep}.fasta",
     output:
         embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
     script:
