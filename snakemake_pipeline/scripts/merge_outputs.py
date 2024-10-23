@@ -28,9 +28,12 @@ def load_mutation_positions(filepath):
         all_mutations = []
         for line in file:
             line = line.strip()
-            line_array = line.split(',')
-            line_array = [int(pos) for pos in line_array]
-            all_mutations.append(line_array)
+            if line == '':
+                all_mutations.append([])
+            else:
+                line_array = line.split(',')
+                line_array = [int(pos) for pos in line_array]
+                all_mutations.append(line_array)
             # all_mutations.append(line.split(','))
 
     return all_mutations
