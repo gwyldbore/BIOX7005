@@ -30,6 +30,7 @@ def get_sequence_df(
 
     print('reached here')
     for fasta_path in fasta_paths:
+        print('then also reached here')
         # Load FASTA file
         # seqs = sequence.readFastaFile(fasta_path, alpha)
 
