@@ -43,8 +43,10 @@ def get_sequence_df(
             print('or the else line')
             seqs = SeqIO.parse(open(fasta_path), format="fasta")
 
+        print('so then entering seq in seqs loop')
         # Add to annotation file
         for seq in seqs:
+            print('inside loop')
             if alignment == False:
                 if seq.name in duplicates:
                     print(
