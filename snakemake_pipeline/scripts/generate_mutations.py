@@ -220,7 +220,6 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
         
         # write the cumulative sequences to the tracking file
         # with open(mutation_position_output, 'w') as mutationfile:
-        print(f'writing {cumulative_positions} to file')
         toprint = ','.join(str(pos) for pos in cumulative_positions)
         mutationfile.write(toprint)
             
