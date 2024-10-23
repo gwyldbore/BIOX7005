@@ -94,7 +94,7 @@ def parse_results(filename):
 
 
 def main():
-    fasta = snakemake.input.generated_sequences_ungapped
+    fasta = snakemake.input.generated_sequences
     blast_results = snakemake.input.blast_out
     output_df = snakemake.output.blast_df
 

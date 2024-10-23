@@ -48,7 +48,7 @@ def pad_gaps(sequence, target_length):
 
 def main():
     inputfile = snakemake.input.generated_sequences
-    outputfile = snakemake.output.generated_sequences_ungapped
+    outputfile = snakemake.output.generated_sequences_padded
 
     records = list(SeqIO.parse(inputfile, 'fasta'))
     all_seqs = []

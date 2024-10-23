@@ -78,7 +78,7 @@ rule pad_gaps:
 
 rule run_interproscan:
     input:
-        generated_sequences_padded="workflows/{dataset_name}/fasta/padded/{dataset_name}_{rep}.fasta"
+        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta"
     output:
         interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv"
     params:
@@ -87,7 +87,7 @@ rule run_interproscan:
         """
         {params.interproscan_dir}/interproscan.sh \
         -dp \
-        -i {input.generated_sequences_ungapped} \
+        -i {input.generated_sequences} \
         -appl Gene3D,PRINTS \
         -f tsv -o {output.interproscan_df}
         """
@@ -106,7 +106,7 @@ rule run_blast:
     output:
         blast_out="workflows/{dataset_name}/blast/blastresults_{dataset_name}_{rep}.tsv",
     shell:
-        "blastp -db ../BLAST/NR_blastdb -query {input.generated_sequences_ungapped} -out {output.blast_out} -evalue 1e-50 -num_threads 4 -max_target_seqs 10000 -outfmt '7 qseqid salltitles'"
+        "blastp -db ../BLAST/NR_blastdb -query {input.generated_sequences_padded} -out {output.blast_out} -evalue 1e-50 -num_threads 4 -max_target_seqs 10000 -outfmt '7 qseqid salltitles'"
 
 rule parse_blast:
     input:
