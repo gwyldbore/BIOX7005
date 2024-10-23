@@ -63,7 +63,7 @@ def main():
     )
         
         # record = remove_gaps(current)
-        record = pad_gaps(current)
+        record = pad_gaps(current, longest_seq_length)
         all_seqs.append(record)
 
 
