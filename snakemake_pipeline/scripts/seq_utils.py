@@ -44,6 +44,7 @@ def get_sequence_df(
             seqs = SeqIO.parse(open(fasta_path), format="fasta")
 
         print('so then entering seq in seqs loop')
+        print(f'seqs: {seqs}')
         # Add to annotation file
         for seq in seqs:
             print('inside loop')
