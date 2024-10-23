@@ -24,6 +24,27 @@ def remove_gaps(sequence):
     return record
 
 
+def pad_gaps(sequence, target_length):
+    difference = abs(len(sequence) - target_length)
+
+    padded = ''
+    gap_pad = '-' * difference
+
+    padded += sequence.seq
+    padded += gap_pad
+
+    record = SeqRecord(
+        Seq(padded),
+        id=f"{sequence.id}",
+        description=''
+    )
+
+    return record
+
+
+
+
+
 
 def main():
     inputfile = snakemake.input.generated_sequences
@@ -32,19 +53,23 @@ def main():
     records = list(SeqIO.parse(inputfile, 'fasta'))
     all_seqs = []
 
+    longest_seq_length = max(len(records[0]), len(records[-1]))
     for sequence in records:
+
         current = SeqRecord(
         Seq(str(sequence.seq)),
         id=f"{sequence.id}",
         description=''
     )
         
-        record = remove_gaps(current)
+        # record = remove_gaps(current)
+        record = pad_gaps(current)
         all_seqs.append(record)
 
 
-        # write all sequences to output file
-        SeqIO.write(all_seqs, outputfile, 'fasta')
+    # write all sequences to output file
+    SeqIO.write(all_seqs, outputfile, 'fasta')
+    print(f"all sequences: {all_seqs}")
 
 
 

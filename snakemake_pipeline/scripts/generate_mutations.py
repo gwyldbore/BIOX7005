@@ -125,7 +125,7 @@ def get_nonconservative_mutations(seq1, seq2):
 
 
 
-def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=42):
+def generate_mutations(inputfile, outputfile, mutation_position_output, method_type, positions=None, seed=42):
     """
     Assumes inputfile is fasta of two aligned sequences, 
     first is origin and second is target.
@@ -181,8 +181,8 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
     )
 
     # remove gaps
-    # record = remove_gaps(first)
-    record = first
+    record = remove_gaps(first)
+    # record = first
 
     # store sequence as a mutable for alteration
     mutableseq = MutableSeq(str(origin.seq))
@@ -190,9 +190,22 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
     mutated_seqs.append(record)
 
     i = 1
+
+    cumulative_positions = []
+    mutationfile = open(mutation_position_output, 'w')
+
+    # for each mutation possible
     for pos, mutation in possible_mutations:
+
+        # insert a blank line to represent no mutations for the first sequence
+        # and to help format later sequences
+        mutationfile.write('\n')
+
         # mutate the working sequence
         mutableseq[pos] = mutation
+
+        # add the position to the cumulative list
+        cumulative_positions.append(pos)
 
         # create a new seqrecord with the mutated sequence
         record = SeqRecord(
@@ -201,10 +214,18 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
             description=''
         )
 
-        # record = remove_gaps(record)
+        record = remove_gaps(record)
 
         mutated_seqs.append(record) 
+        
+        # write the cumulative sequences to the tracking file
+        # with open(mutation_position_output, 'w') as mutationfile:
+        print(f'writing {cumulative_positions} to file')
+        toprint = ','.join(str(pos) for pos in cumulative_positions)
+        mutationfile.write(toprint)
+            
         i += 1
+        
 
     # write all sequences to output file
     SeqIO.write(mutated_seqs, outputfile, 'fasta')
@@ -217,8 +238,12 @@ def generate_mutations(inputfile, outputfile, method_type, positions=None, seed=
 
 
 # generate_mutations('../data/NR1_NR4_ancestors.fasta', '../data/testoutput.fasta')
-# generate_mutations('NR1_NR4_ancestors.fasta', 'testoutput.fasta', [0,1,2,3,4])
-generate_mutations(snakemake.input.fasta, snakemake.output.generated_sequences, 'random')
+# generate_mutations('../data/NR1_NR4_ancestors.fasta', '../data/testoutput.fasta', 'testposlist.txt', 
+#                    'specified', [0,1,2,3,4])
+generate_mutations(snakemake.input.fasta, 
+                   snakemake.output.generated_sequences, 
+                   snakemake.output.mutation_positions, 
+                   'random')
 
 # generate_mutations(snakemake.input.fasta, snakemake.output.fasta, snakemake.wildcards.method_name)
 
