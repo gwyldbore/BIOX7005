@@ -37,6 +37,7 @@ def get_sequence_df(
         if alignment:
             print('then reached the alignment line')
             seqs = AlignIO.parse(open(fasta_path), format="fasta")
+            print('and the opening didnt fail')
 
         else:
             print('or the else line')
