@@ -69,7 +69,7 @@ def main():
 
     # write all sequences to output file
     SeqIO.write(all_seqs, outputfile, 'fasta')
-    print(f"all sequences: {all_seqs}")
+    # print(f"all sequences: {all_seqs}")
 
 
 
