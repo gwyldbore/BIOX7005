@@ -122,6 +122,7 @@ rule merge_outputs:
         interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
         embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
         blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
+        mutationfile="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
 
     output:
         merged_df="workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
