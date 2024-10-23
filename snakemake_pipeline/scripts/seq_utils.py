@@ -47,7 +47,6 @@ def get_sequence_df(
         print(f'seqs: {seqs}')
         # Add to annotation file
         for seq in seqs:
-            print('inside loop')
             if alignment == False:
                 if seq.name in duplicates:
                     print(

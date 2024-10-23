@@ -39,6 +39,14 @@ def calculate_embeddings(sequence, model, tokenizer, model_type):
 
 
 
+def parse_seq_info(info):
+    split_info = info.split('_')
+    mutation_no = split_info[-1]
+
+    return mutation_no
+
+
+
 def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
 
     model = AutoModel.from_pretrained(model_name, output_hidden_states=True)
@@ -80,6 +88,10 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
 
         except Exception as e:
             print(f"Failed to process sequence {sequence} with error: {e}")
+
+    # add the no of mutations to sequence to dataframe
+    # needed in order to plot correctly
+    embedding_df['num_mutation'] = embedding_df['info'].apply(parse_seq_info)
 
 
     # Save embedding_df with full embeddings
