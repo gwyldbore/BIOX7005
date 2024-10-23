@@ -35,9 +35,11 @@ def get_sequence_df(
         # seqs = sequence.readFastaFile(fasta_path, alpha)
 
         if alignment:
+            print('then reached the alignment line')
             seqs = AlignIO.parse(open(fasta_path), format="fasta")
 
         else:
+            print('or the else line')
             seqs = SeqIO.parse(open(fasta_path), format="fasta")
 
         # Add to annotation file
