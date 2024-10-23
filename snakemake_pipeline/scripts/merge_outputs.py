@@ -35,14 +35,7 @@ def load_mutation_positions(filepath):
     return all_mutations
 
 def get_mutation_positions(mutation_list, index):
-    return mutation_list[index]
-
-
-def parse_seq_info(info):
-    split_info = info.split('_')
-    mutation_no = split_info[-1]
-
-    return mutation_no
+    return mutation_list[int(index)]
 
 
 
@@ -69,9 +62,6 @@ def main():
 
     final_df['has_subfamily_4'] = final_df['PRINTS'].str.contains('subfamily 4', na=False)
     final_df['has_subfamily_1'] = final_df['PRINTS'].str.contains('subfamily 1', na=False)
-
-    # add the no of mutations to sequence to dataframe
-    final_df['num_mutation'] = final_df['info'].apply(parse_seq_info)
 
     # also add the mutation position list
     mutation_positions = load_mutation_positions(snakemake.input.mutationfile)
