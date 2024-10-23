@@ -38,9 +38,9 @@ def get_sequence_df(
         else:
             seqs = SeqIO.parse(open(fasta_path), format="fasta")
 
+        print(f'seq utils {fasta_path}')
         # Add to annotation file
         for seq in seqs:
-            print(f'getting seq: {seq} from utils')
             if alignment == False:
                 if seq.name in duplicates:
                     print(
