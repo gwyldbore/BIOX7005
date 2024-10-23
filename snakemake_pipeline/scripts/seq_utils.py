@@ -28,6 +28,7 @@ def get_sequence_df(
     # if ancestor:
     #     cols.append("Sequence_aligned")
 
+    print('reached here')
     for fasta_path in fasta_paths:
         # Load FASTA file
         # seqs = sequence.readFastaFile(fasta_path, alpha)
@@ -38,7 +39,6 @@ def get_sequence_df(
         else:
             seqs = SeqIO.parse(open(fasta_path), format="fasta")
 
-        print(f'seq utils {fasta_path}')
         # Add to annotation file
         for seq in seqs:
             if alignment == False:
