@@ -242,7 +242,7 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
 generate_mutations(snakemake.input.fasta, 
                    snakemake.output.generated_sequences, 
                    snakemake.output.mutation_positions, 
-                   'random')
+                   'specified', [x for x in range(10)])
 
 # generate_mutations(snakemake.input.fasta, snakemake.output.fasta, snakemake.wildcards.method_name)
 
