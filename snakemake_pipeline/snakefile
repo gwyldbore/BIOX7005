@@ -8,17 +8,23 @@ except KeyError:
 # except KeyError:
 #     DATASET_PATH = 'data'
 
-# for testing purposes
-try: 
+# # for testing purposes
+# try: 
+#     DATASET_PATH = config['dataset_path']
+# except KeyError:
+#     DATASET_PATH = 'data/cdhit_70/grasp_marginal'
+
+# actual path
+try:
     DATASET_PATH = config['dataset_path']
 except KeyError:
-    DATASET_PATH = 'data/cdhit_70/grasp_marginal'
+    DATASET_PATH = 'data/reportdata'
 
 try:
     ALL_DATASET_NAMES = config['all_dataset_names']
 except KeyError:
     # ALL_DATASET_NAMES = ['NR4_NR1_ancestors_unaligned']
-    ALL_DATASET_NAMES = ['NR_MSA_cd07_N6_N81']
+    ALL_DATASET_NAMES = ['cd70_NR1toNR4_N6_N81', 'cd70_NR4toNR1_N81_N6', 'cd80_NR1toNR4_N7_N186', 'cd80_NR4toNR1_N186_N7', 'cd85_NR1toNR4_N7_N299', 'cd85_NR4toNR1_N299_N7']
 
 try:
     INTERPROSCAN_DIR = config['interproscan_dir']
