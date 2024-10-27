@@ -26,7 +26,7 @@ def remove_gaps(sequence):
 
 def pad_gaps(sequence, target_length):
     difference = abs(len(sequence) - target_length)
-    print(f'difference is {difference}')
+    # print(f'difference is {difference}')
 
     padded = ''
     gap_pad = '-' * difference
@@ -55,7 +55,7 @@ def main():
     all_seqs = []
 
     longest_seq_length = max(len(records[0]), len(records[-1]))
-    print(f'first seq is {len(records[0])} long, second is {len(records[-1])}')
+    # print(f'first seq is {len(records[0])} long, second is {len(records[-1])}')
     for sequence in records:
 
         current = SeqRecord(

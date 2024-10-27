@@ -315,7 +315,7 @@ def get_probabilistic_mutations(inputfile, removed_at):
     df_combined['Weight'] = df_combined['Weight'] / df_combined['Weight'].sum()
 
     # select order of mutation 'randomly' but using the probability weights
-    print('length of df', len(df_combined['Index']))
+    # print('length of df', len(df_combined['Index']))
     mutation_order = df_combined.sample(n=len(df_combined), weights='Weight', replace=False)['Index'].tolist()
 
     # print(df_combined.sort_values(by='Priority', ascending=True))
@@ -387,7 +387,7 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
 
     elif method_type == 'marginal_weights':
         origin, target, removed_at = remove_common_gaps(origin, target)
-        print(f'length origin {len(origin)}, length target {len(target)}')
+        # print(f'length origin {len(origin)}, length target {len(target)}')
 
         # print(origin.seq)
 

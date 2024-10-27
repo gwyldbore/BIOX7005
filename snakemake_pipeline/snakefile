@@ -25,6 +25,12 @@ try:
 except KeyError:
     # ALL_DATASET_NAMES = ['NR4_NR1_ancestors_unaligned']
     ALL_DATASET_NAMES = ['cd70_NR1toNR4_N6_N81', 'cd70_NR4toNR1_N81_N6', 'cd80_NR1toNR4_N7_N186', 'cd80_NR4toNR1_N186_N7', 'cd85_NR1toNR4_N7_N299', 'cd85_NR4toNR1_N299_N7']
+    # ALL_DATASET_NAMES = ['cd70', 'cd80', 'cd85']
+
+try:
+    ALL_DATAFILE_NAMES = config['all_datafile_names']
+except KeyError:
+    ALL_DATAFILE_NAMES = ['NR1toNR4_N6_N81', NR4toNR1_N81_N6', NR1toNR4_N7_N186', NR4toNR1_N186_N7', NR1toNR4_N7_N299', NR4toNR1_N299_N7']
 
 try:
     INTERPROSCAN_DIR = config['interproscan_dir']
@@ -32,20 +38,28 @@ except KeyError:
     INTERPROSCAN_DIR = '/media/WorkingSpace/Share/interproscan/interproscan-5.65-97.0'
 
 
+# need to add in datafile names - probably like interproscan/{datafile_name}_{rep}.csv
+# this will put all the variations into the cdxx folder
 rule all:
     input:
-        interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
+        # interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
+        interproscan_df = expand("workflows/{dataset_name}/interproscan/{datafile_name}_{rep}.csv"
         dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
         rep=range(1, NUM_REPLICATES + 1),
         ),
 
-        merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
+        # merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
+        merged_df= expand("workflows/{dataset_name}/merged/{datafile_name}_{rep}.csv",
         dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
         rep=range(1, NUM_REPLICATES + 1),
         ),
 
-        plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
+        # plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
+        plot = expand("workflows/{dataset_name}/plots/{datafile_name}_{rep}.png",
         dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
         rep=range(1, NUM_REPLICATES + 1),
         ),
 
@@ -59,10 +73,13 @@ rule all:
 
 rule generate_mutations:
     input:
-        fasta=DATASET_PATH + "/{dataset_name}.fasta"
+        # fasta=DATASET_PATH + "/{dataset_name}.fasta"
+        fasta=DATASET_PATH + "/{dataset_name}_{datafile_name}.fasta"
     output:
-        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
-        mutation_positions="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
+        # generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
+        # mutation_positions="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
+        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{datafile_name}_{rep}.fasta",
+        mutation_positions="workflows/{dataset_name}/fasta/{datafile_name}_{rep}_mutationpos.txt"
     script:
         "scripts/generate_mutations.py"
 
@@ -75,18 +92,22 @@ rule generate_mutations:
 #         "scripts/remove_gaps.py"
 rule pad_gaps:
     input:
-        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta"
+        # generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta"
+        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{datafile_name}_{rep}.fasta"
     output:
-        generated_sequences_padded="workflows/{dataset_name}/fasta/padded/{dataset_name}_{rep}.fasta"
+        # generated_sequences_padded="workflows/{dataset_name}/fasta/padded/{dataset_name}_{rep}.fasta"
+        generated_sequences_padded="workflows/{dataset_name}/fasta/padded/{datafile_name}_{rep}.fasta"
     script:
         "scripts/remove_gaps.py"
 
 
 rule run_interproscan:
     input:
-        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta"
+        # generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta"
+        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{datafile_name}_{rep}.fasta"
     output:
-        interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv"
+        # interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv"
+        interproscan_df="workflows/{dataset_name}/interproscan/{datafile_name}_{rep}.csv"
     params:
         interproscan_dir=INTERPROSCAN_DIR
     shell:
@@ -100,45 +121,59 @@ rule run_interproscan:
 
 rule generate_embeddings:
     input:
-        generated_sequences_padded="workflows/{dataset_name}/fasta/padded/{dataset_name}_{rep}.fasta",
+        # generated_sequences_padded="workflows/{dataset_name}/fasta/padded/{dataset_name}_{rep}.fasta",
+        generated_sequences_padded="workflows/{dataset_name}/fasta/padded/{datafile_name}_{rep}.fasta",
     output:
         embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+        embedding_df="workflows/{dataset_name}/embeddings/{datafile_name}_{rep}.csv",
     script:
         "scripts/generate_embeddings.py"
 
 rule run_blast:
     input:
-        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
+        # generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
+        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{datafile_name}_{rep}.fasta",
     output:
-        blast_out="workflows/{dataset_name}/blast/blastresults_{dataset_name}_{rep}.tsv",
+        # blast_out="workflows/{dataset_name}/blast/blastresults_{dataset_name}_{rep}.tsv",
+        blast_out="workflows/{dataset_name}/blast/blastresults_{datafile_name}_{rep}.tsv",
     shell:
         "blastp -db ../BLAST/NR_blastdb -query {input.generated_sequences} -out {output.blast_out} -evalue 1e-50 -num_threads 4 -max_target_seqs 10000 -outfmt '7 qseqid salltitles'"
 
 rule parse_blast:
     input:
-        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
-        blast_out="workflows/{dataset_name}/blast/blastresults_{dataset_name}_{rep}.tsv",
+        # generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
+        # blast_out="workflows/{dataset_name}/blast/blastresults_{dataset_name}_{rep}.tsv",
+        generated_sequences="workflows/{dataset_name}/fasta/ungapped/{datafile_name}_{rep}.fasta",
+        blast_out="workflows/{dataset_name}/blast/blastresults_{datafile_name}_{rep}.tsv",
     output:
-        blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
+        # blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
+        blast_df="workflows/{dataset_name}/blast/{datafile_name}_{rep}.csv",
     script:
         "scripts/parse_blast.py"
 
 rule merge_outputs:
     input:
-        interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
-        embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
-        blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
-        mutationfile="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
+        # interproscan_df="workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
+        # embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+        # blast_df="workflows/{dataset_name}/blast/{dataset_name}_{rep}.csv",
+        # mutationfile="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
+        interproscan_df="workflows/{dataset_name}/interproscan/{datafile_name}_{rep}.csv",
+        embedding_df="workflows/{dataset_name}/embeddings/{datafile_name}_{rep}.csv",
+        blast_df="workflows/{dataset_name}/blast/{datafile_name}_{rep}.csv",
+        mutationfile="workflows/{dataset_name}/fasta/{datafile_name}_{rep}_mutationpos.txt"
 
     output:
-        merged_df="workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
+        # merged_df="workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
+        merged_df="workflows/{dataset_name}/merged/{datafile_name}_{rep}.csv",
     script:
         "scripts/merge_outputs.py"
 
 rule plot_pca:
     input:
-        embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+        # embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+        embedding_df="workflows/{dataset_name}/embeddings/{datafile_name}_{rep}.csv",
     output:
-        plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
+        # plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
+        plot="workflows/{dataset_name}/plots/{datafile_name}_{rep}.png"
     script:
         "scripts/plot_pca.py"

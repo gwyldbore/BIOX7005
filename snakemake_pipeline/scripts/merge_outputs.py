@@ -21,6 +21,60 @@ def load_interproscan_df(path):
     return interpro_df
 
 
+def parse_prints_output(row):
+    USUAL_BLAST_OUTPUTS = {'subfamily 4': 'NR4',
+                           'sub 4': 'NR4', '4 ': 'NR4',
+                           'hr38': 'NR4', ' 38 ': 'NR4',
+                           'hzf-3': 'NR4', 'nurr1': 'NR4',
+                           'nur77': 'NR4', 'nr4': 'NR4',
+                           'nor1': 'NR4', 
+
+                           'subfamily 1': 'NR1', 
+                           'retinoic acid receptor': 'NR1',
+                           'oxysterol': 'NR1', 'LXR': 'NR1',
+
+                           'probable nuclear hormone receptor': 'Other',
+                           'nuclear receptor related 1': 'Other',
+                           'nuclear receptor isoform x1': 'Other',
+                           'nuclear hormone receptor e75': 'Other',
+                           'nuclear receptor of the nerve growth': 'Other',
+                           'ligand-binding domain': 'Other',
+                           'subfamily 2': 'Other'
+                           }
+    
+    # set up results dict to track count
+    results = {'NR1':0, 'NR4':0, 'Other':0}
+    
+    # get the prints data
+    all_results = row['PRINTS']
+
+    # # which column contains the sequence id?
+    # seq_id = row['']
+
+    # split each result, separated by ;
+    split_results = all_results.split(';')
+
+    for result in split_results:
+        result = result.lower()
+
+        for key in USUAL_BLAST_OUTPUTS.keys():
+            if key in result:
+                # increment the appropriate family in results 
+                results[USUAL_BLAST_OUTPUTS[key]] += 1
+                break
+
+    for subfamily in results.keys():
+        most_frequent = ''
+        frequency = -1
+
+        if results[subfamily] > frequency:
+            most_frequent = subfamily
+            frequency = results[subfamily]
+    
+    return most_frequent
+
+
+
 
 def load_mutation_positions(filepath):
 
@@ -65,8 +119,9 @@ def main():
     # Merge with blast results
     final_df = final_df.merge(blast_df[['info', 'blast_results']], on='info', how='left')
 
-    final_df['has_subfamily_4'] = final_df['PRINTS'].str.contains('subfamily 4', na=False)
-    final_df['has_subfamily_1'] = final_df['PRINTS'].str.contains('subfamily 1', na=False)
+    # final_df['has_subfamily_4'] = final_df['PRINTS'].str.contains('subfamily 4', na=False)
+    # final_df['has_subfamily_1'] = final_df['PRINTS'].str.contains('subfamily 1', na=False)
+    final_df['interproscan_prediction'] = final_df.apply(parse_prints_output, axis=1)
 
     # also add the mutation position list
     mutation_positions = load_mutation_positions(snakemake.input.mutationfile)
