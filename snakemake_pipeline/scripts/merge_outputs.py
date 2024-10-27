@@ -113,11 +113,17 @@ def main():
                                      aggfunc=lambda x: '; '.join(x))
     pivot_df = pivot_df.reset_index()
 
+    # Load logistic regression predictions
+    logistic_predictions_df = pd.read_csv(snakemake.input.logreg_results)
+
     # Merge back with embedding dataframe
     final_df = embedding_df.merge(pivot_df, on=['info'], how='left')
 
     # Merge with blast results
     final_df = final_df.merge(blast_df[['info', 'blast_results']], on='info', how='left')
+
+    # Merge with logistic regression predictions
+    final_df = final_df.merge(logistic_predictions_df[['info', 'embedding_prediction']], on='info', how='left')
 
     # final_df['has_subfamily_4'] = final_df['PRINTS'].str.contains('subfamily 4', na=False)
     # final_df['has_subfamily_1'] = final_df['PRINTS'].str.contains('subfamily 1', na=False)
