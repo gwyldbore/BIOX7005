@@ -30,6 +30,8 @@ def main():
     # transform into each feature as a single column
     df = df.join(pd.DataFrame(df.pop('protbert_mean_embedding').tolist(), index=df.index))
 
+    df.columns = df.columns.astype(str)
+
 
     # split features into x and y
     X_train = df.drop(columns=["Clade"])
