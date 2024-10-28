@@ -127,6 +127,7 @@ def main():
     plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs)
 
     ordered_positions = extract_mutated_positions(input_files)
+    print(ordered_positions)
     plot_mutated_positions(ordered_positions, snakemake.output.position_graphs)
 
     
