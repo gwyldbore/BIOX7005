@@ -28,8 +28,8 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     # Define color map for the clades
     # colors = plt.cm.get_cmap('Set1', num_clades).colors
     # colors = plt.colormaps['PiYG'].resampled(num_clades)
-    # clade_cmap = ListedColormap(['orangered', 'goldenrod'])
-    clade_cmap = ListedColormap(['royalblue', 'green'])
+    clade_cmap = ListedColormap(['#d3d3d3', '#a9a9a9'])
+    # clade_cmap = ListedColormap(['royalblue', 'green'])
     colors = plt.get_cmap(clade_cmap, num_clades).colors
 
     # plt.figure(figsize=(20, 14))
@@ -53,7 +53,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     # scatter = plt.scatter(mutation_df['pca1'], mutation_df['pca2'], 
     #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
     scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
-                c=[int(x) for x in mutation_df['num_mutation']], cmap='spring')
+                c=[int(x) for x in mutation_df['num_mutation']], cmap='viridis')
     
     cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
     fig.colorbar(scatter, cax=cax, orientation='horizontal')
@@ -93,7 +93,8 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
 
     # Define color map for the clades
     # colors = plt.cm.get_cmap('Set1', num_clades).colors
-    clade_cmap = ListedColormap(['royalblue', 'green'])
+    # clade_cmap = ListedColormap(['royalblue', 'green'])
+    clade_cmap = ListedColormap(['#d3d3d3', '#a9a9a9'])
     colors = plt.get_cmap(clade_cmap, num_clades).colors
 
     plt.figure(figsize=(20, 14))
@@ -121,7 +122,8 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     # prediction_colors = plt.cm.get_cmap('winter', len(unique_predictions)).colors
     # prediction_colors = plt.colormaps['PiYG'].resampled(len(unique_predictions))
 
-    prediction_cmap = ListedColormap(['cyan', 'chartreuse', 'hotpink', 'blueviolet'])
+    # prediction_cmap = ListedColormap(['cyan', 'chartreuse', 'hotpink', 'blueviolet'])
+    prediction_cmap = ListedColormap(['#e41a1c', '#377eb8', '#4daf4a', '#ff7f00'])
     prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
 
     for prediction, color in zip(unique_predictions, prediction_colors):
