@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
 import matplotlib.pyplot as plt
+import literal_eval
 
 
 def extract_mutation_counts(input_files) -> dict:
@@ -54,6 +55,8 @@ def extract_mutated_positions(input_files):
     for file in input_files:
         # Load the data from the file
         df = pd.read_csv(file)
+
+        df['mutated_positions'] = df['mutated_positions'].apply(lambda x: literal_eval(str(x)))
 
         # Identify the starting value (first prediction in this file)
         starting_value = df['overall_prediction'].iloc[0]
