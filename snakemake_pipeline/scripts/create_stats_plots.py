@@ -106,7 +106,7 @@ def plot_num_mutations(ordered_counts, output_path):
 
             # Plot the (possibly binned) frequency data
             counts_series.plot(kind='bar', color='skyblue', ax=ax)
-            
+
         ax.set_title(f"Transitions to {category}")
         ax.set_xlabel("Number of Mutations")
         ax.set_ylabel("Frequency")
@@ -142,7 +142,7 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
     #     ax.set_xlabel("Sequence Position")
     #     ax.set_ylabel("Frequency")
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(24, 6), sharey=True)
 
     print(f'mutated positions list being plotted: {[(key, sorted(value)) for key, value in ordered_positions.items()]}')
 
