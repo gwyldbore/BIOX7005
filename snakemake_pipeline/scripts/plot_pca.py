@@ -3,6 +3,7 @@ import pandas as pd
 import seq_utils
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib
 from sklearn.decomposition import PCA
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
@@ -52,7 +53,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     mutation_df = all_embeddings_df.dropna(subset=['num_mutation'])
 
     viridis = plt.get_cmap('viridis')
-    new_cmap = mcolors.LinearSegmentedColormap.from_list(
+    new_cmap = matplotlib.colors.LinearSegmentedColormap.from_list(
         f"trunc({'viridis'},{0.2},{1.0})",
         viridis(np.linspace(0.2, 1.0, 256))
     )
