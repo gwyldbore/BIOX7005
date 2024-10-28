@@ -31,6 +31,7 @@ def main():
     df = df.join(pd.DataFrame(df.pop('protbert_mean_embedding').tolist(), index=df.index))
 
     df.columns = df.columns.astype(str)
+    print('dataframe columns:', df.columns)
 
 
     # split features into x and y
@@ -40,7 +41,6 @@ def main():
     # encode the clade labels
     label_encoder = LabelEncoder()
     y_train_encoded = label_encoder.fit_transform(y_train)
-    print(y_train_encoded)
 
     # Apply SMOTE to the training data to correct class imbalance
     smote = SMOTE(random_state=42)
