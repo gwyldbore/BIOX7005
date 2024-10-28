@@ -105,7 +105,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     for prediction, color in zip(unique_predictions, prediction_colors):
         pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
         plt.scatter(pred_subset['pca1'], pred_subset['pca2'], 
-                    color=color, marker='x', s=100, alpha=0.8, 
+                    color=color, marker='o', s=100, alpha=0.8, 
                     label=f'Prediction: {prediction}')
 
 
