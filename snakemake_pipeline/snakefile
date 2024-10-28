@@ -79,6 +79,10 @@ rule all:
         rep=range(1,NUM_REPLICATES + 1),
         ),
 
+        statplots= expand("workflows/{dataset_name}/results/{datafile_name}.png",
+        dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
+        ),
 
 #         generate_sequences = expand(
 #         "workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
@@ -224,9 +228,11 @@ rule plot_pca:
         # embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
         embedding_df="workflows/{dataset_name}/embeddings/{datafile_name}_{rep}.csv",
         # ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
+        predictions_df="workflows/{dataset_name}/results/{datafile_name}_{rep}.csv"
     output:
         # plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
-        plot="workflows/{dataset_name}/plots/{datafile_name}_{rep}.png"
+        plot_mutation="workflows/{dataset_name}/plots/{datafile_name}_{rep}_mutations.png"
+        plot_prediction="workflows/{dataset_name}/plots/{datafile_name}_{rep}_predictions.png"
     script:
         "scripts/plot_pca.py"
 
@@ -237,3 +243,11 @@ rule gather_prediction_info:
         results_df="workflows/{dataset_name}/results/{datafile_name}_{rep}.csv"
     script:
         "scripts/gather_prediction_info.py"
+
+# rule create_statistic_plots:
+#     input:
+#         expand("workflows/{dataset_name}/results/{datafile_name}_{rep}.csv", rep=range(1, NUM_REPLICATES + 1))
+#     output:
+#         graphs="workflows/{dataset_name}/results/{datafile_name}.png"
+#     script:
+#         "scripts/create_stats_plots.py"
