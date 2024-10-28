@@ -27,30 +27,31 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     # Define color map for the clades
     colors = plt.cm.get_cmap('Set1', num_clades).colors
 
-    plt.figure(figsize=(20, 14))
+    # plt.figure(figsize=(20, 14))
+    fig, ax = plt.subplots(figsize=(20,14))
 
     # Plot all points in gray first to show entries with no clade
     no_clade_df = all_embeddings_df[all_embeddings_df['Clade'].isna()]
     # probably a way to set colour=blue to be a gradient??
-    plt.scatter(no_clade_df['pca1'], no_clade_df['pca2'], color='blue', alpha=0.5, label='No Clade')
+    # plt.scatter(no_clade_df['pca1'], no_clade_df['pca2'], color='blue', alpha=0.5, label='No Clade')
+    ax.scatter(no_clade_df['pca1'], no_clade_df['pca2'], color='blue', alpha=0.5, label='No Clade')
 
     # Plot points with clades in different colors
     for clade, color in zip(clades_with_color, colors):
         subset = all_embeddings_df[all_embeddings_df['Clade'] == clade]
-        plt.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
+        # plt.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
+        ax.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
 
-
-
-    # sequence_no_for_colour = all_embeddings_df['num_mutation'].dropna().unique()
-    
-    # for seq_no in sequence_no_for_colour:
-    #     mutated_subset = all_embeddings_df[all_embeddings_df['num_mutation'] == seq_no]
-    #     plt.scatter(mutated_subset['pca1'], mutated_subset['pca2'], c=mutated_subset['num_mutation'], cmap='Blues')
 
     mutation_df = all_embeddings_df.dropna(subset=['num_mutation'])
 
-    scatter = plt.scatter(mutation_df['pca1'], mutation_df['pca2'], 
+    # scatter = plt.scatter(mutation_df['pca1'], mutation_df['pca2'], 
+    #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
+    scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
                 c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
+    
+    cax = ax.inset_axes([0.3, 0.07, 0.4, 0.04])
+    fig.colorbar(scatter, cax=cax, orientation='horizontal')
     
     # cbar = plt.colorbar()
     # cbar_ax = fig.add_subplot(gs[1])
@@ -110,7 +111,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
 
     # Define a new colormap for predictions
     # prediction_colors = plt.cm.viridis(np.linspace(0, 1, len(unique_predictions)))
-    prediction_colors = plt.cm.get_cmap('tab10', len(unique_predictions)).colors
+    prediction_colors = plt.cm.get_cmap('spring', len(unique_predictions)).colors
 
     for prediction, color in zip(unique_predictions, prediction_colors):
         pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
