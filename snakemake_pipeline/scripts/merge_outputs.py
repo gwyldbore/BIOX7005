@@ -64,18 +64,15 @@ def parse_prints_output(row):
                 results[USUAL_BLAST_OUTPUTS[key]] += 1
                 break
 
+    most_frequent = ''
+    frequency = -1
     for subfamily in results.keys():
-        most_frequent = ''
-        frequency = -1
-
+        
         # print(f'subfamily {subfamily}, most freq {most_frequent}:{frequency}')
-        print(results[subfamily])
 
         if results[subfamily] > frequency:
             most_frequent = subfamily
             frequency = results[subfamily]
-
-    print(f'most frequent is {most_frequent}')
     
     return most_frequent
 
