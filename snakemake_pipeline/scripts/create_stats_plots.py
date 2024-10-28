@@ -105,41 +105,47 @@ def plot_num_mutations(ordered_counts, output_path):
     plt.savefig(output_path, bbox_inches='tight')
 
 
-def plot_mutated_positions(ordered_positions, sequence_length, output_path):
-    # # Create a grid of 3 subplots (one for each non-starting category)
+def plot_mutated_positions(ordered_positions, sequence_length, output_path)
     # fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
-    # # Plot the frequency for each target category in a separate subplot
-    # for ax, (category, counts) in zip(axes, ordered_positions.items()):
-    #     if counts:  # Only plot if there are relevant transitions
-    #         pd.Series(counts).value_counts().sort_index().plot(kind='bar', color='skyblue', ax=ax)
-    #     ax.set_title(f"Transitions to {category}")
-    #     ax.set_xlabel("Number of Mutations")
+    # for ax, (category, positions) in zip(axes, ordered_positions.items()):
+    #     # Calculate frequency of mutated positions
+    #     counts = pd.Series(positions).value_counts().sort_index()
+
+    #     # Plot the frequency of mutated positions as bars
+    #     counts.plot(kind='bar', color='skyblue', ax=ax)
+
+    #     # Only plot every 10th tick if the sequence is too long
+    #     if sequence_length > 50:
+    #         tick_spacing = 10
+    #     else:
+    #         tick_spacing = 1
+
+    #     ax.set_xticks(range(0, sequence_length + 1, tick_spacing))
+    #     ax.set_xticklabels(range(0, sequence_length + 1, tick_spacing), rotation=90)
+
+    #     # Set plot title and labels
+    #     ax.set_title(f"Mutated Positions to {category}")
+    #     ax.set_xlabel("Sequence Position")
     #     ax.set_ylabel("Frequency")
-
-    # # Adjust layout to prevent overlap
-    # plt.tight_layout()
-
-    # # Save the plot
-    # plt.savefig(output_path, bbox_inches='tight')
 
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
     for ax, (category, positions) in zip(axes, ordered_positions.items()):
-        # Calculate frequency of mutated positions
+        # Calculate frequency of each mutation position
         counts = pd.Series(positions).value_counts().sort_index()
 
-        # Plot the frequency of mutated positions as bars
-        counts.plot(kind='bar', color='skyblue', ax=ax)
+        # Plot the mutation positions as bars with the correct x-axis values
+        ax.bar(counts.index, counts.values, color='skyblue')
 
-        # Only plot every 10th tick if the sequence is too long
-        if sequence_length > 50:
-            tick_spacing = 10
-        else:
-            tick_spacing = 1
+        # Set x-axis range to cover the full sequence length
+        ax.set_xlim(0, sequence_length)
 
-        ax.set_xticks(range(0, sequence_length + 1, tick_spacing))
-        ax.set_xticklabels(range(0, sequence_length + 1, tick_spacing), rotation=90)
+        # Set x-ticks for every position in the range of the sequence
+        ax.set_xticks(range(0, sequence_length + 1, max(1, sequence_length // 20)))  # Adjust tick density
+
+        # Rotate x-tick labels for readability
+        ax.set_xticklabels(range(0, sequence_length + 1, max(1, sequence_length // 20)), rotation=90)
 
         # Set plot title and labels
         ax.set_title(f"Mutated Positions to {category}")
