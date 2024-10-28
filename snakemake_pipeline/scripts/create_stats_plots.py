@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 def main():
-    input_files = snakemake.input
+    input_files = snakemake.input.all_data
 
     # Initialize a DataFrame to store all replicates
     all_data = []
