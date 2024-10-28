@@ -1,6 +1,7 @@
 import pandas as pd
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
+import pickle
 
 import joblib
 
@@ -15,7 +16,8 @@ def main():
     # load the trained model and label encoder
     logistic_model, label_encoder = joblib.load(model_path)
 
-    test_data = pd.read_csv(test_data_path)
+    # test_data = pd.read_csv(test_data_path)
+    test_data = pickle.load(test_data_path)
 
     info_column = test_data['info']
     X_test = test_data.drop(columns=['info', 'sequence', 'model_name', 
