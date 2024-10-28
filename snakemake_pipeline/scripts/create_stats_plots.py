@@ -34,7 +34,8 @@ def main():
         for category in categories_to_track:
             # Identify where the prediction changes to the target category
             transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & (df['overall_prediction'] == category)]
-            print('cat, trans', category, transition)
+            print('cat', category)
+            print('trans', transition)
 
             # If there is at least one such transition, store the first one
             if not transition.empty:
