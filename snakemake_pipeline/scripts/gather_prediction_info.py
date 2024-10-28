@@ -15,8 +15,12 @@ def overall_prediction(row):
 
     if NR1count == 3:
         return 'NR1'
+    elif NR1count == 2:
+        return 'NR1-like'
     elif NR4count == 3:
         return 'NR4'
+    elif NR4count == 2:
+        return 'NR4-like'
     else:
         return 'other'
 

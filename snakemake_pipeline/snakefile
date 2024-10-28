@@ -42,6 +42,11 @@ try:
 except KeyError:
     INTERPROSCAN_DIR = '/media/WorkingSpace/Share/interproscan/interproscan-5.65-97.0'
 
+try:
+    METHOD_NAMES = config['method_names']
+except KeyError:
+    METHOD_NAMES = ['random', 'nonconservative', 'marginal_weights']
+
 
 # need to add in datafile names - probably like interproscan/{datafile_name}_{rep}.csv
 # this will put all the variations into the cdxx folder
