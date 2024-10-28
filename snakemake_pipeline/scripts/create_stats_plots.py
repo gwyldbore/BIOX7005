@@ -105,7 +105,7 @@ def plot_num_mutations(ordered_counts, output_path):
     plt.savefig(output_path, bbox_inches='tight')
 
 
-def plot_mutated_positions(ordered_positions, sequence_length, output_path)
+def plot_mutated_positions(ordered_positions, sequence_length, output_path):
     # fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
     # for ax, (category, positions) in zip(axes, ordered_positions.items()):
