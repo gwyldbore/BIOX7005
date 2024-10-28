@@ -49,16 +49,13 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
 
     mutation_df = all_embeddings_df.dropna(subset=['num_mutation'])
 
-    ax = fig.add_subplot(gs[0])
-    # scatter = plt.scatter(mutation_df['pca1'], mutation_df['pca2'], 
-    #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
-    scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
+    scatter = plt.scatter(mutation_df['pca1'], mutation_df['pca2'], 
                 c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
     
-    # cbar = plt.colorbar()
-    cbar_ax = fig.add_subplot(gs[1])
-    fig.colorbar(scatter, cax=cbar_ax, orientation='vertical')
-    cbar_ax.set_ylabel('Colorbar')
+    cbar = plt.colorbar()
+    # cbar_ax = fig.add_subplot(gs[1])
+    # fig.colorbar(scatter, cax=cbar_ax, orientation='vertical')
+    # cbar_ax.set_ylabel('Colorbar')
 
     # Set plot titles and labels
     plt.title("PCA by Clade")
@@ -91,8 +88,8 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     # Define color map for the clades
     colors = plt.cm.get_cmap('Set1', num_clades).colors
 
-    # plt.figure(figsize=(20, 14))
-    fig, ax = plt.subplots(figsize=(20, 14))
+    plt.figure(figsize=(20, 14))
+    # fig, ax = plt.subplots(figsize=(20, 14))
 
     # Plot all points in gray first to show entries with no clade
     no_clade_df = all_embeddings_df[all_embeddings_df['Clade'].isna()]
@@ -102,8 +99,8 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     # Plot points with clades in different colors
     for clade, color in zip(clades_with_color, colors):
         subset = all_embeddings_df[all_embeddings_df['Clade'] == clade]
-        # plt.scatter(subset['pca1'], subset['pca2'], label=f'Clade: {clade}', color=color)
-        ax.scatter(subset['pca1'], subset['pca2'], label=f'Clade: {clade}', color=color)
+        plt.scatter(subset['pca1'], subset['pca2'], label=f'Clade: {clade}', color=color)
+        # ax.scatter(subset['pca1'], subset['pca2'], label=f'Clade: {clade}', color=color)
 
 
 
