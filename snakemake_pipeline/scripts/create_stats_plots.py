@@ -2,6 +2,7 @@ import sys
 import pandas as pd
 import matplotlib.pyplot as plt
 from ast import literal_eval
+import numpy as np
 
 def extract_mutation_counts(input_files) -> dict:
     # Initialize a dictionary to store mutation counts for each target category
