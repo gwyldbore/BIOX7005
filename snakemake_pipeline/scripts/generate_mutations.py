@@ -479,4 +479,4 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
 generate_mutations(snakemake.input.fasta, 
                    snakemake.output.generated_sequences, 
                    snakemake.output.mutation_positions, 
-                   'marginal_weights')
+                   snakemake.wildcards.method_name)
