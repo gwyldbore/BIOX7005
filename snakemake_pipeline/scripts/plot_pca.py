@@ -29,7 +29,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     # colors = plt.cm.get_cmap('Set1', num_clades).colors
     # colors = plt.get_cmap('PiYG', num_clades).colors
     # colors = plt.colormaps['PiYG'].resampled(num_clades)
-    clade_cmap = ListedColormap(['red', 'goldenrod'])
+    clade_cmap = ListedColormap(['orangered', 'goldenrod'])
     colors = plt.get_cmap(clade_cmap, num_clades).colors
 
     # plt.figure(figsize=(20, 14))
@@ -116,7 +116,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
 
     # Define a new colormap for predictions
     # prediction_colors = plt.cm.viridis(np.linspace(0, 1, len(unique_predictions)))
-    prediction_colors = plt.cm.get_cmap('viridis', len(unique_predictions)).colors
+    prediction_colors = plt.cm.get_cmap('winter', len(unique_predictions)).colors
 
     for prediction, color in zip(unique_predictions, prediction_colors):
         pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
