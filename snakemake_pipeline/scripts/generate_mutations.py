@@ -110,7 +110,7 @@ def get_nonconservative_mutations(seq1, seq2):
                    'R':'basic', 'H':'basic', 'K':'basic', 
                    'D':'acidic', 'E':'acidic', 'S':'', 
                    'T':'polar', 'C':'polar', 'M':'polar', 
-                   'N':'polar', 'Q':'polar'}
+                   'N':'polar', 'Q':'polar', '-':'gap'}
 
     pos_mutation = []
 
