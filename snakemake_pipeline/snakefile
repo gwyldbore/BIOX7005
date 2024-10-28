@@ -68,7 +68,7 @@ rule all:
 
         # plot = expand("workflows/{dataset_name}/plots/{dataset_name}_{rep}.png",
         plot = expand("workflows/{dataset_name}/plots/{datafile_name}_{rep}_mutations.png",
-        "workflows/{dataset_name}/plots/{datafile_name}_{rep}_predictions.png"
+        "workflows/{dataset_name}/plots/{datafile_name}_{rep}_predictions.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         rep=range(1, NUM_REPLICATES + 1),
