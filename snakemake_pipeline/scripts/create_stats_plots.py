@@ -27,24 +27,20 @@ def main():
         
         if starting_value == 'NR4':
             categories_to_track.reverse()
-
-        print('to track:', categories_to_track)
+            mutation_counts.pop('NR4')
+        elif starting_value == 'NR1':
+            mutation_counts.pop('NR1')
 
         # Track the first transition to each non-starting category
         for category in categories_to_track:
             # Identify where the prediction changes to the target category
             transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & (df['overall_prediction'] == category)]
-            print()
-            print('cat', category)
-            print('trans', transition)
 
             # If there is at least one such transition, store the first one
             if not transition.empty:
                 first_transition = transition.iloc[0]
                 mutation_counts[category].append(first_transition['num_mutation'])
-                print('in loop', mutation_counts)
                 
-    print('EXITED LOOP \n \n')
     # Create a grid of 3 subplots (one for each non-starting category)
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
