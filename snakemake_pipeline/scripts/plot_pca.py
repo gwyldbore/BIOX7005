@@ -28,7 +28,8 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     colors = plt.cm.get_cmap('Set1', num_clades).colors
 
     # plt.figure(figsize=(20, 14))
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig = plt.figure(figsize=(20, 14))
+    gs = fig.add_gridspec(1, 2, width_ratios=[10, 1], wspace=0.05)
 
     # Plot all points in gray first to show entries with no clade
     no_clade_df = all_embeddings_df[all_embeddings_df['Clade'].isna()]
@@ -49,18 +50,27 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     #     plt.scatter(mutated_subset['pca1'], mutated_subset['pca2'], c=mutated_subset['num_mutation'], cmap='Blues')
 
     mutation_df = all_embeddings_df.dropna(subset=['num_mutation'])
-    scatter = plt.scatter(mutation_df['pca1'], mutation_df['pca2'], 
+
+    ax = fig.add_subplot(gs[0])
+    # scatter = plt.scatter(mutation_df['pca1'], mutation_df['pca2'], 
+    #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
+    scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
                 c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
     
     # cbar = plt.colorbar()
-    cbar = fig.colorbar(scatter, ax=ax)
+    cbar_ax = fig.add_subplot(gs[1])
+    fig.colorbar(scatter, cax=cbar_ax, orientation='vertical')
+    cbar_ax.set_ylabel('Colorbar')
 
     # Set plot titles and labels
     plt.title("PCA by Clade")
     plt.xlabel("PCA Component 1")
     plt.ylabel("PCA Component 2")
     plt.legend()
-    plt.savefig(outpath, bbox_inches='tight')
+    plt.savefig(outpath)
+
+
+
 
 def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
 
@@ -84,7 +94,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     colors = plt.cm.get_cmap('Set1', num_clades).colors
 
     # plt.figure(figsize=(20, 14))
-    fig, ax = plt.subplots(figsize=(8, 6))
+    fig, ax = plt.subplots(figsize=(20, 14))
 
     # Plot all points in gray first to show entries with no clade
     no_clade_df = all_embeddings_df[all_embeddings_df['Clade'].isna()]
@@ -94,7 +104,8 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     # Plot points with clades in different colors
     for clade, color in zip(clades_with_color, colors):
         subset = all_embeddings_df[all_embeddings_df['Clade'] == clade]
-        plt.scatter(subset['pca1'], subset['pca2'], label=f'Clade: {clade}', color=color)
+        # plt.scatter(subset['pca1'], subset['pca2'], label=f'Clade: {clade}', color=color)
+        ax.scatter(subset['pca1'], subset['pca2'], label=f'Clade: {clade}', color=color)
 
 
 
@@ -117,7 +128,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     plt.xlabel("PCA Component 1")
     plt.ylabel("PCA Component 2")
     plt.legend()
-    plt.savefig(outpath, bbox_inches='tight')
+    plt.savefig(outpath)
 
 
 def main():
