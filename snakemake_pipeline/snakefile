@@ -79,10 +79,10 @@ rule all:
         rep=range(1,NUM_REPLICATES + 1),
         ),
 
-        statplots= expand("workflows/{dataset_name}/results/{datafile_name}.png",
-        dataset_name=ALL_DATASET_NAMES,
-        datafile_name=ALL_DATAFILE_NAMES,
-        ),
+        # statplots= expand("workflows/{dataset_name}/results/{datafile_name}.png",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # ),
 
 #         generate_sequences = expand(
 #         "workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
