@@ -24,6 +24,7 @@ def main():
         # Define the other categories to track (excluding the starting value)
         categories_to_track = ["NR1", "NR1-like", "NR4-like", "NR4"]
         categories_to_track.remove(starting_value)
+        print(categories_to_track)
 
         if starting_value == 'NR4':
             categories_to_track.reverse()
@@ -44,7 +45,7 @@ def main():
 
     # print(mutation_counts.items())
     # Plot the frequency for each target category in a separate subplot
-    for ax, (category, counts) in zip(axes, categories_to_track):
+    for ax, (category, counts) in zip(axes, mutation_counts.items()):
         print(f'category is: {category}')
         if counts:  # Only plot if there are relevant transitions
             pd.Series(counts).value_counts().sort_index().plot(kind='bar', color='skyblue', ax=ax)
