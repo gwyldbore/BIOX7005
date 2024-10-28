@@ -125,7 +125,7 @@ def main():
 
     # load the df with the prediction info
     with open(snakemake.input.predictions_df, "rb") as prediction_input:
-        prediction_df = pickle.load(prediction_input)
+        prediction_df = pd.read_csv(prediction_input)
     embedding_predictions = pd.merge(embedding_df, prediction_df[['info', 'overall_prediction']], 
                                      on='info', how='left')
 
