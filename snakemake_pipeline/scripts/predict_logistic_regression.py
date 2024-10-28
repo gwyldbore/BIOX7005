@@ -17,7 +17,8 @@ def main():
     logistic_model, label_encoder = joblib.load(model_path)
 
     # test_data = pd.read_csv(test_data_path)
-    test_data = pickle.load(test_data_path)
+    with open(test_data_path, "rb") as input_file:
+        test_data = pickle.load(input_file)
 
     info_column = test_data['info']
     X_test = test_data.drop(columns=['info', 'sequence', 'model_name', 
