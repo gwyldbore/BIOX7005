@@ -81,7 +81,7 @@ rule generate_ancestor_embeddings:
     input:
         input_sequences=DATASET_PATH + "/{dataset_name}_ancestors.fa"
     output:
-        ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
+        embedding_df="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
     script:
         "scripts/generate_embeddings.py"
 
