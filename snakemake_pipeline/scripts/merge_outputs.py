@@ -53,7 +53,7 @@ def parse_prints_output(row):
 
     # split each result, separated by ;
     split_results = all_results.split('; ')
-    print(f'results: {split_results}')
+    # print(f'results: {split_results}')
 
     for result in split_results:
         result = result.lower()
@@ -61,7 +61,7 @@ def parse_prints_output(row):
         for key in USUAL_BLAST_OUTPUTS.keys():
             if key in result:
                 # increment the appropriate family in results 
-                print(f'key matching: {key}')
+                # print(f'key matching: {key}')
                 results[USUAL_BLAST_OUTPUTS[key]] += 1
                 break
 
@@ -72,6 +72,8 @@ def parse_prints_output(row):
         if results[subfamily] > frequency:
             most_frequent = subfamily
             frequency = results[subfamily]
+
+    print(f'most frequent is {most_frequent}')
     
     return most_frequent
 
