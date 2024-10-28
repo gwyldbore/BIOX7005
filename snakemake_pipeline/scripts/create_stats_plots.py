@@ -24,10 +24,11 @@ def main():
         # Define the other categories to track (excluding the starting value)
         categories_to_track = ["NR1", "NR1-like", "NR4-like", "NR4"]
         categories_to_track.remove(starting_value)
-        print(categories_to_track)
-
+        
         if starting_value == 'NR4':
             categories_to_track.reverse()
+
+        print(categories_to_track)
 
         # Track the first transition to each non-starting category
         for category in categories_to_track:
@@ -39,6 +40,7 @@ def main():
             if not transition.empty:
                 first_transition = transition.iloc[0]
                 mutation_counts[category].append(first_transition['num_mutation'])
+                print(category)
 
     # Create a grid of 3 subplots (one for each non-starting category)
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
