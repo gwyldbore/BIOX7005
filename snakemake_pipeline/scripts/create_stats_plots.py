@@ -57,6 +57,7 @@ def extract_mutated_positions(input_files):
 
         df['mutated_positions'] = df['mutated_positions'].apply(lambda x: literal_eval(str(x)))
 
+        sequence_length = df['sequence_length'].max()
         # Identify the starting value (first prediction in this file)
         starting_value = df['overall_prediction'].iloc[0]
 
@@ -78,7 +79,7 @@ def extract_mutated_positions(input_files):
                 mutated_positions[category].extend(first_transition['mutated_positions'])
 
         ordered_positions = {cat: mutated_positions[cat] for cat in categories_to_track if mutated_positions[cat]}
-        return ordered_positions
+        return ordered_positions, sequence_length
 
 
 
@@ -101,22 +102,37 @@ def plot_num_mutations(ordered_counts, output_path):
     plt.savefig(output_path, bbox_inches='tight')
 
 
-def plot_mutated_positions(ordered_positions, output_path):
-    # Create a grid of 3 subplots (one for each non-starting category)
+def plot_mutated_positions(ordered_positions, sequence_length, output_path):
+    # # Create a grid of 3 subplots (one for each non-starting category)
+    # fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
+
+    # # Plot the frequency for each target category in a separate subplot
+    # for ax, (category, counts) in zip(axes, ordered_positions.items()):
+    #     if counts:  # Only plot if there are relevant transitions
+    #         pd.Series(counts).value_counts().sort_index().plot(kind='bar', color='skyblue', ax=ax)
+    #     ax.set_title(f"Transitions to {category}")
+    #     ax.set_xlabel("Number of Mutations")
+    #     ax.set_ylabel("Frequency")
+
+    # # Adjust layout to prevent overlap
+    # plt.tight_layout()
+
+    # # Save the plot
+    # plt.savefig(output_path, bbox_inches='tight')
+
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
-    # Plot the frequency for each target category in a separate subplot
-    for ax, (category, counts) in zip(axes, ordered_positions.items()):
-        if counts:  # Only plot if there are relevant transitions
-            pd.Series(counts).value_counts().sort_index().plot(kind='bar', color='skyblue', ax=ax)
-        ax.set_title(f"Transitions to {category}")
-        ax.set_xlabel("Number of Mutations")
+    for ax, (category, positions) in zip(axes, ordered_positions.items()):
+        # Plot the frequency of mutations along the sequence length
+        counts = pd.Series(positions).value_counts().sort_index()
+        counts.plot(kind='bar', color='skyblue', ax=ax)
+
+        ax.set_xlim(0, sequence_length)  # Set x-axis to the sequence length
+        ax.set_title(f"Mutated Positions to {category}")
+        ax.set_xlabel("Sequence Position")
         ax.set_ylabel("Frequency")
 
-    # Adjust layout to prevent overlap
     plt.tight_layout()
-
-    # Save the plot
     plt.savefig(output_path, bbox_inches='tight')
 
 
@@ -128,9 +144,9 @@ def main():
     ordered_counts = extract_mutation_counts(input_files)
     plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs)
 
-    ordered_positions = extract_mutated_positions(input_files)
+    ordered_positions, sequence_length = extract_mutated_positions(input_files)
     print(ordered_positions)
-    plot_mutated_positions(ordered_positions, snakemake.output.position_graphs)
+    plot_mutated_positions(ordered_positions, sequence_length, snakemake.output.position_graphs)
 
     
 
