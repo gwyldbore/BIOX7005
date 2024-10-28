@@ -123,7 +123,7 @@ def main():
     final_df = embedding_df.merge(pivot_df, on=['info'], how='left')
 
     # Merge with blast results
-    final_df = final_df.merge(blast_df[['info', 'blast_results']], on='info', how='left')
+    final_df = final_df.merge(blast_df[['info', 'blast_prediction']], on='info', how='left')
 
     # Merge with logistic regression predictions
     # print(logistic_predictions_df)
