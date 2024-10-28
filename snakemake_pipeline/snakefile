@@ -68,6 +68,12 @@ rule all:
         rep=range(1, NUM_REPLICATES + 1),
         ),
 
+        predict = expand("workflows/{dataset_name}/results/{datafile_name}_{rep}.csv"),
+        dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
+        rep=range(1,NUM_REPLICATES + 1),
+        ),
+
 
 #         generate_sequences = expand(
 #         "workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
