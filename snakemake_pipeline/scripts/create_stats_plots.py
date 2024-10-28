@@ -132,10 +132,14 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
         # Plot the frequency of mutated positions as bars
         counts.plot(kind='bar', color='skyblue', ax=ax)
 
-        # Set x-axis range and ticks for each position
-        ax.set_xlim(0, sequence_length)
-        ax.set_xticks(range(0, sequence_length + 1))  # Ticks for every position
-        ax.set_xticklabels(range(0, sequence_length + 1), rotation=90)  # Rotate for readability
+        # Only plot every 10th tick if the sequence is too long
+        if sequence_length > 50:
+            tick_spacing = 10
+        else:
+            tick_spacing = 1
+
+        ax.set_xticks(range(0, sequence_length + 1, tick_spacing))
+        ax.set_xticklabels(range(0, sequence_length + 1, tick_spacing), rotation=90)
 
         # Set plot title and labels
         ax.set_title(f"Mutated Positions to {category}")
@@ -158,7 +162,6 @@ def main():
     plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs)
 
     ordered_positions, sequence_length = extract_mutated_positions(input_files)
-    print(ordered_positions)
     plot_mutated_positions(ordered_positions, sequence_length, snakemake.output.position_graphs)
 
     
