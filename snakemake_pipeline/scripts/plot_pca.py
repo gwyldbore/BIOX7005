@@ -51,10 +51,16 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
 
     mutation_df = all_embeddings_df.dropna(subset=['num_mutation'])
 
+    viridis = plt.get_cmap('viridis')
+    new_cmap = mcolors.LinearSegmentedColormap.from_list(
+        f'trunc({'viridis'},{0.2},{1.0})',
+        viridis(np.linspace(0.2, 1.0, 256))
+    )
+
     # scatter = plt.scatter(mutation_df['pca1'], mutation_df['pca2'], 
     #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
     scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
-                c=[int(x) for x in mutation_df['num_mutation']], cmap='viridis')
+                c=[int(x) for x in mutation_df['num_mutation']], cmap=new_cmap)
     
     cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
     fig.colorbar(scatter, cax=cax, orientation='horizontal')
