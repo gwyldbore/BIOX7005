@@ -59,10 +59,11 @@ rule all:
         rep=range(1, NUM_REPLICATES + 1),
         ),
 
-        statsplot= expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}.png",
+        statsplot= expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{graph_type}.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
+        graph_type=['mutation', 'position']
         )
         # # interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
         # interproscan_df = expand("workflows/{dataset_name}/{method_name}/interproscan/{datafile_name}_{rep}.csv",
