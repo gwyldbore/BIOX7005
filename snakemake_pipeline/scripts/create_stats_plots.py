@@ -93,7 +93,20 @@ def plot_num_mutations(ordered_counts, output_path):
     # Plot the frequency for each target category in a separate subplot
     for ax, (category, counts) in zip(axes, ordered_counts.items()):
         if counts:  # Only plot if there are relevant transitions
-            pd.Series(counts).value_counts().sort_index().plot(kind='bar', color='skyblue', ax=ax)
+            counts_series = pd.Series(counts).value_counts().sort_index()
+
+            # Check if there are more than 10 unique results
+            if len(counts_series) > 10:
+                # Create bins (for example, 10 bins)
+                bin_edges = np.linspace(counts_series.index.min(), counts_series.index.max(), 11)
+                counts_series = pd.cut(counts, bins=bin_edges, include_lowest=True).value_counts().sort_index()
+
+                # Convert bin labels to a readable format
+                counts_series.index = [f"{int(interval.left)} - {int(interval.right)}" for interval in counts_series.index]
+
+            # Plot the (possibly binned) frequency data
+            counts_series.plot(kind='bar', color='skyblue', ax=ax)
+            
         ax.set_title(f"Transitions to {category}")
         ax.set_xlabel("Number of Mutations")
         ax.set_ylabel("Frequency")
