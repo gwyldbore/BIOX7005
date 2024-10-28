@@ -24,7 +24,7 @@ def main():
     # test_data.columns = test_data.columns.astype(str)
     X_test = test_data.drop(columns=['info', 'sequence', 'model_name', 
                                  'protbert_max_embedding', 'protbert_cls_embedding', 
-                                 'protbert_weighted_embedding'])
+                                 'protbert_weighted_embedding', 'num_mutation'])
     
     
     
@@ -33,7 +33,7 @@ def main():
 
     X_test.columns = X_test.columns.astype(str)
 
-    
+
     y_pred_encoded = logistic_model.predict(X_test)
     y_pred = label_encoder.inverse_transform(y_pred_encoded)
 
