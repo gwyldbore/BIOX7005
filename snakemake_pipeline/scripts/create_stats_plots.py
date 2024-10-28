@@ -28,13 +28,13 @@ def main():
         if starting_value == 'NR4':
             categories_to_track.reverse()
 
-        print(categories_to_track)
+        print('to track:', categories_to_track)
 
         # Track the first transition to each non-starting category
         for category in categories_to_track:
             # Identify where the prediction changes to the target category
             transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & (df['overall_prediction'] == category)]
-            print(category, transition)
+            print('cat, trans', category, transition)
 
             # If there is at least one such transition, store the first one
             if not transition.empty:
