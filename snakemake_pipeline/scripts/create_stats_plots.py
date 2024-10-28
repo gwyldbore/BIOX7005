@@ -42,6 +42,7 @@ def main():
     # Create a grid of 3 subplots (one for each non-starting category)
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
+    print(mutation_counts.items())
     # Plot the frequency for each target category in a separate subplot
     for ax, (category, counts) in zip(axes, mutation_counts.items()):
         print(f'category is: {category}')
