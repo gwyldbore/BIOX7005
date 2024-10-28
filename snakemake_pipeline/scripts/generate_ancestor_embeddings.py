@@ -93,7 +93,7 @@ def main():
     # df = seq_utils.get_sequence_df(snakemake.input.generated_sequences_padded, alignment=True)
     # df = seq_utils.get_sequence_df(snakemake.input.generated_sequences_padded)
     df = seq_utils.get_sequence_df(snakemake.input.input_sequences)
-    df['Clade'] = adf['info'].apply(seq_utils.tag_node)
+    df['Clade'] = df['info'].apply(seq_utils.tag_node)
 
 
     # Set model name and output paths
