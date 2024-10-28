@@ -53,7 +53,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
 
     viridis = plt.get_cmap('viridis')
     new_cmap = mcolors.LinearSegmentedColormap.from_list(
-        f'trunc({'viridis'},{0.2},{1.0})',
+        f"trunc({'viridis'},{0.2},{1.0})",
         viridis(np.linspace(0.2, 1.0, 256))
     )
 
