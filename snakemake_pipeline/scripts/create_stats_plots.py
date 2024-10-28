@@ -42,7 +42,7 @@ def main():
             if not transition.empty:
                 first_transition = transition.iloc[0]
                 mutation_counts[category].append(first_transition['num_mutation'])
-                print('in loop', category)
+                print('in loop', mutation_counts)
                 
 
     # Create a grid of 3 subplots (one for each non-starting category)
