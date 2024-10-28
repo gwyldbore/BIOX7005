@@ -27,9 +27,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     # Define color map for the clades
     colors = plt.cm.get_cmap('Set1', num_clades).colors
 
-    # plt.figure(figsize=(20, 14))
-    fig = plt.figure(figsize=(20, 14))
-    gs = fig.add_gridspec(1, 2, width_ratios=[10, 1], wspace=0.05)
+    plt.figure(figsize=(20, 14))
 
     # Plot all points in gray first to show entries with no clade
     no_clade_df = all_embeddings_df[all_embeddings_df['Clade'].isna()]
@@ -114,7 +112,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     unique_predictions = prediction_df['overall_prediction'].unique()
 
     # Define a new colormap for predictions
-    prediction_colors = plt.cm.cool(np.linspace(0, 1, len(unique_predictions)))
+    prediction_colors = plt.cm.viridis(np.linspace(0, 1, len(unique_predictions)))
 
     for prediction, color in zip(unique_predictions, prediction_colors):
         pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
