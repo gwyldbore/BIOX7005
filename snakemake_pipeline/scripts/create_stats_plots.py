@@ -49,6 +49,7 @@ def extract_mutation_counts(input_files) -> dict:
 def extract_mutated_positions(input_files):
     all_categories = ["NR1", "NR1-like", "NR4-like", "NR4"]
     mutated_positions = {category: [] for category in all_categories}
+    max_sequence_length = 0
 
         # Loop through each input file and extract transitions
     for file in input_files:
@@ -57,7 +58,7 @@ def extract_mutated_positions(input_files):
 
         df['mutated_positions'] = df['mutated_positions'].apply(lambda x: literal_eval(str(x)))
 
-        sequence_length = max(0, df['sequence_length'].max())
+        max_sequence_length = max(max_sequence_length, df['sequence_length'].max())
         # Identify the starting value (first prediction in this file)
         starting_value = df['overall_prediction'].iloc[0]
 
