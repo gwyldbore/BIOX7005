@@ -61,7 +61,7 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
         except Exception as e:
             print(f"Error initializing DataFrame: {e}")
             raise
-    print ('now done')
+    # print ('now done')
 
     for idx, row in df.iterrows():
         info = row["info"]

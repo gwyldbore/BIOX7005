@@ -28,23 +28,23 @@ def get_sequence_df(
     # if ancestor:
     #     cols.append("Sequence_aligned")
 
-    print('reached here')
+    # print('reached here')
     for fasta_path in fasta_paths:
-        print('then also reached here')
+        # print('then also reached here')
         # Load FASTA file
         # seqs = sequence.readFastaFile(fasta_path, alpha)
 
         if alignment:
-            print('then reached the alignment line')
+            # print('then reached the alignment line')
             seqs = AlignIO.parse(open(fasta_path), format="fasta")
-            print('and the opening didnt fail')
+            # print('and the opening didnt fail')
 
         else:
-            print('or the else line')
+            # print('or the else line')
             seqs = SeqIO.parse(open(fasta_path), format="fasta")
 
-        print('so then entering seq in seqs loop')
-        print(f'seqs: {seqs}')
+        # print('so then entering seq in seqs loop')
+        # print(f'seqs: {seqs}')
         # Add to annotation file
         for seq in seqs:
             if alignment == False:

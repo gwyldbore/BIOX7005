@@ -27,13 +27,13 @@ def main():
                                 'protbert_max_embedding', 'protbert_cls_embedding', 
                                 'protbert_weighted_embedding'])
     
-    print(df)
+    # print(df)
     
     # transform into each feature as a single column
     df = df.join(pd.DataFrame(df.pop('protbert_mean_embedding').tolist(), index=df.index))
 
     df.columns = df.columns.astype(str)
-    print('dataframe columns:', df)
+    # print('dataframe columns:', df)
 
 
     # split features into x and y
