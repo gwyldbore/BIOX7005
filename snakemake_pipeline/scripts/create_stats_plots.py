@@ -40,11 +40,11 @@ def main():
                 mutation_counts[category].append(first_transition['num_mutation'])
 
     # Create a grid of 3 subplots (one for each non-starting category)
-    fig, axes = plt.subplots(1, 4, figsize=(18, 6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
-    print(mutation_counts.items())
+    # print(mutation_counts.items())
     # Plot the frequency for each target category in a separate subplot
-    for ax, (category, counts) in zip(axes, mutation_counts.items()):
+    for ax, (category, counts) in zip(axes, categories_to_track):
         print(f'category is: {category}')
         if counts:  # Only plot if there are relevant transitions
             pd.Series(counts).value_counts().sort_index().plot(kind='bar', color='skyblue', ax=ax)
