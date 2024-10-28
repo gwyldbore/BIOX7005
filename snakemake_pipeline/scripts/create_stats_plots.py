@@ -96,7 +96,7 @@ def plot_num_mutations(ordered_counts, output_path):
     plt.tight_layout()
 
     # Save the plot
-    plt.savefig(output_path.replace('.png', '_mutation.png'), bbox_inches='tight')
+    plt.savefig(output_path, bbox_inches='tight')
 
 
 def plot_mutated_positions(ordered_positions, output_path):
@@ -115,7 +115,7 @@ def plot_mutated_positions(ordered_positions, output_path):
     plt.tight_layout()
 
     # Save the plot
-    plt.savefig(output_path.replace('.png', '_positions.png'), bbox_inches='tight')
+    plt.savefig(output_path, bbox_inches='tight')
 
 
 
@@ -124,7 +124,7 @@ def main():
     input_files = snakemake.input
 
     ordered_counts = extract_mutation_counts(input_files)
-    plot_num_mutations(ordered_counts, snakemake.output.graphs)
+    plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs)
 
     # ordered_positions = extract_mutated_positions(input_files)
     # plot_mutated_positions(ordered_positions, snakemake.output.graphs)

@@ -266,6 +266,7 @@ rule create_statistic_plots:
             rep=range(1, NUM_REPLICATES + 1)
         )
     output:
-        graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}.png"
+        mutation_graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}_mutation.png",
+        position_graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}_position.png"
     script:
         "scripts/create_stats_plots.py"
