@@ -52,7 +52,8 @@ def parse_prints_output(row):
     # seq_id = row['']
 
     # split each result, separated by ;
-    split_results = all_results.split(';')
+    split_results = all_results.split('; ')
+    print(f'results: {split_results}')
 
     for result in split_results:
         result = result.lower()
