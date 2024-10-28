@@ -1,7 +1,6 @@
 try:
     NUM_REPLICATES = config['num_replicates']
 except KeyError:
-    # NUM_REPLICATES = 10
     NUM_REPLICATES = 1
 
 # try:
