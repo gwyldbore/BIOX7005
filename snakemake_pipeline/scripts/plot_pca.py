@@ -29,7 +29,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     # colors = plt.cm.get_cmap('Set1', num_clades).colors
     # colors = plt.get_cmap('PiYG', num_clades).colors
     # colors = plt.colormaps['PiYG'].resampled(num_clades)
-    clade_cmap = ListedColormap['gold', 'lightseagreen']
+    clade_cmap = ListedColormap(['gold', 'lightseagreen'])
     colors = plt.get_cmap(clade_cmap, num_clades).colors
 
     # plt.figure(figsize=(20, 14))
