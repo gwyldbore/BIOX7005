@@ -48,7 +48,7 @@ def extract_mutation_counts(input_files) -> dict:
     # Reorder mutation counts based on the valid categories order
     ordered_counts = {cat: mutation_counts[cat] for cat in categories_to_track if cat in mutation_counts}
 
-    return ordered_counts
+    return ordered_counts, max_sequence_length
 
 
 def extract_mutated_positions(input_files):
@@ -198,7 +198,7 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
 def main():
     input_files = snakemake.input
 
-    ordered_counts = extract_mutation_counts(input_files)
+    ordered_counts, sequence_length = extract_mutation_counts(input_files)
     plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs, sequence_length)
 
     ordered_positions, sequence_length = extract_mutated_positions(input_files)
