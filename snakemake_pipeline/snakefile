@@ -217,7 +217,7 @@ rule plot_pca:
     script:
         "scripts/plot_pca.py"
 
-rule find_stopping_sequence:
-    input:
-    output:
-    script:
+# rule find_stopping_sequence:
+#     input:
+#     output:
+#     script:
