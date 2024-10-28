@@ -44,6 +44,7 @@ def main():
 
     # Plot the frequency for each target category in a separate subplot
     for ax, (category, counts) in zip(axes, mutation_counts.items()):
+        print('category is: {category}')
         if counts:  # Only plot if there are relevant transitions
             pd.Series(counts).value_counts().sort_index().plot(kind='bar', color='skyblue', ax=ax)
         ax.set_title(f"Transitions to {category}")
