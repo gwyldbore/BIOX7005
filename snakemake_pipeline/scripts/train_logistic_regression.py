@@ -25,7 +25,7 @@ def main():
     # drop the columns i don't want
     df = embedding_df.drop(columns=['info', 'sequence', 'model_name', 
                                 'protbert_max_embedding', 'protbert_cls_embedding', 
-                                'protbert_weighted_embedding'])
+                                'protbert_weighted_embedding', 'num_mutation'])
     
     # transform into each feature as a single column
     df = df.join(pd.DataFrame(df.pop('protbert_mean_embedding').tolist(), index=df.index))
