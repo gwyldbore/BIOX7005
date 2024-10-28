@@ -26,7 +26,7 @@ def main():
         categories_to_track.remove(starting_value)
 
         if starting_value == 'NR4':
-            categories_to_track = categories_to_track.reverse()
+            categories_to_track.reverse()
 
         # Track the first transition to each non-starting category
         for category in categories_to_track:
