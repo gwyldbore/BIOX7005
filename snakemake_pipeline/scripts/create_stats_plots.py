@@ -57,7 +57,7 @@ def extract_mutated_positions(input_files):
 
         df['mutated_positions'] = df['mutated_positions'].apply(lambda x: literal_eval(str(x)))
 
-        sequence_length = df['sequence_length'].max()
+        sequence_length = max(0, df['sequence_length'].max())
         # Identify the starting value (first prediction in this file)
         starting_value = df['overall_prediction'].iloc[0]
 
