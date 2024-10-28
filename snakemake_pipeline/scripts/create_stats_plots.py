@@ -5,8 +5,15 @@ import matplotlib.pyplot as plt
 def main():
     input_files = snakemake.input
 
-    all_mutation_counts = []
+    # Initialize a dictionary to store mutation counts for each target category
+    mutation_counts = {
+        "NR1": [],
+        "NR1-like": [],
+        "NR4-like": [],
+        "NR4": []
+    }
 
+    # Loop through each input file and extract transitions
     for file in input_files:
         # Load the data from the file
         df = pd.read_csv(file)
@@ -30,11 +37,21 @@ def main():
             # If there is at least one such transition, store the first one
             if not transition.empty:
                 first_transition = transition.iloc[0]
-                all_mutation_counts.append(first_transition['num_mutation'])
+                mutation_counts[category].append(first_transition['num_mutation'])
 
-    # Create a frequency plot from the aggregated mutation counts
-    plt.figure(figsize=(10, 6))
-    pd.Series(all_mutation_counts).value_counts().sort_index().plot(kind='bar', color='skyblue')
+    # Create a grid of 3 subplots (one for each non-starting category)
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
+
+    # Plot the frequency for each target category in a separate subplot
+    for ax, (category, counts) in zip(axes, mutation_counts.items()):
+        if counts:  # Only plot if there are relevant transitions
+            pd.Series(counts).value_counts().sort_index().plot(kind='bar', color='skyblue', ax=ax)
+        ax.set_title(f"Transitions to {category}")
+        ax.set_xlabel("Number of Mutations")
+        ax.set_ylabel("Frequency")
+
+    # Adjust layout to prevent overlap
+    plt.tight_layout()
 
     # Add labels and title
     plt.title(f"Frequency of 'num_mutation' Changes")
