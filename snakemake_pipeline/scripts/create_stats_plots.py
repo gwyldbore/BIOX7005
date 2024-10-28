@@ -27,9 +27,9 @@ def main():
         
         if starting_value == 'NR4':
             categories_to_track.reverse()
-            mutation_counts.pop('NR4')
+            mutation_counts.pop('NR4', '')
         elif starting_value == 'NR1':
-            mutation_counts.pop('NR1')
+            mutation_counts.pop('NR1', '')
 
         # Track the first transition to each non-starting category
         for category in categories_to_track:
