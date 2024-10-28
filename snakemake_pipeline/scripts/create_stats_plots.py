@@ -42,7 +42,7 @@ def main():
                 mutation_counts[category].append(first_transition['num_mutation'])
 
     # Reorder mutation counts based on the valid categories order
-    ordered_counts = {cat: mutation_counts[cat] for cat in valid_categories if cat in mutation_counts}
+    ordered_counts = {cat: mutation_counts[cat] for cat in categories_to_track if cat in mutation_counts}
                 
     # Create a grid of 3 subplots (one for each non-starting category)
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
