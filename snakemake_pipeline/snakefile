@@ -231,7 +231,7 @@ rule plot_pca:
         predictions_df="workflows/{dataset_name}/results/{datafile_name}_{rep}.csv"
     output:
         # plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
-        plot_mutation="workflows/{dataset_name}/plots/{datafile_name}_{rep}_mutations.png"
+        plot_mutation="workflows/{dataset_name}/plots/{datafile_name}_{rep}_mutations.png",
         plot_prediction="workflows/{dataset_name}/plots/{datafile_name}_{rep}_predictions.png"
     script:
         "scripts/plot_pca.py"
