@@ -25,7 +25,8 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     num_clades = len(clades_with_color)
 
     # Define color map for the clades
-    colors = plt.cm.get_cmap('Set1', num_clades).colors
+    # colors = plt.cm.get_cmap('Set1', num_clades).colors
+    colors = plt.get_cmap('Set1', num_clades).colors
 
     # plt.figure(figsize=(20, 14))
     fig, ax = plt.subplots(figsize=(20,14))
