@@ -46,7 +46,7 @@ def main():
     # Combine the 'info' column, predictions, and probabilities into one DataFrame
     results_df = pd.DataFrame({
         'info': info_column,
-        'Prediction': y_pred
+        'embedding_prediction': y_pred
     })
     results_df = pd.concat([results_df, proba_df], axis=1)
 

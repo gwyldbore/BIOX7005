@@ -123,8 +123,8 @@ def main():
     final_df = final_df.merge(blast_df[['info', 'blast_results']], on='info', how='left')
 
     # Merge with logistic regression predictions
-    print(logistic_predictions_df)
-    # final_df = final_df.merge(logistic_predictions_df[['info', 'embedding_prediction']], on='info', how='left')
+    # print(logistic_predictions_df)
+    final_df = final_df.merge(logistic_predictions_df[['info', 'embedding_prediction']], on='info', how='left')
 
     # final_df['has_subfamily_4'] = final_df['PRINTS'].str.contains('subfamily 4', na=False)
     # final_df['has_subfamily_1'] = final_df['PRINTS'].str.contains('subfamily 1', na=False)
