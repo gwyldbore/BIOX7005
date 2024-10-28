@@ -30,7 +30,7 @@ def main():
     
     results_df['overall_prediction'] = results_df.apply(overall_prediction, axis=1)
 
-    results_df.to_csv(snakemake.output.results_df)
+    results_df.to_csv(snakemake.output.results_df, index=False)
 
 
 if __name__ == "__main__":
