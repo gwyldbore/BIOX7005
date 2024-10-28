@@ -31,7 +31,7 @@ def main():
     df = df.join(pd.DataFrame(df.pop('protbert_mean_embedding').tolist(), index=df.index))
 
     df.columns = df.columns.astype(str)
-    print('dataframe columns:', df.columns)
+    print('dataframe columns:', df)
 
 
     # split features into x and y
