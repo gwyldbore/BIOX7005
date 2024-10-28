@@ -58,6 +58,7 @@ def extract_mutated_positions(input_files):
 
         df['mutated_positions'] = df['mutated_positions'].apply(lambda x: literal_eval(str(x)))
 
+        df['sequence_length'] = df['sequence'].apply(lambda x: len(str(x)) if pd.notna(x) else 0)
         max_sequence_length = max(max_sequence_length, df['sequence_length'].max())
         # Debugging: Check sequence lengths
         print(f"Processed {file}, Max Length: {df['sequence_length'].max()}")
