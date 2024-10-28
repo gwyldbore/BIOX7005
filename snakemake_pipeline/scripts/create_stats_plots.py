@@ -44,7 +44,7 @@ def main():
                 mutation_counts[category].append(first_transition['num_mutation'])
                 print('in loop', mutation_counts)
                 
-
+    print('EXITED LOOP \n \n')
     # Create a grid of 3 subplots (one for each non-starting category)
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
