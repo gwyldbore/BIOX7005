@@ -30,7 +30,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     # colors = plt.colormaps['PiYG'].resampled(num_clades)
     # clade_cmap = ListedColormap(['#d3d3d3', '#a9a9a9'])
 
-    clade_cmap = ListedColormap(['#a6cee3', '#b2df8a'])
+    clade_cmap = ListedColormap(['#a6cee3', '#fdbf6f'])
     colors = plt.get_cmap(clade_cmap, num_clades).colors
 
     # plt.figure(figsize=(20, 14))
@@ -95,7 +95,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     # Define color map for the clades
     # colors = plt.cm.get_cmap('Set1', num_clades).colors
     # clade_cmap = ListedColormap(['royalblue', 'green'])
-    clade_cmap = ListedColormap(['#d3d3d3', '#a9a9a9'])
+    clade_cmap = ListedColormap(['#a6cee3', '#fdbf6f'])
     colors = plt.get_cmap(clade_cmap, num_clades).colors
 
     plt.figure(figsize=(20, 14))
