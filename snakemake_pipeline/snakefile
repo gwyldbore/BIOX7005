@@ -83,7 +83,7 @@ rule generate_ancestor_embeddings:
     output:
         embedding_df="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
     script:
-        "scripts/generate_embeddings.py"
+        "scripts/generate_ancestor_embeddings.py"
 
 
 rule generate_mutations:
