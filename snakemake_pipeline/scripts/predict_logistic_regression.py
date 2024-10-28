@@ -22,6 +22,8 @@ def main():
                                  'protbert_max_embedding', 'protbert_cls_embedding', 
                                  'protbert_weighted_embedding'])
     
+    X_test.columns = X_test.columns.astype(str)
+    
     # Transform 'protbert_mean_embedding' into separate features (as in training)
     X_test = X_test.join(pd.DataFrame(X_test.pop('protbert_mean_embedding').tolist(), index=X_test.index))
 
