@@ -68,7 +68,7 @@ def parse_prints_output(row):
         most_frequent = ''
         frequency = -1
 
-        print(f'subfamily {subfamily}, most freq {most_frequent}')
+        print(f'subfamily {subfamily}, most freq {most_frequent}:{frequency}')
 
         if results[subfamily] > frequency:
             most_frequent = subfamily
