@@ -87,26 +87,40 @@ def extract_mutated_positions(input_files):
 
 
 
-def plot_num_mutations(ordered_counts, output_path):
+def plot_num_mutations(ordered_counts, output_path, sequence_length):
     # Create a grid of 3 subplots (one for each non-starting category)
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
     # Plot the frequency for each target category in a separate subplot
     for ax, (category, counts) in zip(axes, ordered_counts.items()):
-        if counts:  # Only plot if there are relevant transitions
-            counts_series = pd.Series(counts).value_counts().sort_index()
+        # if counts:  # Only plot if there are relevant transitions
+        #     counts_series = pd.Series(counts).value_counts().sort_index()
 
-            # Check if there are more than 10 unique results
-            if len(counts_series) > 10:
-                # Create bins (for example, 10 bins)
-                bin_edges = np.linspace(counts_series.index.min(), counts_series.index.max(), 11)
-                counts_series = pd.cut(counts, bins=bin_edges, include_lowest=True).value_counts().sort_index()
+        #     # Check if there are more than 10 unique results
+        #     if len(counts_series) > 10:
+        #         # Create bins (for example, 10 bins)
+        #         bin_edges = np.linspace(counts_series.index.min(), counts_series.index.max(), 11)
+        #         counts_series = pd.cut(counts, bins=bin_edges, include_lowest=True).value_counts().sort_index()
 
-                # Convert bin labels to a readable format
-                counts_series.index = [f"{int(interval.left)} - {int(interval.right)}" for interval in counts_series.index]
+        #         # Convert bin labels to a readable format
+        #         counts_series.index = [f"{int(interval.left)} - {int(interval.right)}" for interval in counts_series.index]
 
-            # Plot the (possibly binned) frequency data
-            counts_series.plot(kind='bar', color='skyblue', ax=ax)
+        #     # Plot the (possibly binned) frequency data
+        #     counts_series.plot(kind='bar', color='skyblue', ax=ax)
+
+        counts = pd.Series(counts).value_counts().sort_index()
+
+        # Plot the mutation positions as bars with the correct x-axis values
+        ax.bar(counts.index, counts.values, color='skyblue')
+
+        # Set x-axis range to cover the full sequence length
+        ax.set_xlim(0, sequence_length)
+
+        # Set x-ticks for every position in the range of the sequence
+        ax.set_xticks(range(0, sequence_length + 1, max(1, sequence_length // 20)))  # Adjust tick density
+
+        # Rotate x-tick labels for readability
+        ax.set_xticklabels(range(0, sequence_length + 1, max(1, sequence_length // 20)), rotation=90)
 
         ax.set_title(f"Transitions to {category}")
         ax.set_xlabel("Number of Mutations")
@@ -143,9 +157,9 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
     #     ax.set_xlabel("Sequence Position")
     #     ax.set_ylabel("Frequency")
 
-    fig, axes = plt.subplots(1, 3, figsize=(24, 6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(27, 6), sharey=True)
 
-    print(f'mutated positions list being plotted: {[(key, sorted(value)) for key, value in ordered_positions.items()]}')
+    # print(f'mutated positions list being plotted: {[(key, sorted(value)) for key, value in ordered_positions.items()]}')
 
     for ax, (category, positions) in zip(axes, ordered_positions.items()):
         # Calculate frequency of each mutation position
@@ -181,7 +195,7 @@ def main():
     input_files = snakemake.input
 
     ordered_counts = extract_mutation_counts(input_files)
-    plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs)
+    plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs, sequence_length)
 
     ordered_positions, sequence_length = extract_mutated_positions(input_files)
     plot_mutated_positions(ordered_positions, sequence_length, snakemake.output.position_graphs)
