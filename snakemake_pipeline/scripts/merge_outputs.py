@@ -62,12 +62,13 @@ def parse_prints_output(row):
             if key in result:
                 # increment the appropriate family in results 
                 results[USUAL_BLAST_OUTPUTS[key]] += 1
-                print(results)
                 break
 
     for subfamily in results.keys():
         most_frequent = ''
         frequency = -1
+
+        print(f'subfamily {subfamily}, most freq {most_frequent}')
 
         if results[subfamily] > frequency:
             most_frequent = subfamily
