@@ -52,9 +52,9 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     # scatter = plt.scatter(mutation_df['pca1'], mutation_df['pca2'], 
     #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
     scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
-                c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
+                c=[int(x) for x in mutation_df['num_mutation']], cmap='spring')
     
-    cax = ax.inset_axes([0.05, 0.1, 0.1, 0.1])
+    cax = ax.inset_axes([0.05, 0.05, 0.5, 0.1])
     fig.colorbar(scatter, cax=cax, orientation='horizontal')
     
     # cbar = plt.colorbar()
@@ -91,7 +91,9 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     num_clades = len(clades_with_color)
 
     # Define color map for the clades
-    colors = plt.cm.get_cmap('Set1', num_clades).colors
+    # colors = plt.cm.get_cmap('Set1', num_clades).colors
+    clade_cmap = ListedColormap(['orangered', 'goldenrod'])
+    colors = plt.get_cmap(clade_cmap, num_clades).colors
 
     plt.figure(figsize=(20, 14))
     # fig, ax = plt.subplots(figsize=(20, 14))
