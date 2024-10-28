@@ -12,6 +12,7 @@ def extract_mutation_counts(input_files) -> dict:
         "NR4-like": [],
         "NR4": []
     }
+    max_sequence_length = 0
 
     # Loop through each input file and extract transitions
     for file in input_files:
@@ -20,6 +21,9 @@ def extract_mutation_counts(input_files) -> dict:
 
         # Identify the starting value (first prediction in this file)
         starting_value = df['overall_prediction'].iloc[0]
+
+        df['sequence_length'] = df['sequence'].apply(lambda x: len(str(x)) if pd.notna(x) else 0)
+        max_sequence_length = max(max_sequence_length, df['sequence_length'].max())
 
         # Define the other categories to track (excluding the starting value)
         categories_to_track = ["NR1", "NR1-like", "NR4-like", "NR4"]
