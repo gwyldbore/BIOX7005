@@ -55,7 +55,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
                 c=[int(x) for x in mutation_df['num_mutation']], cmap='spring')
     
-    cax = ax.inset_axes([0.05, 0.05, 0.5, 0.1])
+    cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
     fig.colorbar(scatter, cax=cax, orientation='horizontal')
     
     # cbar = plt.colorbar()
