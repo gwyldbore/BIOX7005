@@ -38,6 +38,7 @@ def main():
     # encode the clade labels
     label_encoder = LabelEncoder()
     y_train_encoded = label_encoder.fit_transform(y_train)
+    print(y_train_encoded)
 
     # Apply SMOTE to the training data to correct class imbalance
     smote = SMOTE(random_state=42)

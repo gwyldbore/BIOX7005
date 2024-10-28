@@ -211,6 +211,7 @@ rule plot_pca:
     input:
         # embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
         embedding_df="workflows/{dataset_name}/embeddings/{datafile_name}_{rep}.csv",
+        ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
     output:
         # plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
         plot="workflows/{dataset_name}/plots/{datafile_name}_{rep}.png"

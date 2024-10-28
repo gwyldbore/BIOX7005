@@ -70,7 +70,9 @@ def main():
     # print('Nodes to label:', nodes_to_label)
 
     # Load previously calculated ancestor embeddings
-    with open("./data/ancestor_embedding_df.csv", "rb") as input_file:
+    # with open("./data/ancestor_embedding_df.csv", "rb") as input_file:
+    #     ancestor_embedding_df = pickle.load(input_file)
+    with open(snakemake.input.ancestor_embeddings, "rb") as input_file:
         ancestor_embedding_df = pickle.load(input_file)
 
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node)
