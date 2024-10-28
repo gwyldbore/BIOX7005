@@ -34,6 +34,7 @@ def main():
         for category in categories_to_track:
             # Identify where the prediction changes to the target category
             transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & (df['overall_prediction'] == category)]
+            print()
             print('cat', category)
             print('trans', transition)
 
@@ -41,7 +42,8 @@ def main():
             if not transition.empty:
                 first_transition = transition.iloc[0]
                 mutation_counts[category].append(first_transition['num_mutation'])
-                print(category)
+                print('in loop', category)
+                
 
     # Create a grid of 3 subplots (one for each non-starting category)
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
