@@ -61,7 +61,7 @@ def parse_prints_output(row):
         for key in USUAL_BLAST_OUTPUTS.keys():
             if key in result:
                 # increment the appropriate family in results 
-                # print(f'key matching: {key}')
+                print(f'key matching: {key}')
                 results[USUAL_BLAST_OUTPUTS[key]] += 1
                 break
 
