@@ -84,7 +84,7 @@ def extract_mutated_positions(input_files):
                 mutated_positions[category].extend(first_transition['mutated_positions'])
 
         ordered_positions = {cat: mutated_positions[cat] for cat in categories_to_track if mutated_positions[cat]}
-        return ordered_positions, sequence_length
+        return ordered_positions, max_sequence_length
 
 
 
