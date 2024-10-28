@@ -131,7 +131,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     # prediction_colors = plt.colormaps['PiYG'].resampled(len(unique_predictions))
 
     # prediction_cmap = ListedColormap(['cyan', 'chartreuse', 'hotpink', 'blueviolet'])
-    prediction_cmap = ListedColormap(['#e41a1c', '#377eb8', '#984ea3', '#4d4d4d'])
+    prediction_cmap = ListedColormap(['#ff7c0a', 'red', 'royalblue', 'limegreen'])
     prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
 
     for prediction, color in zip(unique_predictions, prediction_colors):
