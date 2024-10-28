@@ -219,7 +219,10 @@ rule plot_pca:
     script:
         "scripts/plot_pca.py"
 
-# rule find_stopping_sequence:
-#     input:
-#     output:
-#     script:
+rule gather_prediction_info:
+    input:
+        merged_df="workflows/{dataset_name}/merged/{datafile_name}_{rep}.csv"
+    output:
+        results_df="workflows/{dataset_name}/results{datafile_name}_{rep}.csv"
+    script:
+        "scripts/gather_prediction_info.py"

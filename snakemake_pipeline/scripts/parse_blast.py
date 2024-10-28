@@ -5,7 +5,7 @@ def dummy_blast_results(seq_df, output_df, blast_results):
     # Randomly assign either 'dummy_NR1' or 'dummy_NR4' to each sequence
     # seq_df['blast_results'] = [random.choice(['dummy_NR1', 'dummy_NR4']) for _ in range(len(seq_df))]
 
-    seq_df['blast_results'] = seq_df['info'].map(blast_results)
+    seq_df['blast_prediction'] = seq_df['info'].map(blast_results)
 
     seq_df.to_csv(output_df, index=False)
 
