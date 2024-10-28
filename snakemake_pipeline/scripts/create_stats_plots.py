@@ -60,8 +60,6 @@ def extract_mutated_positions(input_files):
 
         df['sequence_length'] = df['sequence'].apply(lambda x: len(str(x)) if pd.notna(x) else 0)
         max_sequence_length = max(max_sequence_length, df['sequence_length'].max())
-        # Debugging: Check sequence lengths
-        print(f"Processed {file}, Max Length: {df['sequence_length'].max()}")
 
         # Identify the starting value (first prediction in this file)
         starting_value = df['overall_prediction'].iloc[0]
@@ -128,16 +126,26 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
     for ax, (category, positions) in zip(axes, ordered_positions.items()):
-        # Plot the frequency of mutations along the sequence length
+        # Calculate frequency of mutated positions
         counts = pd.Series(positions).value_counts().sort_index()
+
+        # Plot the frequency of mutated positions as bars
         counts.plot(kind='bar', color='skyblue', ax=ax)
 
-        ax.set_xlim(0, sequence_length)  # Set x-axis to the sequence length
+        # Set x-axis range and ticks for each position
+        ax.set_xlim(0, sequence_length)
+        ax.set_xticks(range(0, sequence_length + 1))  # Ticks for every position
+        ax.set_xticklabels(range(0, sequence_length + 1), rotation=90)  # Rotate for readability
+
+        # Set plot title and labels
         ax.set_title(f"Mutated Positions to {category}")
         ax.set_xlabel("Sequence Position")
         ax.set_ylabel("Frequency")
 
+    # Adjust layout to prevent overlap
     plt.tight_layout()
+
+    # Save the plot
     plt.savefig(output_path, bbox_inches='tight')
 
 
