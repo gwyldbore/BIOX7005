@@ -257,7 +257,8 @@ rule gather_prediction_info:
 
 rule create_statistic_plots:
     input:
-        expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv", rep=range(1, NUM_REPLICATES + 1))
+        # expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv", rep=range(1, NUM_REPLICATES + 1))
+        all_data="workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv"
     output:
         graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}.png"
     script:
