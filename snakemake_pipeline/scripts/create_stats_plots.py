@@ -131,6 +131,8 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
 
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
+    print(f'mutated positions list being plotted: {ordered_positions}')
+
     for ax, (category, positions) in zip(axes, ordered_positions.items()):
         # Calculate frequency of each mutation position
         counts = pd.Series(positions).value_counts().sort_index()
