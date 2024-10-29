@@ -285,8 +285,10 @@ rule plot_pca_batch:
     output:
         plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_mutations.png",
         plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_predictions.png"
+    params:
+        batch=lambda wildcards: wildcards.batch  # Pass batch as a parameter
     script:
-        "scripts/plot_pca.py"
+        "scripts/plot_pca.py --batch {params.batch}"
 
 
 
