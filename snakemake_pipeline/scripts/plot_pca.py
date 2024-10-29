@@ -83,7 +83,7 @@ def plot_pca2(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='pro
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
 
     pca = PCA(n_components=2)
-    pca_result = pca.fit(ancestor_embeddings)
+    pca_result = pca.fit_transform(ancestor_embeddings)
 
 
     # Transform both ancestors_df and mutations_df using the fitted PCA
