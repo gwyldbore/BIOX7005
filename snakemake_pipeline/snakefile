@@ -1,7 +1,7 @@
 try:
     NUM_REPLICATES = config['num_replicates']
 except KeyError:
-    NUM_REPLICATES = 5
+    NUM_REPLICATES = 100
 
 # try:
 #     DATASET_PATH = config['dataset_path']
@@ -240,18 +240,18 @@ rule merge_outputs:
     script:
         "scripts/merge_outputs.py"
 
-rule plot_pca:
-    input:
-        # embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
-        embedding_df="workflows/{dataset_name}/{method_name}/embeddings/{datafile_name}_{rep}.csv",
-        # ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
-        predictions_df="workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv"
-    output:
-        # plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
-        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
-        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_predictions.png"
-    script:
-        "scripts/plot_pca.py"
+# rule plot_pca:
+#     input:
+#         # embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+#         embedding_df="workflows/{dataset_name}/{method_name}/embeddings/{datafile_name}_{rep}.csv",
+#         # ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
+#         predictions_df="workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv"
+#     output:
+#         # plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
+#         plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
+#         plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_predictions.png"
+#     script:
+#         "scripts/plot_pca.py"
 
 # rule plot_pca_batch:
 #     input:
