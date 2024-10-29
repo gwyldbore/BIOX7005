@@ -101,7 +101,7 @@ def plot_num_mutations(ordered_counts, output_path):
             counts_series = pd.Series(counts).value_counts().sort_index()
 
             # Determine the range of mutation counts and check if binning is needed
-            if len(counts_series) > 10:
+            if len(counts_series) > 20:
                 # Determine the bin edges (increments of 5)
                 min_count = counts_series.index.min()
                 max_count = counts_series.index.max()
@@ -163,7 +163,7 @@ def plot_num_mutation_spread(ordered_counts, sequence_length, output_path):
 
 
 def plot_mutated_positions(ordered_positions, sequence_length, output_path):
-    fig, axes = plt.subplots(1, 3, figsize=(27, 6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(15, 6), sharey=True)
 
     # print(f'mutated positions list being plotted: {[(key, sorted(value)) for key, value in ordered_positions.items()]}')
 
