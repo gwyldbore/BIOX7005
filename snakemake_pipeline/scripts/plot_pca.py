@@ -204,7 +204,7 @@ def main():
         with open(file, "rb") as input_file:
             df = pickle.load(input_file)
         # df = pickle.load(file)
-        df.apply(adjust_info, args=(i), axis=1)
+        df.apply(adjust_info, index=i, axis=1)
         emb_list.append(df)
         i += 1
     embedding_dfs = pd.concat(emb_list)
