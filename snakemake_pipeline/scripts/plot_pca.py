@@ -87,8 +87,10 @@ def plot_pca2(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='pro
 
 
     # Transform both ancestors_df and mutations_df using the fitted PCA
-    ancestors_df[['pca1', 'pca2']] = pca.transform(ancestor_embeddings)
-    mutations_df[['pca1', 'pca2']] = pca.transform(np.vstack(mutations_df[col_name].values))
+    # ancestors_df[['pca1', 'pca2']] = pca.transform(ancestor_embeddings)
+    ancestors_df['pca1'] = pca_result[:, 0]
+    ancestors_df['pca2'] = pca_result[:, 1]
+    # mutations_df[['pca1', 'pca2']] = pca.transform(np.vstack(mutations_df[col_name].values))
 
 
     # Set up the plot
@@ -110,12 +112,12 @@ def plot_pca2(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='pro
         ax.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
 
 
-    mutation_df = mutations_df.dropna(subset=['num_mutation'])
-    scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
-                c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
+    # mutation_df = mutations_df.dropna(subset=['num_mutation'])
+    # scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
+    #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
     
-    cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
-    fig.colorbar(scatter, cax=cax, orientation='horizontal')
+    # cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
+    # fig.colorbar(scatter, cax=cax, orientation='horizontal')
 
     # Set plot titles and labels
     plt.title("PCA by Clade")
@@ -237,8 +239,8 @@ def main():
     plot_pca2(embedding_df, ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
 
 
-    all_embeddings_prediction_df = pd.concat([embedding_predictions, specific_ancestor_embedding_df])
-    plot_pca_colour_by_predicted(all_embeddings_prediction_df, nodes_to_label, snakemake.output.plot_prediction)
+    # all_embeddings_prediction_df = pd.concat([embedding_predictions, specific_ancestor_embedding_df])
+    # plot_pca_colour_by_predicted(all_embeddings_prediction_df, nodes_to_label, snakemake.output.plot_prediction)
 
 
 # def main():
