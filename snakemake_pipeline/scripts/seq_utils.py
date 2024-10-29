@@ -110,13 +110,13 @@ def tag_node(info, dataset):
     # with open('./data/NR1_ids.txt', 'r') as file:
     #     nr1_names = set(line.strip() for line in file)
 
-    with open(f'../data/{dataset}_nodes/NR1_ids.txt', 'r') as file:
+    with open(f'../data/reportdata/{dataset}_nodes/NR1_ids.txt', 'r') as file:
         nr1_names = set(line.strip() for line in file)
 
     # with open('./data/NR4_ids.txt', 'r') as file:
     #     nr4_names = set(line.strip() for line in file)
 
-    with open(f'../data/{dataset}_nodes/NR4_ids.txt', 'r') as file:
+    with open(f'../data/reportdata/{dataset}_nodes/NR4_ids.txt', 'r') as file:
         nr4_names = set(line.strip() for line in file)
 
     if info in nr1_names:
