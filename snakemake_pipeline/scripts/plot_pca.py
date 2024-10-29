@@ -212,7 +212,7 @@ def main():
     i = 0
     for file in input_predictions:
         df = pd.read_csv(file)
-        df.apply(adjust_info, args=(i), axis=1)
+        df.apply(adjust_info, index=i, axis=1)
         pred_list.append(df)
         i += 1
     prediction_dfs = pd.concat(pred_list)
