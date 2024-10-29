@@ -249,7 +249,7 @@ rule plot_pca:
     output:
         # plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
         plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
-        # plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_predictions.png"
+        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_predictions.png"
     script:
         "scripts/plot_pca.py"
 

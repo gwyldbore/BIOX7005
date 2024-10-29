@@ -389,9 +389,6 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
         origin, target, removed_at = remove_common_gaps(origin, target)
         # print(f'length origin {len(origin)}, length target {len(target)}')
 
-        # print(origin.seq)
-
-
         mutation_positions = get_probabilistic_mutations(inputfile, removed_at)
         possible_mutations = get_specified_mutations(origin, target, mutation_positions)
 
