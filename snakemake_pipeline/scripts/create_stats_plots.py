@@ -163,7 +163,7 @@ def plot_num_mutation_spread(ordered_counts, sequence_length, output_path):
 
 
 def plot_mutated_positions(ordered_positions, sequence_length, output_path):
-    fig, axes = plt.subplots(1, 3, figsize=(15, 6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(24, 6), sharey=True)
 
     # print(f'mutated positions list being plotted: {[(key, sorted(value)) for key, value in ordered_positions.items()]}')
 
@@ -181,7 +181,7 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
         ax.set_xticks(range(0, sequence_length + 1, max(1, sequence_length // 20)))  # Adjust tick density
 
         # Rotate x-tick labels for readability
-        ax.set_xticklabels(range(0, sequence_length + 1, max(1, sequence_length // 20)), rotation=90)
+        ax.set_xticklabels(range(0, sequence_length + 1, max(1, sequence_length // 20)), rotation=45)
 
         # Set plot title and labels
         ax.set_title(f"Mutated Positions to {category}")
@@ -202,8 +202,7 @@ def main():
 
     ordered_counts, sequence_length = extract_mutation_counts(input_files)
     plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs)
-    # spread_path = snakemake.output.mutation_graphs.replace('.png', '_spread.png')
-    # plot_num_mutations(ordered_counts, sequence_length, spread_path)
+    plot_num_mutations(ordered_counts, sequence_length, snakemake.output.position_spread)
 
     ordered_positions, sequence_length = extract_mutated_positions(input_files)
     plot_mutated_positions(ordered_positions, sequence_length, snakemake.output.position_graphs)
