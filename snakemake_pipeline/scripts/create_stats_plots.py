@@ -91,7 +91,7 @@ def extract_mutated_positions(input_files):
 
 
 
-def plot_num_mutations(ordered_counts, output_path, sequence_length):
+def plot_num_mutations(ordered_counts, output_path):
     # Create a grid of 3 subplots (one for each non-starting category)
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
 
@@ -163,29 +163,6 @@ def plot_num_mutation_spread(ordered_counts, sequence_length, output_path):
 
 
 def plot_mutated_positions(ordered_positions, sequence_length, output_path):
-    # fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
-
-    # for ax, (category, positions) in zip(axes, ordered_positions.items()):
-    #     # Calculate frequency of mutated positions
-    #     counts = pd.Series(positions).value_counts().sort_index()
-
-    #     # Plot the frequency of mutated positions as bars
-    #     counts.plot(kind='bar', color='skyblue', ax=ax)
-
-    #     # Only plot every 10th tick if the sequence is too long
-    #     if sequence_length > 50:
-    #         tick_spacing = 10
-    #     else:
-    #         tick_spacing = 1
-
-    #     ax.set_xticks(range(0, sequence_length + 1, tick_spacing))
-    #     ax.set_xticklabels(range(0, sequence_length + 1, tick_spacing), rotation=90)
-
-    #     # Set plot title and labels
-    #     ax.set_title(f"Mutated Positions to {category}")
-    #     ax.set_xlabel("Sequence Position")
-    #     ax.set_ylabel("Frequency")
-
     fig, axes = plt.subplots(1, 3, figsize=(27, 6), sharey=True)
 
     # print(f'mutated positions list being plotted: {[(key, sorted(value)) for key, value in ordered_positions.items()]}')
@@ -224,9 +201,9 @@ def main():
     input_files = snakemake.input
 
     ordered_counts, sequence_length = extract_mutation_counts(input_files)
-    plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs, sequence_length)
-    spread_path = snakemake.output.mutation_graphs.replace('.png', '_spread.png')
-    plot_num_mutations(ordered_counts, sequence_length, spread_path)
+    plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs)
+    # spread_path = snakemake.output.mutation_graphs.replace('.png', '_spread.png')
+    # plot_num_mutations(ordered_counts, sequence_length, spread_path)
 
     ordered_positions, sequence_length = extract_mutated_positions(input_files)
     plot_mutated_positions(ordered_positions, sequence_length, snakemake.output.position_graphs)
