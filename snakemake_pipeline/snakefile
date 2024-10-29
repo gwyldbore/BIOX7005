@@ -48,11 +48,8 @@ except KeyError:
     METHOD_NAMES = ['random', 'nonconservative', 'marginal_weights']
 
 
-# need to add in datafile names - probably like interproscan/{datafile_name}_{rep}.csv
-# this will put all the variations into the cdxx folder
 rule all:
     input:
-        
         plot= expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
@@ -67,7 +64,7 @@ rule all:
         graph_type=['mutation', 'position']
         ),
 
-                # plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
+        # plot1 = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
         # dataset_name=ALL_DATASET_NAMES,
         # datafile_name=ALL_DATAFILE_NAMES,
         # method_name=METHOD_NAMES,
