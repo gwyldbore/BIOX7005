@@ -52,21 +52,19 @@ except KeyError:
 # this will put all the variations into the cdxx folder
 rule all:
     input:
-        plot_mutation=expand(
-            "workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_mutations.png",
-            dataset_name=ALL_DATASET_NAMES,
-            datafile_name=ALL_DATAFILE_NAMES,
-            method_name=METHOD_NAMES,
-            batch=range((NUM_REPLICATES + 4) // 5)  # Calculate number of batches
-        ),
-        plot_prediction=expand(
-            "workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_predictions.png",
-            dataset_name=ALL_DATASET_NAMES,
-            datafile_name=ALL_DATAFILE_NAMES,
-            method_name=METHOD_NAMES,
-            batch=range((NUM_REPLICATES + 4) // 5)  # Calculate number of batches
-        ),
+        # plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # method_name=METHOD_NAMES,
+        # rep=range(1, NUM_REPLICATES + 1),
+        # ),
 
+        plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
+        dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
+        method_name=METHOD_NAMES,
+        batch=range((NUM_REPLICATES + 4) // 5),
+        ),
 
         statsplot= expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{graph_type}.png",
         dataset_name=ALL_DATASET_NAMES,
@@ -75,12 +73,7 @@ rule all:
         graph_type=['mutation', 'position']
         ),
 
-                # plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
-        # dataset_name=ALL_DATASET_NAMES,
-        # datafile_name=ALL_DATAFILE_NAMES,
-        # method_name=METHOD_NAMES,
-        # rep=range(1, NUM_REPLICATES + 1),
-        # ),
+
 
         # # interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
         # interproscan_df = expand("workflows/{dataset_name}/{method_name}/interproscan/{datafile_name}_{rep}.csv",
@@ -282,8 +275,8 @@ rule plot_pca_batch:
             rep=range(int(wildcards.batch) * 5, (int(wildcards.batch) + 1) * 5)
         )
     output:
-        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch_mutations_{rep}.png",
-        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch_predictions_{rep}.png"
+        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
+        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_predictions.png"
     script:
         "scripts/plot_pca.py"
 
