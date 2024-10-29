@@ -52,12 +52,7 @@ except KeyError:
 # this will put all the variations into the cdxx folder
 rule all:
     input:
-        # plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
-        # dataset_name=ALL_DATASET_NAMES,
-        # datafile_name=ALL_DATAFILE_NAMES,
-        # method_name=METHOD_NAMES,
-        # rep=range(1, NUM_REPLICATES + 1),
-        # ),
+
 
         plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
         dataset_name=ALL_DATASET_NAMES,
@@ -65,6 +60,13 @@ rule all:
         method_name=METHOD_NAMES,
         batch=range((NUM_REPLICATES + 4) // 5),
         ),
+
+                # plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # method_name=METHOD_NAMES,
+        # rep=range(1, NUM_REPLICATES + 1),
+        # ),
 
         statsplot= expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{graph_type}.png",
         dataset_name=ALL_DATASET_NAMES,
