@@ -276,12 +276,13 @@ def main():
     # print('Nodes to label:', nodes_to_label)
 
     # Load previously calculated ancestor embeddings
-    with open("./data/ancestor_embedding_df.csv", "rb") as input_file:
-        ancestor_embedding_df = pickle.load(input_file)
-    # with open(snakemake.input.ancestor_embeddings, "rb") as input_file:
+    # with open("./data/ancestor_embedding_df.csv", "rb") as input_file:
     #     ancestor_embedding_df = pickle.load(input_file)
+    with open(snakemake.input.ancestor_embeddings, "rb") as input_file:
+        ancestor_embedding_df = pickle.load(input_file)
+    dataset_name = snakemake.wildcards.dataset_name
 
-    ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node)
+    ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
 
     # Filter for only NR1 or NR4 clades
     specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]

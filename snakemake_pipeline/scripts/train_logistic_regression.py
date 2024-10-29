@@ -10,17 +10,17 @@ from imblearn.over_sampling import SMOTE
 
 
 
-def load_dataframe(inputfile):
+def load_dataframe(inputfile, dataset_name):
     with open(inputfile, "rb") as input_file:
         embedding_df = pickle.load(input_file)
 
-    embedding_df['Clade'] = embedding_df['info'].apply(seq_utils.tag_node)
+    embedding_df['Clade'] = embedding_df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
 
     return embedding_df
 
 def main():    
     # Load the df with the ancestor sequences
-    embedding_df = load_dataframe(snakemake.input.ancestor_embeddings)
+    embedding_df = load_dataframe(snakemake.input.ancestor_embeddings, snakemake.wildcards.dataset_name)
 
     # drop the columns i don't want
     df = embedding_df.drop(columns=['info', 'sequence', 'model_name', 
