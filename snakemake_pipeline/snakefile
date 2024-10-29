@@ -267,7 +267,6 @@ rule merge_outputs:
 
 rule plot_pca_batch:
     input:
-        # Collect batches of 5 replicates for embeddings and predictions
         embedding_df=lambda wildcards: expand(
             "workflows/{dataset_name}/{method_name}/embeddings/{datafile_name}_{rep}.csv", 
             dataset_name=wildcards.dataset_name,
@@ -286,7 +285,7 @@ rule plot_pca_batch:
         plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_mutations.png",
         plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_predictions.png"
     params:
-        batch=lambda wildcards: wildcards.batch  # Pass batch as a parameter
+        batch=lambda wildcards: wildcards.batch
     script:
         "scripts/plot_pca.py --batch {params.batch}"
 

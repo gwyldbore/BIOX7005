@@ -187,37 +187,42 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
 import argparse
 
 def load_embeddings(files):
+    """Load and concatenate embedding DataFrames from multiple files."""
     dfs = [pd.read_csv(file) for file in files]
     return pd.concat(dfs)
 
 def load_predictions(files):
+    """Load and concatenate prediction CSVs from multiple files."""
     dfs = [pd.read_csv(file) for file in files]
     return pd.concat(dfs)
 
+def plot_pca(all_embeddings_df, outpath):
+    embeddings = np.vstack(all_embeddings_df['protbert_cls_embedding'].values)
+    pca_result = PCA(n_components=2).fit_transform(embeddings)
+    all_embeddings_df['pca1'], all_embeddings_df['pca2'] = pca_result[:, 0], pca_result[:, 1]
+
+    plt.figure(figsize=(20, 14))
+    plt.scatter(all_embeddings_df['pca1'], all_embeddings_df['pca2'], alpha=0.5)
+    plt.xlabel('PCA Component 1')
+    plt.ylabel('PCA Component 2')
+    plt.title('PCA Plot')
+    plt.savefig(outpath)
+
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--batch', required=True, help='Batch number to process')
+    parser.add_argument('--batch', type=int, required=True, help='Batch number to process')
     args = parser.parse_args()
 
+    # Load the input files specified by Snakemake
     embedding_df = load_embeddings(snakemake.input.embedding_df)
     prediction_df = load_predictions(snakemake.input.predictions_df)
 
-    embedding_predictions = pd.merge(
-        embedding_df, prediction_df[['info', 'overall_prediction']], 
-        on='info', how='left'
-    )
+    # Merge predictions into embeddings DataFrame
+    merged_df = pd.merge(embedding_df, prediction_df[['info', 'overall_prediction']], on='info', how='left')
 
-    with open("./data/ancestor_embedding_df.csv", "rb") as input_file:
-        ancestor_embedding_df = pickle.load(input_file)
-    ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node)
-
-    specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
-    all_embeddings_df = pd.concat([embedding_df, specific_ancestor_embedding_df])
-
-    plot_pca(all_embeddings_df, embedding_df['info'].values, snakemake.output.plot_mutation)
-    all_embeddings_prediction_df = pd.concat([embedding_predictions, specific_ancestor_embedding_df])
-    plot_pca_colour_by_predicted(all_embeddings_prediction_df, embedding_df['info'].values, snakemake.output.plot_prediction)
-
+    # Generate mutation and prediction plots
+    plot_pca(merged_df, snakemake.output.plot_mutation)
+    plot_pca(merged_df, snakemake.output.plot_prediction)
 
 if __name__ == "__main__":
     main()
