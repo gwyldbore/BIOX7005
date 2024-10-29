@@ -200,7 +200,10 @@ def main():
 
     i = 0
     for file in input_embeddings:
-        df = pickle.load(file)
+
+        with open(file, "rb") as input_file:
+            df = pickle.load(input_file)
+        # df = pickle.load(file)
         df.apply(adjust_info, args=(i), axis=1)
         emb_list.append(df)
         i += 1
