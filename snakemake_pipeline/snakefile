@@ -53,8 +53,7 @@ except KeyError:
 rule all:
     input:
         
-
-        plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
+        plot= expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
