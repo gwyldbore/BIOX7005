@@ -50,13 +50,6 @@ except KeyError:
 
 rule all:
     input:
-        plot= expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
-        dataset_name=ALL_DATASET_NAMES,
-        datafile_name=ALL_DATAFILE_NAMES,
-        method_name=METHOD_NAMES,
-        rep=range(1, NUM_REPLICATES + 1),
-        ),
-
         statsplot= expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{graph_type}.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
@@ -64,7 +57,14 @@ rule all:
         graph_type=['mutation', 'position']
         ),
 
-        # plot1 = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
+        # plot= expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # method_name=METHOD_NAMES,
+        # rep=range(1, NUM_REPLICATES + 1),
+        # ),
+
+        # plot_binned = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
         # dataset_name=ALL_DATASET_NAMES,
         # datafile_name=ALL_DATAFILE_NAMES,
         # method_name=METHOD_NAMES,
