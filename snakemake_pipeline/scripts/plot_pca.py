@@ -78,6 +78,58 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     plt.legend()
     plt.savefig(outpath)
 
+def plot_pca2(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
+    
+    ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
+
+    pca = PCA(n_components=2)
+    pca_result = pca.fit(ancestor_embeddings)
+
+
+    # Transform both ancestors_df and mutations_df using the fitted PCA
+    ancestors_df[['pca1', 'pca2']] = pca.transform(ancestor_embeddings)
+    mutations_df[['pca1', 'pca2']] = pca.transform(np.vstack(mutations_df[col_name].values))
+
+
+    # Set up the plot
+    fig, ax = plt.subplots(figsize=(20, 14))
+
+    # Plot mutations_df entries in blue (No Clade)
+    # ax.scatter(mutations_df['pca1'], mutations_df['pca2'], color='blue', alpha=0.5)
+
+    # Plot entries from ancestors_df with clades in different colors
+    clades_with_color = ancestors_df['Clade'].unique()
+    num_clades = len(clades_with_color)
+
+    clade_cmap = ListedColormap(['#d3d3d3', '#ffca8a'])
+    colors = plt.get_cmap(clade_cmap, num_clades).colors
+
+    # Plot points with clades in different colors
+    for clade, color in zip(clades_with_color, colors):
+        subset = ancestors_df[ancestors_df['Clade'] == clade]
+        ax.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
+
+
+    mutation_df = mutations_df.dropna(subset=['num_mutation'])
+    scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
+                c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
+    
+    cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
+    fig.colorbar(scatter, cax=cax, orientation='horizontal')
+
+    # Set plot titles and labels
+    plt.title("PCA by Clade")
+    plt.xlabel("PCA Component 1")
+    plt.ylabel("PCA Component 2")
+    plt.legend()
+    plt.savefig(outpath)
+
+
+
+
+
+
+
 
 
 
@@ -135,7 +187,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     prediction_cmap = ListedColormap(['mediumorchid', 'red', 'royalblue', 'forestgreen'])
     if unique_predictions[0] == 'NR4':
         prediction_cmap.reversed()
-        
+
     prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
 
     for prediction, color in zip(unique_predictions, prediction_colors):
@@ -151,7 +203,6 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     plt.ylabel("PCA Component 2")
     plt.legend()
     plt.savefig(outpath)
-
 
 def main():
     # Load the df with the mutated sequences
@@ -182,7 +233,8 @@ def main():
     all_embeddings_df = pd.concat([embedding_df, specific_ancestor_embedding_df])
 
     # Plot PCA
-    plot_pca(all_embeddings_df, nodes_to_label, snakemake.output.plot_mutation)
+    # plot_pca(all_embeddings_df, nodes_to_label, snakemake.output.plot_mutation)
+    plot_pca2(embedding_df, ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
 
 
     all_embeddings_prediction_df = pd.concat([embedding_predictions, specific_ancestor_embedding_df])
