@@ -133,6 +133,9 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
 
     # prediction_cmap = ListedColormap(['cyan', 'chartreuse', 'hotpink', 'blueviolet'])
     prediction_cmap = ListedColormap(['mediumorchid', 'red', 'royalblue', 'forestgreen'])
+    if unique_predictions[0] == 'NR4':
+        prediction_cmap.reversed()
+        
     prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
 
     for prediction, color in zip(unique_predictions, prediction_colors):
