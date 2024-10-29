@@ -116,6 +116,7 @@ def plot_num_mutations(ordered_counts, output_path):
             # Plot the (possibly binned) frequency data
             counts_series.plot(kind='bar', color='skyblue', ax=ax)
 
+        ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
 
         ax.set_title(f"Transitions to {category}")
         ax.set_xlabel("Number of Mutations")
@@ -202,7 +203,7 @@ def main():
 
     ordered_counts, sequence_length = extract_mutation_counts(input_files)
     plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs)
-    plot_num_mutation_spread(ordered_counts, sequence_length, snakemake.output.position_spread)
+    plot_num_mutation_spread(ordered_counts, sequence_length, snakemake.output.mutation_spread)
 
     ordered_positions, sequence_length = extract_mutated_positions(input_files)
     plot_mutated_positions(ordered_positions, sequence_length, snakemake.output.position_graphs)

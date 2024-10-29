@@ -52,19 +52,36 @@ except KeyError:
 # this will put all the variations into the cdxx folder
 rule all:
     input:
-        plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
-        dataset_name=ALL_DATASET_NAMES,
-        datafile_name=ALL_DATAFILE_NAMES,
-        method_name=METHOD_NAMES,
-        rep=range(1, NUM_REPLICATES + 1),
+        plot_mutation=expand(
+            "workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_mutations.png",
+            dataset_name=ALL_DATASET_NAMES,
+            datafile_name=ALL_DATAFILE_NAMES,
+            method_name=METHOD_NAMES,
+            batch=range((NUM_REPLICATES + 4) // 5)  # Calculate number of batches
         ),
+        plot_prediction=expand(
+            "workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_predictions.png",
+            dataset_name=ALL_DATASET_NAMES,
+            datafile_name=ALL_DATAFILE_NAMES,
+            method_name=METHOD_NAMES,
+            batch=range((NUM_REPLICATES + 4) // 5)  # Calculate number of batches
+        ),
+
 
         statsplot= expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{graph_type}.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
         graph_type=['mutation', 'position']
-        )
+        ),
+
+                # plot = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # method_name=METHOD_NAMES,
+        # rep=range(1, NUM_REPLICATES + 1),
+        # ),
+
         # # interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
         # interproscan_df = expand("workflows/{dataset_name}/{method_name}/interproscan/{datafile_name}_{rep}.csv",
         # dataset_name=ALL_DATASET_NAMES,
@@ -235,18 +252,45 @@ rule merge_outputs:
     script:
         "scripts/merge_outputs.py"
 
-rule plot_pca:
+# rule plot_pca:
+#     input:
+#         # embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
+#         embedding_df="workflows/{dataset_name}/{method_name}/embeddings/{datafile_name}_{rep}.csv",
+#         # ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
+#         predictions_df="workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv"
+#     output:
+#         # plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
+#         plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
+#         plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_predictions.png"
+#     script:
+#         "scripts/plot_pca.py"
+
+rule plot_pca_batch:
     input:
-        # embedding_df="workflows/{dataset_name}/embeddings/{dataset_name}_{rep}.csv",
-        embedding_df="workflows/{dataset_name}/{method_name}/embeddings/{datafile_name}_{rep}.csv",
-        # ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
-        predictions_df="workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv"
+        # Collect batches of 5 replicates for embeddings and predictions
+        embedding_df=lambda wildcards: expand(
+            "workflows/{dataset_name}/{method_name}/embeddings/{datafile_name}_{rep}.csv", 
+            dataset_name=wildcards.dataset_name,
+            method_name=wildcards.method_name,
+            datafile_name=wildcards.datafile_name,
+            rep=range(int(wildcards.batch) * 5, (int(wildcards.batch) + 1) * 5)
+        ),
+        predictions_df=lambda wildcards: expand(
+            "workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv", 
+            dataset_name=wildcards.dataset_name,
+            method_name=wildcards.method_name,
+            datafile_name=wildcards.datafile_name,
+            rep=range(int(wildcards.batch) * 5, (int(wildcards.batch) + 1) * 5)
+        )
     output:
-        # plot="workflows/{dataset_name}/plots/{dataset_name}_{rep}.png"
-        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_mutations.png",
-        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{rep}_predictions.png"
+        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_mutations.png",
+        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_predictions.png"
     script:
         "scripts/plot_pca.py"
+
+
+
+        
 
 rule gather_prediction_info:
     input:
@@ -269,6 +313,6 @@ rule create_statistic_plots:
     output:
         mutation_graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}_mutation.png",
         position_graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}_position.png",
-        position_spread="workflows/{dataset_name}/{method_name}/results/{datafile_name}_positionspread.png",
+        mutation_spread="workflows/{dataset_name}/{method_name}/results/{datafile_name}_mutationspread.png",
     script:
         "scripts/create_stats_plots.py"
