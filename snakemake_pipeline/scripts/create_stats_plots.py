@@ -202,7 +202,7 @@ def main():
 
     ordered_counts, sequence_length = extract_mutation_counts(input_files)
     plot_num_mutations(ordered_counts, snakemake.output.mutation_graphs)
-    plot_num_mutations(ordered_counts, sequence_length, snakemake.output.position_spread)
+    plot_num_mutation_spread(ordered_counts, sequence_length, snakemake.output.position_spread)
 
     ordered_positions, sequence_length = extract_mutated_positions(input_files)
     plot_mutated_positions(ordered_positions, sequence_length, snakemake.output.position_graphs)
