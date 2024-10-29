@@ -23,13 +23,13 @@ def main():
     info_column = test_data['info']
     # test_data.columns = test_data.columns.astype(str)
     X_test = test_data.drop(columns=['info', 'sequence', 'model_name', 
-                                 'protbert_max_embedding', 'protbert_cls_embedding', 
+                                 'protbert_max_embedding', 'protbert_mean_embedding', 
                                  'protbert_weighted_embedding', 'num_mutation'])
     
     
     
     # Transform 'protbert_mean_embedding' into separate features (as in training)
-    X_test = X_test.join(pd.DataFrame(X_test.pop('protbert_mean_embedding').tolist(), index=X_test.index))
+    X_test = X_test.join(pd.DataFrame(X_test.pop('protbert_cls_embedding').tolist(), index=X_test.index))
 
     X_test.columns = X_test.columns.astype(str)
 

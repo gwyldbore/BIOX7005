@@ -282,14 +282,10 @@ rule plot_pca_batch:
             rep=range(int(wildcards.batch) * 5, (int(wildcards.batch) + 1) * 5)
         )
     output:
-        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_mutations.png",
-        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch{batch}_predictions.png"
-    params:
-        batch=lambda wildcards: wildcards.batch
-    shell:
-        """
-        python scripts/plot_pca.py --batch {params.batch}
-        """
+        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch_mutations_{rep}.png",
+        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch_predictions_{rep}.png"
+    script:
+        "scripts/plot_pca.py
 
 
 
