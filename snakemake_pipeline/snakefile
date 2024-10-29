@@ -285,7 +285,7 @@ rule plot_pca_batch:
         plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch_mutations_{rep}.png",
         plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_batch_predictions_{rep}.png"
     script:
-        "scripts/plot_pca.py
+        "scripts/plot_pca.py"
 
 
 
