@@ -67,7 +67,6 @@ rule all:
         calculate_stats= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
-        method_name=METHOD_NAMES,
         rep=range(1, NUM_REPLICATES + 1),
         ),
 
@@ -305,6 +304,8 @@ rule calculate_statistics:
         )
     output:
         boxplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg"
+    wildcards:
+        method_name=METHOD_NAMES
     script:
         "scripts/statistical_testing.py"
 
