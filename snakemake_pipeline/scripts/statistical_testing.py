@@ -108,6 +108,27 @@ def perform_statistical_tests(df, category):
 
 
 
+def plot_qq(category_data, category):
+    """Generate Q-Q plots for each method within a category."""
+    methods = category_data['method_name'].unique()
+    num_methods = len(methods)
+
+    # Create subplots: One Q-Q plot for each method
+    fig, axes = plt.subplots(1, num_methods, figsize=(6 * num_methods, 6))
+    fig.suptitle(f'Q-Q Plots for {category}', fontsize=16, fontweight='bold')
+
+    for i, method in enumerate(methods):
+        # Filter data for the current method
+        method_data = category_data[category_data['method'] == method]['num_mutation']
+
+        # Generate Q-Q plot
+        stats.probplot(method_data, dist="norm", plot=axes[i])
+        axes[i].set_title(f'Method: {method}', fontsize=14)
+
+    plt.tight_layout(rect=[0, 0, 1, 0.95])  # Adjust layout to fit the title
+    plt.savefig(snakemake.output.qq)
+
+
 def main():
     input_files = snakemake.input
 
@@ -172,9 +193,13 @@ def main():
     # Get the unique categories from the data
     categories = grouped_df['overall_prediction'].unique()
 
-    # Run statistical tests for each category
     for category in categories:
-        perform_statistical_tests(grouped_df, category)
+        category_data = grouped_df[grouped_df['overall_prediction'] == category]
+        plot_qq(category_data, category)
+
+    # # Run statistical tests for each category
+    # for category in categories:
+    #     perform_statistical_tests(grouped_df, category)
 
 
 
