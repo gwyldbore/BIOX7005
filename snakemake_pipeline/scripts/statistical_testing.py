@@ -54,6 +54,10 @@ def process_methods_and_replicates(methods):
     return pd.concat(aggregated_results, ignore_index=True)
 
 
+def clean_category_name(name):
+    return name.replace('_', ' ').title()
+
+
 def main():
     input_files = snakemake.input
 
@@ -85,6 +89,10 @@ def main():
 
     # Remove individual x-axis labels from each subplot
     for ax in g.axes.flat:
+        # Extract the original category name from the title
+        original_title = ax.get_title().split(' = ')[1]  # Extract the prediction value
+        # Set the cleaned title (with underscores replaced by spaces)
+        ax.set_title(clean_category_name(original_title), fontsize=14, fontweight='bold', pad=10)
         ax.set_xlabel('')
 
     # Adjust the title and labels
