@@ -235,7 +235,7 @@ def plot_pca_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, no
     # define new cmap
     prediction_cmap = ListedColormap(['mediumorchid', 'red', 'royalblue', 'forestgreen'])
     if unique_predictions[0] == 'NR4':
-        prediction_cmap.reversed()
+        prediction_cmap = ListedColormap(['forestgreen', 'royalblue', 'red', 'mediumorchid'])
 
     prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
 
