@@ -61,12 +61,14 @@ def clean_name(name):
 
 
 def get_prediction_order(initial_category):
-    base_order = ['NR1', 'NR1-like', 'NR4-like', 'NR4']
+    base_order = ['NR1', 'NR1-like', 'NR4-like', 'NR4', 'other']
 
     if initial_category == 'NR1':
-        return base_order
+        return base_order[1:]
     elif initial_category == 'NR4':
-        return base_order.reverse()
+        base_order = base_order[:-1:-1]
+        base_order.append('other')
+        return base_order
     else:
         # default to base
         return base_order
@@ -86,6 +88,7 @@ def main():
 
     # can just run this on the last one as it'll be the same for all of them
     initial_category = get_initial_category(df)
+    
         
     grouped_df = pd.concat(grouped_results, ignore_index=True)
 
