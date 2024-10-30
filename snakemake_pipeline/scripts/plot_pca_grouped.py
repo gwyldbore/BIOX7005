@@ -178,13 +178,28 @@ def main():
     prediction_dfs = pd.concat(pred_list)
 
 
-        nodes_to_label = embedding_dfs['info'].values
+    nodes_to_label = embedding_dfs['info'].values
 
-    with open("../data/ancestor_embedding_df.csv", "rb") as input_file:
+
+    # merge predictinos in
+    embedding_predictions = pd.merge(embedding_dfs, prediction_dfs[['info', 'overall_prediction']], 
+                                     on='info', how='left')
+
+
+    # get the ancestor embeddings
+    with open(snakemake.input.ancestor_embeddings, "rb") as input_file:
         ancestor_embedding_df = pickle.load(input_file)
 
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='cd80')
     specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
+
+    plot_pca_ancestors_static(embedding_dfs, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
+
+    plot_pca_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
+
+
+
+
 
 
     # Load the df with the mutated sequences
