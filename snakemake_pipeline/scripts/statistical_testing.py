@@ -113,6 +113,11 @@ def plot_qq(category_data, category, outpath):
     methods = category_data['method'].unique()
     num_methods = len(methods)
 
+    # Check if there are methods to plot
+    if num_methods == 0:
+        print(f"No valid methods found for category: {category}")
+        return
+
     # Create subplots: One Q-Q plot for each method
     fig, axes = plt.subplots(1, num_methods, figsize=(6 * num_methods, 6))
     fig.suptitle(f'Q-Q Plots for {category}', fontsize=16, fontweight='bold')
