@@ -304,7 +304,7 @@ rule calculate_statistics:
             rep=range(1, NUM_REPLICATES + 1)
         )
     output:
-        boxplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg"
+        boxplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_{method_name}.svg"
     script:
         "scripts/statistical_testing.py"
 
