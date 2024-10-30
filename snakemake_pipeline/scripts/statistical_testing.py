@@ -123,7 +123,8 @@ def run_shapiro_tests(df, outpath):
             
             print(f'shapiro method data for {method}, {category}: {method_data}')
 
-            if not method_data.empty:
+            # if not method_data.empty:
+            if len(method_data) >=3:
                 # Run the Shapiro-Wilk test
                 stat, p_value = shapiro(method_data)
                 results.append({
@@ -131,6 +132,13 @@ def run_shapiro_tests(df, outpath):
                     'Method': method,
                     'W-Statistic': stat,
                     'p-value': p_value
+                })
+            else:
+                results.append({
+                    'Category': category,
+                    'Method': method,
+                    'W-Statistic': "insufficient data",
+                    'p-value': 'insufficient data'
                 })
 
     # Write the results to a text file with proper formatting
@@ -140,7 +148,7 @@ def run_shapiro_tests(df, outpath):
         for result in results:
             f.write(f"Category: {result['Category']}, Method: {result['Method']}\n")
             normal = 'False'
-            if result['p-value'] > 0.05:
+            if isinstance(result['p-value'], str) and result['p-value'] > 0.05:
                 normal = 'True'
             f.write(f"W-Statistic: {result['W-Statistic']:.4f}, p-value: {result['p-value']:.4e}, normal: {normal}\n")
             f.write("-" * 40 + "\n")
