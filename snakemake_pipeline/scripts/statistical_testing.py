@@ -52,40 +52,38 @@ def main():
 
 
     # 3.1 Shapiro-Wilk test for normality
-    for method, data in combined_df.groupby('Method'):
-        stat, p = stats.shapiro(data['Mutation_Count'])
+    for method, data in combined_df.groupby('method'):
+        stat, p = stats.shapiro(data['num_mutation'])
         print(f'{method} - Shapiro-Wilk test p-value: {p}')
 
     # 3.2 Levene’s test for equal variances
     stat, p = stats.levene(
-        *[group['Mutation_Count'].values for name, group in combined_df.groupby('Method')]
+        *[group['num_mutation'].values for name, group in combined_df.groupby('method')]
     )
-    print(f"Levene’s test p-value: {p}")
+    print(f'Levene’s test p-value: {p}')
 
     # 3.3 Hypothesis Testing (ANOVA or Kruskal-Wallis)
     if p > 0.05:  # If variances are equal
         stat, p = stats.f_oneway(
-            *[group['Mutation_Count'].values for name, group in combined_df.groupby('Method')]
+            *[group['num_mutation'].values for name, group in combined_df.groupby('method')]
         )
         print(f'ANOVA test p-value: {p}')
         if p < 0.05:
-            tukey = pairwise_tukeyhsd(combined_df['Mutation_Count'], combined_df['Method'])
+            tukey = pairwise_tukeyhsd(combined_df['num_mutation'], combined_df['method'])
             print(tukey)
     else:
         stat, p = stats.kruskal(
-            *[group['Mutation_Count'].values for name, group in combined_df.groupby('Method')]
+            *[group['num_mutation'].values for name, group in combined_df.groupby('method')]
         )
         print(f'Kruskal-Wallis test p-value: {p}')
         if p < 0.05:
-            dunn = sp.posthoc_dunn(combined_df, val_col='Mutation_Count', group_col='Method', p_adjust='bonferroni')
+            dunn = sp.posthoc_dunn(combined_df, val_col='num_mutation', group_col='method', p_adjust='bonferroni')
             print(dunn)
 
     # Step 4: Chi-square Test for Mutated Positions
-    positions_df = pd.crosstab(combined_df['Position'], combined_df['Method'])
+    positions_df = pd.crosstab(combined_df['Position'], combined_df['method'])
     chi2, p, _, _ = stats.chi2_contingency(positions_df)
     print(f'Chi-square test p-value: {p}')
-
-
 
 
 
