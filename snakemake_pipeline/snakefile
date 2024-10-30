@@ -68,7 +68,7 @@ rule all:
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
-        batch=range((NUM_REPLICATES + 4) // 5),
+        batch=range(1, (NUM_REPLICATES + 4) // 5),
         ),
 
 
