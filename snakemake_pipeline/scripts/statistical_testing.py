@@ -9,6 +9,7 @@ import math
 from scipy.stats import kruskal
 import statsmodels.api as sm
 from statsmodels.formula.api import ols
+from scipy.stats import shapiro
 
 
 def get_initial_category(df):
