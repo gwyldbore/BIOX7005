@@ -121,7 +121,7 @@ def run_shapiro_tests(df, outpath):
             method_data = df[(df['overall_prediction'] == category) & 
                              (df['method'] == method)]['num_mutation']
             
-            print(f'shapiro method data for {method}, {category}: {method_data}')
+            # print(f'shapiro method data for {method}, {category}: {method_data}')
 
             # if not method_data.empty:
             if len(method_data) >=3:
@@ -148,10 +148,12 @@ def run_shapiro_tests(df, outpath):
         for result in results:
             f.write(f"Category: {result['Category']}, Method: {result['Method']}\n")
             normal = 'False'
+            # check that pvalue is actually calculated
             if (not isinstance(result['p-value'], str)):
                 if result['p-value'] > 0.05:
                     normal = 'True'
                 f.write(f"W-Statistic: {result['W-Statistic']:.4f}, p-value: {result['p-value']:.4e}, normal: {normal}\n")
+            # otherwise if there was insufficient data to calculate
             else:
                 f.write(f"W-Statistic: {result['W-Statistic']}, p-value: {result['p-value']}, normal: {normal}\n")
             f.write("-" * 40 + "\n")
