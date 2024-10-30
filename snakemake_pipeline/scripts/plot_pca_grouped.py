@@ -203,7 +203,7 @@ def main():
 
 
     # get the ancestor embeddings
-    with open(snakemake.input.ancestor_embeddings, "rb") as input_file:
+    with open(snakemake.input.ancestor_embeddings[0], "rb") as input_file:
         ancestor_embedding_df = pickle.load(input_file)
 
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='cd80')
