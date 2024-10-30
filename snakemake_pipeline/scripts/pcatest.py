@@ -89,7 +89,7 @@ def main():
         row['info'] += f'_{index}'
 
     def adjust_filegroup(row, index):
-        row['filegroup'] = index
+        return index
 
     i = 0
     print('opening embeddings')
@@ -98,7 +98,7 @@ def main():
             df = pickle.load(input_file)
         # df['filegroup'] = 0
         df.apply(adjust_info, index=i, axis=1)
-        df.apply(adjust_filegroup, index=i, axis=1)
+        df['filegroup'] = df.apply(adjust_filegroup, index=i, axis=1)
         emb_list.append(df)
         
         i += 1
