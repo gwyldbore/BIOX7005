@@ -112,6 +112,7 @@ def perform_statistical_tests(df, category):
 def plot_qq_grid(df, outpath):
     """Generate a grid of Q-Q plots with categories as rows and methods as columns."""
     # Get unique categories and methods
+    print(df)
     categories = df['overall_prediction'].dropna().unique()
     methods = df['method'].dropna().unique()
     print(f'methods: {methods}')
@@ -180,7 +181,7 @@ def main():
     grouped_df['overall_prediction'] = pd.Categorical(
         grouped_df['overall_prediction'], categories=order, ordered=True
     )
-    
+
 
     # Create a box plot for each overall_prediction category
     g = sns.catplot(
