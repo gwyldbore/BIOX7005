@@ -71,7 +71,7 @@ def main():
 
     # Create a box plot comparing the number of mutations across methods.
     plt.figure(figsize=(10, 6))
-    sns.boxplot(x='method_name', y='num_mutation', data=aggregated_df)
+    sns.boxplot(x='method_name', y='num_mutation', data=grouped_df)
 
     # Add plot title and labels
     plt.title('Comparison of Number of Mutations Across Methods')
