@@ -106,6 +106,39 @@ def perform_statistical_tests(df, category):
 
 
 
+def run_shapiro_tests(df, outpath):
+    """Run Shapiro-Wilk test for each category-method combination and write results to a text file."""
+    categories = df['overall_prediction'].dropna().unique()
+    methods = df['method'].dropna().unique()
+
+    results = []
+
+    # Iterate over categories and methods
+    for category in categories:
+        for method in methods:
+            # Filter data for the current category and method
+            method_data = df[(df['overall_prediction'] == category) & 
+                             (df['method'] == method)]['num_mutation']
+
+            if not method_data.empty:
+                # Run the Shapiro-Wilk test
+                stat, p_value = shapiro(method_data)
+                results.append({
+                    'Category': category,
+                    'Method': method,
+                    'W-Statistic': stat,
+                    'p-value': p_value
+                })
+
+    # Write the results to a text file with proper formatting
+    with open(outpath, 'w') as f:
+        f.write("Shapiro-Wilk Test Results\n")
+        f.write("=" * 40 + "\n")
+        for result in results:
+            f.write(f"Category: {result['Category']}, Method: {result['Method']}\n")
+            f.write(f"W-Statistic: {result['W-Statistic']:.4f}, p-value: {result['p-value']:.4e}\n")
+            f.write("-" * 40 + "\n")
+
 
 def plot_qq_grid(df, outpath):
     """Generate a grid of Q-Q plots with categories as rows and methods as columns."""
@@ -213,9 +246,10 @@ def main():
 
     plot_qq_grid(grouped_df, snakemake.output.qqplot)
 
-    # # Run statistical tests for each category
-    # for category in categories:
-    #     perform_statistical_tests(grouped_df, category)
+    # Run Shapiro-Wilk tests and write the results to a text file
+    run_shapiro_tests(grouped_df, snakemake.output.shapiro)
+
+   
 
 
 
