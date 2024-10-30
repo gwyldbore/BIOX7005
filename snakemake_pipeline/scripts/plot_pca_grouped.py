@@ -203,16 +203,16 @@ def main():
 
 
     # get the ancestor embeddings
-    print(f'ANCESTOR EMBEDDING INPUT: {snakemake.input.ancestor_embeddings}')
-    # with open(snakemake.input.ancestor_embeddings[0], "rb") as input_file:
-    #     ancestor_embedding_df = pickle.load(input_file)
+    # print(f'ANCESTOR EMBEDDING INPUT: {snakemake.input.ancestor_embeddings}')
+    with open(snakemake.input.ancestor_embeddings, "rb") as input_file:
+        ancestor_embedding_df = pickle.load(input_file)
 
-    # ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='cd80')
-    # specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
+    ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='cd80')
+    specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
 
-    # plot_pca_ancestors_static(embedding_dfs, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
+    plot_pca_ancestors_static(embedding_dfs, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
 
-    # plot_pca_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
+    plot_pca_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
 
 
 
