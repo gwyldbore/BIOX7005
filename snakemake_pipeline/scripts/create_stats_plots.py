@@ -133,7 +133,7 @@ def plot_num_mutations(ordered_counts, output_path):
 
 def plot_num_mutation_spread(ordered_counts, sequence_length, output_path):
 
-    fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=False)
 
     # Plot the frequency for each target category in a separate subplot
     for ax, (category, counts) in zip(axes, ordered_counts.items()):
