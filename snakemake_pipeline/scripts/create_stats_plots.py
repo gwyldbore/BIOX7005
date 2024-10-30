@@ -164,7 +164,8 @@ def plot_num_mutation_spread(ordered_counts, sequence_length, output_path):
 
 
 def plot_mutated_positions(ordered_positions, sequence_length, output_path):
-    fig, axes = plt.subplots(1, 3, figsize=(24, 6), sharey=True)
+    # fig, axes = plt.subplots(1, 3, figsize=(24, 6), sharey=True)
+    fig, axes = plt.subplots(1, 3, figsize=(24, 6), sharey=False)
 
     # print(f'mutated positions list being plotted: {[(key, sorted(value)) for key, value in ordered_positions.items()]}')
 
