@@ -42,11 +42,11 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
         subset = ancestors_df[ancestors_df['Clade'] == clade]
         ax.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
 
-    marker_dict = {1: 'o',
-                2: 'x',
-                3: '*',
-                4: '^',
-                5: 's'}
+    marker_dict = {0: 'o',
+                1: 'x',
+                2: '*',
+                3: '^',
+                4: 's'}
     
 
     mutation_df = mutations_df.dropna(subset=['num_mutation'])
