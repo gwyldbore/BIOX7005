@@ -112,8 +112,9 @@ def perform_statistical_tests(df, category):
 def plot_qq_grid(df, outpath):
     """Generate a grid of Q-Q plots with categories as rows and methods as columns."""
     # Get unique categories and methods
-    categories = df['overall_prediction'].unique()
-    methods = df['method'].unique()
+    categories = df['overall_prediction'].dropna().unique()
+    methods = df['method'].dropna().unique()
+    print(f'methods: {methods}')
 
     # Create the grid: categories as rows, methods as columns
     fig, axes = plt.subplots(
