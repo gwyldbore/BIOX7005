@@ -110,7 +110,7 @@ def perform_statistical_tests(df, category):
 
 def plot_qq(category_data, category, outpath):
     """Generate Q-Q plots for each method within a category."""
-    methods = category_data['method_name'].unique()
+    methods = category_data['method'].unique()
     num_methods = len(methods)
 
     # Create subplots: One Q-Q plot for each method
