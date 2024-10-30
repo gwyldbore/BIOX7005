@@ -69,14 +69,22 @@ def main():
 
 
 
-    # Create a box plot comparing the number of mutations across methods.
-    plt.figure(figsize=(10, 6))
-    sns.boxplot(x='method', y='num_mutation', data=grouped_df)
+    # Create a box plot for each overall_prediction category
+    g = sns.catplot(
+        data=grouped_df,
+        x='method',
+        y='num_mutation',
+        col='overall_prediction',  # Create separate plots for each category
+        kind='box',
+        height=5,  # Adjust the height of each plot
+        aspect=1.2  # Control the aspect ratio of each plot
+    )
 
-    # Add plot title and labels
-    plt.title('Comparison of Number of Mutations Across Methods')
-    plt.xlabel('Method')
-    plt.ylabel('Number of Mutations')
+    # Adjust the title and labels
+    g.figure.suptitle('Comparison of Number of Mutations Across Methods by Prediction Category', 
+                y=1.05)  # Adjust the title position
+    g.set_axis_labels('Method', 'Number of Mutations')
+
     plt.savefig(snakemake.output.boxplot)
     plt.close() # close to save memory
 
