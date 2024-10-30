@@ -8,11 +8,7 @@ from sklearn.decomposition import PCA
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
 
-marker_dict = {1: 'o',
-               2: 'x',
-               3: '*',
-               4: '^',
-               5: 's'}
+
 
 
 def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
@@ -46,7 +42,13 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
         subset = ancestors_df[ancestors_df['Clade'] == clade]
         ax.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
 
-
+    marker_dict = {1: 'o',
+                2: 'x',
+                3: '*',
+                4: '^',
+                5: 's'}
+    
+    
     mutation_df = mutations_df.dropna(subset=['num_mutation'])
     # scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
     #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
