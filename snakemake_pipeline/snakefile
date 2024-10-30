@@ -48,7 +48,7 @@ except KeyError:
 
 rule all:
     input:
-        statsplot= expand("workflows/{dataset_name}/{method_name}/results/{dataset_name}_{datafile_name}_{graph_type}_{method_name}.png",
+        statsplot= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_{graph_type}_{method_name}.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
