@@ -82,7 +82,7 @@ def main():
             print(dunn)
 
     # Step 4: Chi-square Test for Mutated Positions
-    positions_df = pd.crosstab(combined_df['Position'], combined_df['method'])
+    positions_df = pd.crosstab(combined_df['mutated_positions'], combined_df['method'])
     chi2, p, _, _ = stats.chi2_contingency(positions_df)
     print(f'Chi-square test p-value: {p}')
 
