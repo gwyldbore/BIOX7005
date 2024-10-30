@@ -7,6 +7,8 @@ import scikit_posthocs as sp
 import math
 
 
+def get_initial_category(df):
+    return df['overall_prediction'.iloc[0]]
 
 def find_first_prediction_changes(df):
     """
@@ -14,8 +16,8 @@ def find_first_prediction_changes(df):
     excluding the initial category and any reversion to it.
     """
     # Identify the initial category from the first row.
-    initial_category = df['overall_prediction'].iloc[0]
-
+    initial_category = get_initial_category(df)
+    
     # Shift the `overall_prediction` column to compare with the previous row.
     previous_predictions = df['overall_prediction'].shift(1)
 
@@ -58,6 +60,18 @@ def clean_name(name):
     return name.replace('_', ' ')
 
 
+def get_prediction_order(initial_category):
+    base_order = ['NR1', 'NR1-like', 'NR4-like', 'NR4']
+
+    if initial_category == 'NR1':
+        return base_order
+    elif initial_category == 'NR4':
+        return base_order.reverse()
+    else:
+        # default to base
+        return base_order
+
+
 def main():
     input_files = snakemake.input
 
@@ -69,13 +83,23 @@ def main():
         changes = find_first_prediction_changes(df)
 
         grouped_results.append(changes)
+
+    # can just run this on the last one as it'll be the same for all of them
+    initial_category = get_initial_category(df)
         
     grouped_df = pd.concat(grouped_results, ignore_index=True)
 
     grouped_df.to_csv('TESTFILE.csv')
 
 
+    order = get_prediction_order(initial_category)
+
     grouped_df['method'] = grouped_df['method'].apply(clean_name)
+
+    grouped_df['overall_prediction'] = pd.Categorical(
+        grouped_df['overall_prediction'], categories=order, ordered=True
+    )
+
 
     # Create a box plot for each overall_prediction category
     g = sns.catplot(
