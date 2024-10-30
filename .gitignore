@@ -50,3 +50,10 @@ snakemake_pipeline/data/ancestor_embedding_df.csv
 
 snakemake_pipeline/BLAST/NRs_IPR_NCBI.fasta
 snakemake_pipeline/BLAST/identical_protein_group_NRs.fasta
+
+plots
+processing/pcatest2.ipynb
+processing/seq_utils.py
+processing/cd80
+
+Assessments/*
