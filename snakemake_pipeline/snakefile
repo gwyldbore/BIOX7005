@@ -299,7 +299,6 @@ rule calculate_statistics:
         lambda wildcards: expand(
             "workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv",
             dataset_name=wildcards.dataset_name,
-            method_name=wildcards.method_name,
             datafile_name=wildcards.datafile_name,
             rep=range(1, NUM_REPLICATES + 1)
         )
