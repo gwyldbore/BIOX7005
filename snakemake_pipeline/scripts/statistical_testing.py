@@ -200,7 +200,7 @@ def main():
 
     for category in categories:
         category_data = grouped_df[grouped_df['overall_prediction'] == category]
-        plot_qq(category_data, category, snakemake.output.qqplot)
+        plot_qq(category_data, category, snakemake.output.qqplot + f'_{category}.svg')
 
     # # Run statistical tests for each category
     # for category in categories:
