@@ -111,37 +111,30 @@ def perform_statistical_tests(df, category):
 
 def plot_qq_grid(df, outpath):
     """Generate a Q-Q plot grid with categories as rows and methods as columns."""
-    categories = df['overall_prediction'].unique().dropna()
+    categories = df['overall_prediction'].unique()
     methods = df['method'].unique()
 
     # Create the grid: categories in rows, methods in columns
-    fig, axes = plt.subplots(len(categories), len(methods), figsize=(6 * len(methods), 6 * len(categories)))
+    fig, axes = plt.subplots(
+        len(categories), len(methods), figsize=(6 * len(methods), 6 * len(categories)),
+        squeeze=False  # Always return a 2D array of axes
+    )
     fig.suptitle('Q-Q Plots for All Methods and Categories', fontsize=18, fontweight='bold')
-    # If there is only one row or one column, make axes iterable
-    if len(categories) == 1:
-        axes = axes[np.newaxis, :]  # Convert to 2D array (1 row)
-    if len(methods) == 1:
-        axes = axes[:, np.newaxis]  # Convert to 2D array (1 column)
 
-        # Iterate over categories (rows) and methods (columns) to populate the grid
+    # Iterate over categories (rows) and methods (columns) to populate the grid
     for i, category in enumerate(categories):
         for j, method in enumerate(methods):
             # Filter data for the current category and method
             method_data = df[(df['overall_prediction'] == category) & (df['method'] == method)]['num_mutation']
 
             if method_data.empty:
-                # If no data, disable the axis and skip plotting
+                # If no data, disable the axis and display a message
                 axes[i, j].axis('off')
                 axes[i, j].text(0.5, 0.5, 'No Data', ha='center', va='center', fontsize=12)
             else:
                 # Generate the Q-Q plot
                 stats.probplot(method_data, dist="norm", plot=axes[i, j])
                 axes[i, j].set_title(f'{category} - {method}', fontsize=12)
-
-    # Adjust layout and save the plot
-    plt.tight_layout(rect=[0, 0, 1, 0.98])
-    plt.savefig(outpath)
-    plt.close()
 
     # Adjust layout and save the plot
     plt.tight_layout(rect=[0, 0, 1, 0.98])
@@ -164,20 +157,16 @@ def main():
     # can just run this on the last one as it'll be the same for all of them
     initial_category = get_initial_category(df)
     
-        
+    
     grouped_df = pd.concat(grouped_results, ignore_index=True)
-
     grouped_df.to_csv('TESTFILE.csv')
 
 
     order = get_prediction_order(initial_category)
-
     grouped_df['method'] = grouped_df['method'].apply(clean_name)
-
     grouped_df['overall_prediction'] = pd.Categorical(
         grouped_df['overall_prediction'], categories=order, ordered=True
     )
-
 
     # Create a box plot for each overall_prediction category
     g = sns.catplot(
@@ -199,14 +188,11 @@ def main():
         ax.set_xlabel('')
 
     # Adjust the title and labels
-    # g.figure.suptitle('Comparison of Number of Mutations Across Methods by Prediction Category', 
-    #             y=1.05)  # Adjust the title position
     g.set_axis_labels('Method', 'Number of Mutations')
     # Add a single x-axis label for the entire plot
-    # g.figure.text(0.5, 0.04, 'Method', ha='center', fontsize=14)
-
     plt.savefig(snakemake.output.boxplot)
     plt.close() # close to save memory
+
 
 
 
