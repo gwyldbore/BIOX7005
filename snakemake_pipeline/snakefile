@@ -296,8 +296,11 @@ rule plot_statistics:
             rep=range(1, NUM_REPLICATES + 1)
         )
     output:
-        mutation_graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}_mutation.png",
-        position_graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}_position.png",
-        mutation_spread="workflows/{dataset_name}/{method_name}/results/{datafile_name}_mutationspread.png",
+        mutation_graphs="workflows/{dataset_name}/results/{datafile_name}_mutation.png",
+        position_graphs="workflows/{dataset_name}/results/{datafile_name}_position.png",
+        mutation_spread="workflows/{dataset_name}/results/{datafile_name}_mutationspread.png",
+        # mutation_graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}_mutation.png",
+        # position_graphs="workflows/{dataset_name}/{method_name}/results/{datafile_name}_position.png",
+        # mutation_spread="workflows/{dataset_name}/{method_name}/results/{datafile_name}_mutationspread.png",
     script:
         "scripts/create_stats_plots.py"

@@ -169,6 +169,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     # Overlay predictions with new colors
     prediction_df = all_embeddings_df.dropna(subset=['overall_prediction'])
     unique_predictions = prediction_df['overall_prediction'].unique()
+    unique_predictions.sorted()
     # print(unique_predictions)
 
     # Define a new colormap for predictions
