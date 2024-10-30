@@ -54,8 +54,8 @@ def process_methods_and_replicates(methods):
     return pd.concat(aggregated_results, ignore_index=True)
 
 
-def clean_category_name(name):
-    return name.replace('_', ' ').title()
+def clean_name(name):
+    return name.replace('_', ' ')
 
 
 def main():
@@ -75,6 +75,7 @@ def main():
     grouped_df.to_csv('TESTFILE.csv')
 
 
+    grouped_df_df['method_name'] = grouped_df['method_name'].apply(clean_name)
 
     # Create a box plot for each overall_prediction category
     g = sns.catplot(
@@ -98,9 +99,9 @@ def main():
     # Adjust the title and labels
     # g.figure.suptitle('Comparison of Number of Mutations Across Methods by Prediction Category', 
     #             y=1.05)  # Adjust the title position
-    g.set_axis_labels('', 'Number of Mutations')
+    g.set_axis_labels('Method', 'Number of Mutations')
     # Add a single x-axis label for the entire plot
-    g.figure.text(0.5, 0.04, 'Method', ha='center', fontsize=14)
+    # g.figure.text(0.5, 0.04, 'Method', ha='center', fontsize=14)
 
     plt.savefig(snakemake.output.boxplot)
     plt.close() # close to save memory
