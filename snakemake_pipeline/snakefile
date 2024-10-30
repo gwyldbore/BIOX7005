@@ -293,21 +293,24 @@ rule gather_prediction_info:
         "scripts/gather_prediction_info.py"
 
 
+
+
 rule calculate_statistics:
     input:
         lambda wildcards: expand(
             "workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv",
             dataset_name=wildcards.dataset_name,
             datafile_name=wildcards.datafile_name,
-            method_name=wildcards.method_name,
+            method_name=METHOD_NAMES,
             rep=range(1, NUM_REPLICATES + 1)
         )
     output:
         boxplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg"
-    params:
-        method_name=METHOD_NAMES
     script:
         "scripts/statistical_testing.py"
+
+
+
 
 rule plot_statistics:
     input:
