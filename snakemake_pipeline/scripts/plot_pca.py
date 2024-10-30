@@ -179,7 +179,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
         prediction_cmap = ListedColormap(['forestgreen', 'royalblue', 'red', 'mediumorchid'])
         
 
-    prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
+    prediction_colors = plt.get_cmap(prediction_cmap).colors
 
     for prediction, color in zip(unique_predictions, prediction_colors):
         pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
