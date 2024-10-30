@@ -51,8 +51,8 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
 
     mutation_df = mutations_df.dropna(subset=['num_mutation'])
     scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
-                c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
-                # marker=marker_dict[int(mutation_df['filegroup'])])
+                c=[int(x) for x in mutation_df['num_mutation']], cmap='cool',
+                marker=[marker_dict[int(x)] for x in mutation_df['filegroup']])
     
     
     # Plot points with different markers based on 'filegroup' column
@@ -121,7 +121,7 @@ def main():
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='cd80')
     specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
 
-    plot_pca_ancestors_static(embedding_dfs, specific_ancestor_embedding_df, nodes_to_label, '../workflows/cd80/groupedpcaplot_marginal.svg')
+    plot_pca_ancestors_static(embedding_dfs, specific_ancestor_embedding_df, nodes_to_label, '../workflows/cd80/groupedpcaplot_marginalsymbol.svg')
 
 
 
