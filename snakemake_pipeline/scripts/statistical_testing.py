@@ -7,11 +7,6 @@ import scikit_posthocs as sp
 
 
 
-plt.figure(figsize=(10, 6))
-sns.boxplot(x='Method', y='Mutation_Count', data=df)
-plt.title('Mutation Counts by Method')
-plt.savefig('boxplot.png')
-plt.close()
 
 
 
@@ -30,7 +25,7 @@ def main():
     plt.savefig(snakemake.output.boxplot)
     plt.close() # close to save memory
 
-    
+
 
 
 
