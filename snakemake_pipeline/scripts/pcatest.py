@@ -89,8 +89,10 @@ def main():
     for file in input_embeddings:
         with open(file, 'rb') as input_file:
             df = pickle.load(input_file)
+        df['filegroup'] = 0
         df.apply(adjust_info, index=i, axis=1)
         emb_list.append(df)
+        
         i += 1
     embedding_dfs = pd.concat(emb_list)
 
@@ -99,6 +101,7 @@ def main():
     # for file in input_predictions:
     #     df = pd.read_csv(input_file)
     #     df.apply(adjust_info, index=i, axis=1)
+        # df['filegroup'] = 0
     #     i += 1
     #     pred_list.append(df)
     # prediction_dfs = pd.concat(pred_list)
