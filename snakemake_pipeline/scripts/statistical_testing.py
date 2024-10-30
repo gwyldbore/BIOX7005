@@ -115,6 +115,7 @@ def plot_qq_grid(df, outpath):
     categories = df['overall_prediction'].dropna().unique()
     methods = df['method'].dropna().unique()
     print(f'methods: {methods}')
+    print(f'categories: {categories}')
 
     # Create the grid: categories as rows, methods as columns
     fig, axes = plt.subplots(
