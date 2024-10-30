@@ -70,9 +70,7 @@ def get_prediction_order(initial_category):
     if initial_category == 'NR1':
         return base_order[1:]
     elif initial_category == 'NR4':
-        base_order = base_order[:-1:-1]
-        base_order.append('other')
-        return base_order
+        return ['NR4-like', 'NR1-like', 'NR1', 'other']
     else:
         # default to base
         return base_order
