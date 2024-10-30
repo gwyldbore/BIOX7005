@@ -10,7 +10,7 @@ from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
 
 def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
-    
+    print('inside plot')
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
 
     pca = PCA(n_components=2)
@@ -97,7 +97,7 @@ def main():
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='cd80')
     specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
 
-    plot_pca_ancestors_static(embedding_dfs, specific_ancestor_embedding_df, nodes_to_label, '../workflows/cd80/data/marginal/groupedpcaplot.svg')
+    plot_pca_ancestors_static(embedding_dfs, specific_ancestor_embedding_df, nodes_to_label, '../workflows/cd80/groupedpcaplot_marginal.svg')
 
 
 
