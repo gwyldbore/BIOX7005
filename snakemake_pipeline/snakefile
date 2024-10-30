@@ -64,7 +64,7 @@ rule all:
         rep=range(1, NUM_REPLICATES + 1, 10),
         ),
 
-        grouped_pca = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations_grouped.png",
+        grouped_pca = expand("workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
