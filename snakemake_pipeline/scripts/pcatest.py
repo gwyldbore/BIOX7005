@@ -60,8 +60,8 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
 
 
 def main():
-    input_embeddings = [f'./workflows/cd80/marginal_weights/embeddings/NR1toNR4_N7_N186_{rep}.csv' for rep in range(1, 6)]
-    input_predictions = [f'./workflows/cd80/marginal_weights/predictions/NR1toNR4_N7_N186_{rep}.csv' for rep in range(1, 6)]
+    input_embeddings = [f'../workflows/cd80/marginal_weights/embeddings/NR1toNR4_N7_N186_{rep}.csv' for rep in range(1, 6)]
+    input_predictions = [f'../workflows/cd80/marginal_weights/predictions/NR1toNR4_N7_N186_{rep}.csv' for rep in range(1, 6)]
 
     emb_list = []
     pred_list = []
@@ -97,7 +97,7 @@ def main():
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='cd80')
     specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
 
-    plot_pca_ancestors_static(embedding_dfs, specific_ancestor_embedding_df, nodes_to_label, './workflows/cd80/data/marginal/groupedpcaplot.svg')
+    plot_pca_ancestors_static(embedding_dfs, specific_ancestor_embedding_df, nodes_to_label, '../workflows/cd80/data/marginal/groupedpcaplot.svg')
 
 
 
