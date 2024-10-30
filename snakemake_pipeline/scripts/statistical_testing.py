@@ -8,11 +8,73 @@ import math
 
 
 
+def find_first_prediction_changes(df):
+    """
+    Identify the first occurrence of each new `overall_prediction` category 
+    (excluding the first one) within a replicate.
+    """
+    # Shift the `overall_prediction` column to compare with the previous row.
+    previous_predictions = df['overall_prediction'].shift(1)
 
+    # Identify where the prediction changes.
+    changes = df[df['overall_prediction'] != previous_predictions]
+
+    # Exclude the first category by skipping the first row.
+    first_changes = changes.iloc[1:]
+
+    # Keep only the first instance of each unique `overall_prediction` change.
+    first_unique_changes = first_changes.drop_duplicates(subset=['overall_prediction'], keep='first')
+
+    return first_unique_changes
+
+
+
+def process_methods_and_replicates(methods):
+    """
+    Process all methods, each containing multiple replicates, and aggregate results.
+    """
+    aggregated_results = []
+
+    # Iterate through each method and its replicates
+    for method_name, replicates in methods.items():
+        for replicate_name, df in replicates.items():
+            # Extract first prediction changes for the replicate
+            changes = find_first_prediction_changes(df)
+
+            # Add method and replicate information to the dataframe
+            changes['method'] = method_name
+
+            # Append the results to the aggregated list
+            aggregated_results.append(changes)
+
+    # Combine all results into a single dataframe
+    return pd.concat(aggregated_results, ignore_index=True)
 
 
 def main():
     input_files = snakemake.input
+
+
+    grouped_results = []
+
+    for file in input_files:
+        df = pd.read_csv(file)
+        changes = find_first_prediction_changes(df)
+
+        grouped_results.append(changes)
+        
+    grouped_df = pd.concat(grouped_results, ignore_index=True)
+
+    print(grouped_df)
+
+
+
+
+
+
+
+
+
     # method_name = snakemake.wildcards.method_name
 
     replicates = [pd.read_csv(file) for file in input_files]

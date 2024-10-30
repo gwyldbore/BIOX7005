@@ -91,7 +91,6 @@ def extract_mutated_positions(input_files):
     return ordered_positions, max_sequence_length
 
 
-
 def plot_num_mutations(ordered_counts, output_path):
     # Create a grid of 3 subplots (one for each non-starting category)
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=True)
@@ -132,7 +131,6 @@ def plot_num_mutations(ordered_counts, output_path):
     plt.savefig(output_path, bbox_inches='tight')
 
 
-
 def plot_num_mutation_spread(ordered_counts, sequence_length, output_path):
 
     fig, axes = plt.subplots(1, 3, figsize=(18, 6), sharey=False)
@@ -166,8 +164,6 @@ def plot_num_mutation_spread(ordered_counts, sequence_length, output_path):
     plt.savefig(output_path, bbox_inches='tight')
 
 
-
-
 def plot_mutated_positions(ordered_positions, sequence_length, output_path):
     # fig, axes = plt.subplots(1, 3, figsize=(24, 6), sharey=True)
     fig, axes = plt.subplots(1, 3, figsize=(24, 6), sharey=False)
@@ -191,7 +187,7 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
         ax.set_xticklabels(range(0, sequence_length + 1, max(1, sequence_length // 20)), rotation=45)
 
         ax.yaxis.set_major_locator(MaxNLocator(integer=True))
-        
+
         # Set plot title and labels
         ax.set_title(f"Mutated Positions to {category}")
         ax.set_xlabel("Sequence Position")
@@ -202,8 +198,6 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
 
     # Save the plot
     plt.savefig(output_path, bbox_inches='tight')
-
-
 
 
 def main():
