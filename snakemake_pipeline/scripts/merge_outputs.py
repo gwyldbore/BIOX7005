@@ -46,7 +46,10 @@ def parse_prints_output(row):
     results = {'NR1':0, 'NR4':0, 'Other':0}
     
     # get the prints data
-    all_results = row['PRINTS']
+    try:
+        all_results = row['PRINTS']
+    except KeyError:
+        all_results = row['Gene3D']
 
     # # which column contains the sequence id?
     # seq_id = row['']
