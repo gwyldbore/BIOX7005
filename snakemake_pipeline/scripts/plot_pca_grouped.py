@@ -50,13 +50,13 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
                 c=[int(x) for x in mutation_df['num_mutation']], cmap='cool',
                 marker=marker_dict[mutation_df['filegroup']])
     
-    # for group, marker in marker_dict.items():
-    #     group_subset = mutation_df[mutation_df['filegroup'] == group]
-    #     scatter = ax.scatter(
-    #         group_subset['pca1'], group_subset['pca2'],
-    #         c=[int(x) for x in group_subset['num_mutation']],
-    #         cmap='cool', marker=marker, alpha=0.8
-    #     )
+    for group, marker in marker_dict.items():
+        group_subset = mutation_df[mutation_df['filegroup'] == group]
+        scatter = ax.scatter(
+            group_subset['pca1'], group_subset['pca2'],
+            c=[int(x) for x in group_subset['num_mutation']],
+            cmap='cool', marker=marker, alpha=0.8
+        )
     
     cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
     fig.colorbar(scatter, cax=cax, orientation='horizontal')
@@ -119,11 +119,26 @@ def plot_pca_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, no
 
     prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
 
+    # for prediction, color in zip(unique_predictions, prediction_colors):
+    #     pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
+    #     plt.scatter(pred_subset['pca1'], pred_subset['pca2'], 
+    #                 color=color, label=f'Prediction: {prediction}',
+    #                 marker=marker_dict[prediction_df['filegroup']])
+
+        # Plot predictions grouped by prediction type and filegroup
     for prediction, color in zip(unique_predictions, prediction_colors):
         pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
-        plt.scatter(pred_subset['pca1'], pred_subset['pca2'], 
-                    color=color, label=f'Prediction: {prediction}',
-                    marker=marker_dict[prediction_df['filegroup']])
+
+        # Further group by 'filegroup' to assign different markers
+        for group, marker in marker_dict.items():
+            group_subset = pred_subset[pred_subset['filegroup'] == group]
+
+            if not group_subset.empty:  # Plot only if there are points in this group
+                ax.scatter(
+                    group_subset['pca1'], group_subset['pca2'], 
+                    color=color, label=f'{prediction} - Group {group}',
+                    marker=marker, alpha=0.8
+                )
 
     # Set plot titles and labels
     plt.title("PCA by Clade")
