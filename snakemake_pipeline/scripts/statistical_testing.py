@@ -19,9 +19,32 @@ def main():
 
 
     # make a boxplot of the stats
-    plt.figure(figsize=(10, 6))
-    sns.boxplot(x='method', y='num_mutation', data=combined_df)
-    plt.title(f'Mutation Counts by {method_name}')
+    # plt.figure(figsize=(10, 6))
+    # sns.boxplot(x='method', y='num_mutation', data=combined_df)
+    # plt.title(f'Mutation Counts by {method_name}')
+    # plt.ylabel("Number of mutations")
+    # plt.savefig(snakemake.output.boxplot)
+    # plt.close() # close to save memory
+
+    # Get unique methods for plotting
+    methods = combined_df['method'].unique()
+
+    # Calculate the number of rows and columns for the grid layout
+    num_methods = len(methods)
+    cols = 3  # Define the number of columns in the grid
+    rows = math.ceil(num_methods / cols)  # Calculate the number of rows needed
+
+    fig, axes = plt.subplots(rows, cols, figsize=(15, 5 * rows), squeeze=False)
+
+    # Generate boxplots for each method
+    for i, method in enumerate(methods):
+        row, col = divmod(i, cols)  # Calculate grid position
+        sns.boxplot(
+            x='method', y='num_mutation', 
+            data=combined_df[combined_df['method'] == method], ax=axes[row, col]
+        )
+        axes[row, col].set_title(f'Mutation Counts for {method}')
+
     plt.ylabel("Number of mutations")
     plt.savefig(snakemake.output.boxplot)
     plt.close() # close to save memory
@@ -37,7 +60,7 @@ def main():
     stat, p = stats.levene(
         *[group['Mutation_Count'].values for name, group in combined_df.groupby('Method')]
     )
-    print(f'Levene’s test p-value: {p}')
+    print(f"Levene’s test p-value: {p}")
 
     # 3.3 Hypothesis Testing (ANOVA or Kruskal-Wallis)
     if p > 0.05:  # If variances are equal
