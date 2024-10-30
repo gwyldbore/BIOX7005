@@ -5,6 +5,9 @@ import seaborn as sns
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 import scikit_posthocs as sp
 import math
+from scipy.stats import kruskal
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
 
 
 def get_initial_category(df):
@@ -72,6 +75,37 @@ def get_prediction_order(initial_category):
     else:
         # default to base
         return base_order
+    
+
+    # Define a function to perform ANOVA or Kruskal-Wallis and post-hoc testing
+def perform_statistical_tests(df, category):
+    """Perform statistical tests for a given category."""
+    # Filter data for the current category
+    category_data = df[df['overall_prediction'] == category]
+
+    # Check if there are enough unique methods for comparison
+    if category_data['method'].nunique() < 2:
+        print(f"Not enough methods for comparison in category: {category}")
+        return None
+
+    # Perform Kruskal-Wallis test (non-parametric)
+    kruskal_result = kruskal(
+        *[group['num_mutation'].values for name, group in category_data.groupby('method')]
+    )
+    print(f"Kruskal-Wallis result for {category}: p-value = {kruskal_result.pvalue}")
+
+    if kruskal_result.pvalue < 0.05:
+        # Perform post-hoc Tukey HSD test if significant
+        tukey = pairwise_tukeyhsd(
+            endog=category_data['num_mutation'],
+            groups=category_data['method'],
+            alpha=0.05
+        )
+        print(f"Tukey HSD post-hoc test for {category}:\n{tukey}\n")
+    else:
+        print(f"No significant differences found in {category}.\n")
+
+
 
 
 def main():
@@ -132,6 +166,13 @@ def main():
 
     plt.savefig(snakemake.output.boxplot)
     plt.close() # close to save memory
+
+
+
+    # Get the unique categories from the data
+    categories = grouped_df['overall_prediction'].unique()
+
+
 
 
 
