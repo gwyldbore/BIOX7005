@@ -108,7 +108,7 @@ def perform_statistical_tests(df, category):
 
 
 
-def plot_qq(category_data, category):
+def plot_qq(category_data, category, outpath):
     """Generate Q-Q plots for each method within a category."""
     methods = category_data['method_name'].unique()
     num_methods = len(methods)
@@ -126,7 +126,7 @@ def plot_qq(category_data, category):
         axes[i].set_title(f'Method: {method}', fontsize=14)
 
     plt.tight_layout(rect=[0, 0, 1, 0.95])  # Adjust layout to fit the title
-    plt.savefig(snakemake.output.qqplot)
+    plt.savefig(outpath)
 
 
 def main():
@@ -195,7 +195,7 @@ def main():
 
     for category in categories:
         category_data = grouped_df[grouped_df['overall_prediction'] == category]
-        plot_qq(category_data, category)
+        plot_qq(category_data, category, snakemake.output.qqplot)
 
     # # Run statistical tests for each category
     # for category in categories:
