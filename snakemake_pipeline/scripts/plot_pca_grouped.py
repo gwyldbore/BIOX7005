@@ -170,7 +170,8 @@ def main():
 
     i = 0
     for file in input_predictions:
-        df = pd.read_csv(input_file)
+        with open(file, 'r') as input_file:
+            df = pd.read_csv(input_file)
         df.apply(adjust_info, index=i, axis=1)
         df.apply(adjust_filegroup, index=i, axis=1)
         i += 1
