@@ -307,6 +307,7 @@ rule calculate_statistics:
         boxplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg",
         qqplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_qqplot.svg",
         shapiro="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_shapiro.txt",
+        kruskal="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_kruskal.txt",
     script:
         "scripts/statistical_testing.py"
 

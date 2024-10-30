@@ -143,6 +143,46 @@ def run_shapiro_tests(df, outpath):
             f.write(f"W-Statistic: {result['W-Statistic']:.4f}, p-value: {result['p-value']:.4e}, normal: {normal}\n")
             f.write("-" * 40 + "\n")
 
+def run_kruskal_wallis(df, outpath):
+    """Run Kruskal-Wallis test for each category and write results to a text file."""
+    categories = df['overall_prediction'].unique().dropna()
+    results = []
+
+    # Iterate over categories
+    for category in categories:
+        # Group by method within the category
+        category_data = df[df['overall_prediction'] == category]
+
+        # Prepare data for Kruskal-Wallis test (grouped by method)
+        grouped_data = [
+            group['num_mutation'].values for _, group in category_data.groupby('method')
+        ]
+
+        if len(grouped_data) < 2:
+            print(f"Not enough methods for comparison in category: {category}")
+            continue
+
+        # Run the Kruskal-Wallis test
+        stat, p_value = kruskal(*grouped_data)
+
+        # Store the result
+        results.append({
+            'Category': category,
+            'Statistic': stat,
+            'p-value': p_value
+        })
+
+    # Write the results to a text file
+    with open(outpath, 'w') as f:
+        f.write("Kruskal-Wallis Test Results\n")
+        f.write("=" * 40 + "\n")
+        for result in results:
+            f.write(f"Category: {result['Category']}\n")
+            significant = False
+            if results['p-value'] < 0.05: # reject the null
+                significant = True
+            f.write(f"Statistic: {result['Statistic']:.4f}, p-value: {result['p-value']:.4e}, significant: {significant}\n")
+            f.write("-" * 40 + "\n")
 
 def plot_qq_grid(df, outpath):
     """Generate a grid of Q-Q plots with categories as rows and methods as columns."""
@@ -252,6 +292,8 @@ def main():
 
     # Run Shapiro-Wilk tests and write the results to a text file
     run_shapiro_tests(grouped_df, snakemake.output.shapiro)
+
+    run_kruskal_wallis(grouped_df, snakemake.output.kruskal)
 
    
 
