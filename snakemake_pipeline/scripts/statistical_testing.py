@@ -137,7 +137,10 @@ def run_shapiro_tests(df, outpath):
         f.write("=" * 40 + "\n")
         for result in results:
             f.write(f"Category: {result['Category']}, Method: {result['Method']}\n")
-            f.write(f"W-Statistic: {result['W-Statistic']:.4f}, p-value: {result['p-value']:.4e}\n")
+            normal = 'False'
+            if result['p-value'] > 0.05:
+                normal = 'True'
+            f.write(f"W-Statistic: {result['W-Statistic']:.4f}, p-value: {result['p-value']:.4e}, normal: {normal}\n")
             f.write("-" * 40 + "\n")
 
 
