@@ -20,7 +20,7 @@ def main():
 
     # make a boxplot of the stats
     plt.figure(figsize=(10, 6))
-    sns.boxplot(x='Method', y='Mutation_Count', data=combined_df)
+    sns.boxplot(x='method', y='mutation_count', data=combined_df)
     plt.title(f'Mutation Counts by {method_name}')
     plt.savefig(snakemake.output.boxplot)
     plt.close() # close to save memory
