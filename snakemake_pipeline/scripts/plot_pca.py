@@ -170,7 +170,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     prediction_df = all_embeddings_df.dropna(subset=['overall_prediction'])
     unique_predictions = prediction_df['overall_prediction'].unique()
     unique_predictions.sorted()
-    # print(unique_predictions)
+    print(unique_predictions)
 
     # Define a new colormap for predictions
     prediction_cmap = ListedColormap(['mediumorchid', 'red', 'royalblue', 'forestgreen'])
