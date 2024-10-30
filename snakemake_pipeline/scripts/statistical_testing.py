@@ -180,6 +180,7 @@ def main():
     grouped_df['overall_prediction'] = pd.Categorical(
         grouped_df['overall_prediction'], categories=order, ordered=True
     )
+    
 
     # Create a box plot for each overall_prediction category
     g = sns.catplot(
