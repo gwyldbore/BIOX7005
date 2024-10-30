@@ -1,6 +1,7 @@
 import pandas as pd
 import scipy.stats as stats
 import matplotlib.pyplot as plt
+import numpy as np
 import seaborn as sns
 from statsmodels.stats.multicomp import pairwise_tukeyhsd
 import scikit_posthocs as sp
@@ -116,8 +117,13 @@ def plot_qq_grid(df, outpath):
     # Create the grid: categories in rows, methods in columns
     fig, axes = plt.subplots(len(categories), len(methods), figsize=(6 * len(methods), 6 * len(categories)))
     fig.suptitle('Q-Q Plots for All Methods and Categories', fontsize=18, fontweight='bold')
+    # If there is only one row or one column, make axes iterable
+    if len(categories) == 1:
+        axes = axes[np.newaxis, :]  # Convert to 2D array (1 row)
+    if len(methods) == 1:
+        axes = axes[:, np.newaxis]  # Convert to 2D array (1 column)
 
-    # Iterate over categories (rows) and methods (columns) to populate the grid
+        # Iterate over categories (rows) and methods (columns) to populate the grid
     for i, category in enumerate(categories):
         for j, method in enumerate(methods):
             # Filter data for the current category and method
@@ -131,6 +137,11 @@ def plot_qq_grid(df, outpath):
                 # Generate the Q-Q plot
                 stats.probplot(method_data, dist="norm", plot=axes[i, j])
                 axes[i, j].set_title(f'{category} - {method}', fontsize=12)
+
+    # Adjust layout and save the plot
+    plt.tight_layout(rect=[0, 0, 1, 0.98])
+    plt.savefig(outpath)
+    plt.close()
 
     # Adjust layout and save the plot
     plt.tight_layout(rect=[0, 0, 1, 0.98])
