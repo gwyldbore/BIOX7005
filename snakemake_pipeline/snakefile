@@ -269,8 +269,8 @@ rule grouped_pca:
         ),
         ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv",
     output:
-        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
-        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_predictions.png"
+        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_mutations_grouped.png",
+        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_predictions_grouped.png"
     script:
         "scripts/plot_pca_grouped.py"
 
