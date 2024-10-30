@@ -50,14 +50,14 @@ except KeyError:
 
 rule all:
     input:
-        statsplot= expand("workflows/{dataset_name}/{method_name}/results/{dataset_name}_{datafile_name}_{graph_type}.png",
+        statsplot= expand("workflows/{dataset_name}/{method_name}/results/{dataset_name}_{datafile_name}_{graph_type}_{method_name}.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
         graph_type=['mutation', 'position']
         ),
 
-        single_pca= expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations.png",
+        single_pca= expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations_{method_name}.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
@@ -246,8 +246,8 @@ rule single_pca:
         ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv",
         predictions_df="workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv"
     output:
-        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations.png",
-        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_predictions.png"
+        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations_{method_name}.png",
+        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_predictions_{method_name}.png"
     script:
         "scripts/plot_pca.py"
 
@@ -297,8 +297,8 @@ rule plot_statistics:
             rep=range(1, NUM_REPLICATES + 1)
         )
     output:
-        mutation_graphs="workflows/{dataset_name}/{method_name}/results/{dataset_name}_{datafile_name}_mutation.png",
-        position_graphs="workflows/{dataset_name}/{method_name}/results/{dataset_name}_{datafile_name}_position.png",
-        mutation_spread="workflows/{dataset_name}/{method_name}/results/{dataset_name}_{datafile_name}_mutationspread.png",
+        mutation_graphs="workflows/{dataset_name}/{method_name}/results/{dataset_name}_{datafile_name}_mutation_{method_name}.png",
+        position_graphs="workflows/{dataset_name}/{method_name}/results/{dataset_name}_{datafile_name}_position_{method_name}.png",
+        mutation_spread="workflows/{dataset_name}/{method_name}/results/{dataset_name}_{datafile_name}_mutationspread_{method_name}.png",
     script:
         "scripts/create_stats_plots.py"
