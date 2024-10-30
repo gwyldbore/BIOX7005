@@ -65,7 +65,7 @@ def main():
         
     grouped_df = pd.concat(grouped_results, ignore_index=True)
 
-    print(grouped_df)
+    grouped_df.to_csv('TESTFILE.csv')
 
 
 
