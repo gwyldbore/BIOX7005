@@ -120,6 +120,8 @@ def run_shapiro_tests(df, outpath):
             # Filter data for the current category and method
             method_data = df[(df['overall_prediction'] == category) & 
                              (df['method'] == method)]['num_mutation']
+            
+            print(f'shapiro method data: {method_data}')
 
             if not method_data.empty:
                 # Run the Shapiro-Wilk test
