@@ -108,30 +108,34 @@ def perform_statistical_tests(df, category):
 
 
 
-def plot_qq(category_data, category, outpath):
-    """Generate Q-Q plots for each method within a category."""
-    methods = category_data['method'].unique()
-    num_methods = len(methods)
+def plot_qq_grid(df, outpath):
+    """Generate a Q-Q plot grid with categories as rows and methods as columns."""
+    categories = df['overall_prediction'].unique().dropna()
+    methods = df['method'].unique().dropna()
 
-    # Check if there are methods to plot
-    if num_methods == 0:
-        print(f"No valid methods found for category: {category}")
-        return
+    # Create the grid: categories in rows, methods in columns
+    fig, axes = plt.subplots(len(categories), len(methods), figsize=(6 * len(methods), 6 * len(categories)))
+    fig.suptitle('Q-Q Plots for All Methods and Categories', fontsize=18, fontweight='bold')
 
-    # Create subplots: One Q-Q plot for each method
-    fig, axes = plt.subplots(1, num_methods, figsize=(6 * num_methods, 6))
-    fig.suptitle(f'Q-Q Plots for {category}', fontsize=16, fontweight='bold')
+    # Iterate over categories (rows) and methods (columns) to populate the grid
+    for i, category in enumerate(categories):
+        for j, method in enumerate(methods):
+            # Filter data for the current category and method
+            method_data = df[(df['overall_prediction'] == category) & (df['method'] == method)]['num_mutation']
 
-    for i, method in enumerate(methods):
-        # Filter data for the current method
-        method_data = category_data[category_data['method'] == method]['num_mutation']
+            if method_data.empty:
+                # If no data, disable the axis and skip plotting
+                axes[i, j].axis('off')
+                axes[i, j].text(0.5, 0.5, 'No Data', ha='center', va='center', fontsize=12)
+            else:
+                # Generate the Q-Q plot
+                stats.probplot(method_data, dist="norm", plot=axes[i, j])
+                axes[i, j].set_title(f'{category} - {method}', fontsize=12)
 
-        # Generate Q-Q plot
-        stats.probplot(method_data, dist="norm", plot=axes[i])
-        axes[i].set_title(f'Method: {method}', fontsize=14)
-
-    plt.tight_layout(rect=[0, 0, 1, 0.95])  # Adjust layout to fit the title
+    # Adjust layout and save the plot
+    plt.tight_layout(rect=[0, 0, 1, 0.98])
     plt.savefig(outpath)
+    plt.close()
 
 
 def main():
@@ -198,9 +202,7 @@ def main():
     # Get the unique categories from the data
     categories = grouped_df['overall_prediction'].unique().dropna()
 
-    for category in categories:
-        category_data = grouped_df[grouped_df['overall_prediction'] == category]
-        plot_qq(category_data, category, snakemake.output.qqplot)
+    plot_qq_grid(grouped_df, snakemake.output.qqplot)
 
     # # Run statistical tests for each category
     # for category in categories:
