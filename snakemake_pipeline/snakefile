@@ -304,7 +304,7 @@ rule calculate_statistics:
         )
     output:
         boxplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg"
-    wildcards:
+    params:
         method_name=METHOD_NAMES
     script:
         "scripts/statistical_testing.py"
