@@ -197,10 +197,11 @@ def main():
 
     # Get the unique categories from the data
     categories = grouped_df['overall_prediction'].unique()
+    qqpath = str(snakemake.output.qqplot)
 
     for category in categories:
         category_data = grouped_df[grouped_df['overall_prediction'] == category]
-        plot_qq(category_data, category, snakemake.output.qqplot + f'_{category}.svg')
+        plot_qq(category_data, category, qqpath + f'_{category}.svg')
 
     # # Run statistical tests for each category
     # for category in categories:
