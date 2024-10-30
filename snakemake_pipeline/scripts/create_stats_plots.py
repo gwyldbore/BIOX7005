@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from ast import literal_eval
 import numpy as np
+from matplotlib.ticker import MaxNLocator
 
 def extract_mutation_counts(input_files) -> dict:
     # Initialize a dictionary to store mutation counts for each target category
@@ -150,6 +151,8 @@ def plot_num_mutation_spread(ordered_counts, sequence_length, output_path):
 
         # Rotate x-tick labels for readability
         ax.set_xticklabels(range(0, sequence_length + 1, max(1, sequence_length // 20)), rotation=90)
+        
+        ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
         ax.set_title(f"Transitions to {category}")
         ax.set_xlabel("Number of Mutations")
