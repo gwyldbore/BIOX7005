@@ -10,20 +10,23 @@ import math
 
 def find_first_prediction_changes(df):
     """
-    Identify the first occurrence of each new `overall_prediction` category 
-    (excluding the first one) within a replicate.
+    Return the first row where each new `overall_prediction` occurs,
+    excluding the initial category and any reversion to it.
     """
+    # Identify the initial category from the first row.
+    initial_category = df['overall_prediction'].iloc[0]
+
     # Shift the `overall_prediction` column to compare with the previous row.
     previous_predictions = df['overall_prediction'].shift(1)
 
     # Identify where the prediction changes.
     changes = df[df['overall_prediction'] != previous_predictions]
 
-    # Exclude the first category by skipping the first row.
-    first_changes = changes.iloc[1:]
+    # Exclude the first row and any rows where the category reverts to the initial one.
+    valid_changes = changes[changes['overall_prediction'] != initial_category].iloc[1:]
 
     # Keep only the first instance of each unique `overall_prediction` change.
-    first_unique_changes = first_changes.drop_duplicates(subset=['overall_prediction'], keep='first')
+    first_unique_changes = valid_changes.drop_duplicates(subset=['overall_prediction'], keep='first')
 
     return first_unique_changes
 
