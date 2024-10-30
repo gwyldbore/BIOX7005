@@ -266,7 +266,7 @@ rule plot_pca_grouped:
             method_name=wildcards.method_name,
             datafile_name=wildcards.datafile_name,
             rep=range(int(wildcards.batch) * 5, (int(wildcards.batch) + 1) * 5)
-        )
+        ),
         ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv",
     output:
         plot_mutation="workflows/{dataset_name}/{method_name}/plots/{datafile_name}_{batch}_mutations.png",
