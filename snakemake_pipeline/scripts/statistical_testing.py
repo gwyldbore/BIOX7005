@@ -172,6 +172,10 @@ def main():
     # Get the unique categories from the data
     categories = grouped_df['overall_prediction'].unique()
 
+    # Run statistical tests for each category
+    for category in categories:
+        perform_statistical_tests(grouped_df, category)
+
 
 
 
