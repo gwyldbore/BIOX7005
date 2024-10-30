@@ -119,6 +119,7 @@ def plot_num_mutations(ordered_counts, output_path):
 
         ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
         # ax.set_ylim(0, 15)
+        ax.yaxis.set_major_locator(MaxNLocator(integer=True))
 
         ax.set_title(f"Transitions to {category}")
         ax.set_xlabel("Number of Mutations")
@@ -189,6 +190,8 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
         # Rotate x-tick labels for readability
         ax.set_xticklabels(range(0, sequence_length + 1, max(1, sequence_length // 20)), rotation=45)
 
+        ax.yaxis.set_major_locator(MaxNLocator(integer=True))
+        
         # Set plot title and labels
         ax.set_title(f"Mutated Positions to {category}")
         ax.set_xlabel("Sequence Position")

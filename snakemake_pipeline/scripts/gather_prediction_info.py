@@ -23,6 +23,9 @@ def overall_prediction(row):
         return 'NR4-like'
     else:
         return 'other'
+    
+def insert_method_type(row):
+    return snakemake.wildcards.method_name
 
 def main():
     # load in the merged df
@@ -33,6 +36,7 @@ def main():
                             'embedding_prediction', 'mutated_positions']].copy()
     
     results_df['overall_prediction'] = results_df.apply(overall_prediction, axis=1)
+    results_df['method'] = results_df.apply(insert_method_type, axis=1)
 
     results_df.to_csv(snakemake.output.results_df, index=False)
 
