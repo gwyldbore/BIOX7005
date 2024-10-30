@@ -117,29 +117,39 @@ def plot_qq_grid(df, outpath):
     print(f'methods: {methods}')
     print(f'categories: {categories}')
 
-    # Create the grid: categories as rows, methods as columns
+    # Dynamically adjust the grid size based on valid combinations
+    num_categories = len(categories)
+    num_methods = len(methods)
+
+    if num_categories == 0 or num_methods == 0:
+        print("No valid data to plot.")
+        return
+
+    # Create the grid: categories in rows, methods in columns
     fig, axes = plt.subplots(
-        len(categories), len(methods), figsize=(6 * len(methods), 6 * len(categories)),
+        num_categories, num_methods, figsize=(6 * num_methods, 6 * num_categories),
         squeeze=False  # Ensure we always get a 2D array of axes
     )
     fig.suptitle('Q-Q Plots for All Categories and Methods', fontsize=18, fontweight='bold')
 
-    # Iterate over each category-method pair to fill the grid
+    # Iterate over categories and methods to populate the grid
     for i, category in enumerate(categories):
         for j, method in enumerate(methods):
-            # Filter the data for the current category and method
+            ax = axes[i, j]  # Select the correct axis
+
+            # Filter data for the current category and method
             method_data = df[(df['overall_prediction'] == category) & (df['method'] == method)]['num_mutation']
 
-            # Generate the Q-Q plot or display 'No Data' if empty
-            ax = axes[i, j]  # Get the appropriate subplot
             if method_data.empty:
+                # If no data, disable the axis and display a message
                 ax.axis('off')
                 ax.text(0.5, 0.5, 'No Data', ha='center', va='center', fontsize=12)
             else:
+                # Generate the Q-Q plot
                 stats.probplot(method_data, dist="norm", plot=ax)
                 ax.set_title(f'{category} - {method}', fontsize=12)
 
-    # Adjust layout to fit everything and save the plot
+    # Adjust layout to prevent overlap and save the plot
     plt.tight_layout(rect=[0, 0, 1, 0.98])
     plt.savefig(outpath)
     plt.close()
