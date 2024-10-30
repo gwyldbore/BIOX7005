@@ -8,6 +8,12 @@ from sklearn.decomposition import PCA
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
 
+marker_dict = {1: 'o',
+               2: 'x',
+               3: '*',
+               4: '^',
+               5: 's'}
+
 
 def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
     print('inside plot')
@@ -42,8 +48,16 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
 
 
     mutation_df = mutations_df.dropna(subset=['num_mutation'])
-    scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
-                c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
+    # scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
+    #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
+    # Plot points with different markers based on 'filegroup' column
+    for group, marker in marker_dict.items():
+        group_subset = mutation_df[mutation_df['filegroup'] == group]
+        scatter = ax.scatter(
+            group_subset['pca1'], group_subset['pca2'],
+            c=[int(x) for x in group_subset['num_mutation']],
+            cmap='cool', marker=marker, alpha=0.8, label=group
+        )
     
     cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
     fig.colorbar(scatter, cax=cax, orientation='horizontal')
@@ -68,6 +82,7 @@ def main():
 
     def adjust_info(row, index):
         row['info'] += f'_{index}'
+        row['filegroup'] = index
 
     i = 0
     print('opening embeddings')
@@ -94,6 +109,7 @@ def main():
     with open("../data/ancestor_embedding_df.csv", "rb") as input_file:
         ancestor_embedding_df = pickle.load(input_file)
 
+    print('tagging nodes')
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='cd80')
     specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
 
