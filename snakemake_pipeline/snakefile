@@ -305,7 +305,7 @@ rule calculate_statistics:
         )
     output:
         boxplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg",
-        qqplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_qqplot_random.svg"
+        qqplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_qqplot.svg"
     script:
         "scripts/statistical_testing.py"
 
