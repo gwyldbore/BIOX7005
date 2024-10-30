@@ -110,7 +110,6 @@ def perform_statistical_tests(df, category):
 def plot_qq_grid(df, outpath):
     """Generate a grid of Q-Q plots with categories as rows and methods as columns."""
     # Get unique categories and methods
-    print(df)
     categories = df['overall_prediction'].dropna().unique()
     methods = df['method'].dropna().unique()
     print(f'methods: {methods}')
@@ -211,7 +210,6 @@ def main():
 
     # Get the unique categories from the data
     categories = grouped_df['overall_prediction'].unique().dropna()
-    print(f'inside main still {grouped_df}')
 
     plot_qq_grid(grouped_df, snakemake.output.qqplot)
 
