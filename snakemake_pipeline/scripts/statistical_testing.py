@@ -75,7 +75,7 @@ def main():
     grouped_df.to_csv('TESTFILE.csv')
 
 
-    grouped_df_df['method'] = grouped_df['method'].apply(clean_name)
+    grouped_df['method'] = grouped_df['method'].apply(clean_name)
 
     # Create a box plot for each overall_prediction category
     g = sns.catplot(
