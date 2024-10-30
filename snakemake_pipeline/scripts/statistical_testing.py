@@ -8,7 +8,7 @@ import math
 
 
 def get_initial_category(df):
-    return df['overall_prediction'.iloc[0]]
+    return df['overall_prediction'].iloc[0]
 
 def find_first_prediction_changes(df):
     """
