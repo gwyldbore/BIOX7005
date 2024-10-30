@@ -126,7 +126,7 @@ def plot_qq(category_data, category):
         axes[i].set_title(f'Method: {method}', fontsize=14)
 
     plt.tight_layout(rect=[0, 0, 1, 0.95])  # Adjust layout to fit the title
-    plt.savefig(snakemake.output.qq)
+    plt.savefig(snakemake.output.qqplot)
 
 
 def main():
