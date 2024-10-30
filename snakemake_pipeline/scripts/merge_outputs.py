@@ -111,6 +111,7 @@ def main():
         embedding_df = pickle.load(input_file)
 
     merged_df = embedding_df.merge(interproscan_df, on='info', how='left')
+    print(merged_df.head())
 
     pivot_df = merged_df.pivot_table(index='info', columns='label', values='extended_description',
                                      aggfunc=lambda x: '; '.join(x))
@@ -131,6 +132,7 @@ def main():
 
     # final_df['has_subfamily_4'] = final_df['PRINTS'].str.contains('subfamily 4', na=False)
     # final_df['has_subfamily_1'] = final_df['PRINTS'].str.contains('subfamily 1', na=False)
+    # if 'PRINTS' in final_df.columns():
     final_df['interproscan_prediction'] = final_df.apply(parse_prints_output, axis=1)
 
     # also add the mutation position list
