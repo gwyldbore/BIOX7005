@@ -110,33 +110,34 @@ def perform_statistical_tests(df, category):
 
 
 def plot_qq_grid(df, outpath):
-    """Generate a Q-Q plot grid with categories as rows and methods as columns."""
+    """Generate a grid of Q-Q plots with categories as rows and methods as columns."""
+    # Get unique categories and methods
     categories = df['overall_prediction'].unique()
     methods = df['method'].unique()
 
-    # Create the grid: categories in rows, methods in columns
+    # Create the grid: categories as rows, methods as columns
     fig, axes = plt.subplots(
         len(categories), len(methods), figsize=(6 * len(methods), 6 * len(categories)),
-        squeeze=False  # Always return a 2D array of axes
+        squeeze=False  # Ensure we always get a 2D array of axes
     )
-    fig.suptitle('Q-Q Plots for All Methods and Categories', fontsize=18, fontweight='bold')
+    fig.suptitle('Q-Q Plots for All Categories and Methods', fontsize=18, fontweight='bold')
 
-    # Iterate over categories (rows) and methods (columns) to populate the grid
+    # Iterate over each category-method pair to fill the grid
     for i, category in enumerate(categories):
         for j, method in enumerate(methods):
-            # Filter data for the current category and method
+            # Filter the data for the current category and method
             method_data = df[(df['overall_prediction'] == category) & (df['method'] == method)]['num_mutation']
 
+            # Generate the Q-Q plot or display 'No Data' if empty
+            ax = axes[i, j]  # Get the appropriate subplot
             if method_data.empty:
-                # If no data, disable the axis and display a message
-                axes[i, j].axis('off')
-                axes[i, j].text(0.5, 0.5, 'No Data', ha='center', va='center', fontsize=12)
+                ax.axis('off')
+                ax.text(0.5, 0.5, 'No Data', ha='center', va='center', fontsize=12)
             else:
-                # Generate the Q-Q plot
-                stats.probplot(method_data, dist="norm", plot=axes[i, j])
-                axes[i, j].set_title(f'{category} - {method}', fontsize=12)
+                stats.probplot(method_data, dist="norm", plot=ax)
+                ax.set_title(f'{category} - {method}', fontsize=12)
 
-    # Adjust layout and save the plot
+    # Adjust layout to fit everything and save the plot
     plt.tight_layout(rect=[0, 0, 1, 0.98])
     plt.savefig(outpath)
     plt.close()
