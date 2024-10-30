@@ -118,7 +118,7 @@ def plot_num_mutations(ordered_counts, output_path):
             counts_series.plot(kind='bar', color='skyblue', ax=ax)
 
         ax.set_xticklabels(ax.get_xticklabels(), rotation=45)
-        ax.set_ylim(0, 15)
+        # ax.set_ylim(0, 15)
 
         ax.set_title(f"Transitions to {category}")
         ax.set_xlabel("Number of Mutations")
