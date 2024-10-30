@@ -118,7 +118,6 @@ def main():
     pivot_df = merged_df.pivot_table(index='info', columns='label', values='extended_description',
                                      aggfunc=lambda x: '; '.join(x))
     pivot_df = pivot_df.reset_index()
-    print(pivot_df.head())
 
     # Load logistic regression predictions
     logistic_predictions_df = pd.read_csv(snakemake.input.logreg_results)
