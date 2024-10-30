@@ -213,6 +213,7 @@ def main():
 
     # Get the unique categories from the data
     categories = grouped_df['overall_prediction'].unique().dropna()
+    print(f'inside main still {grouped_df}')
 
     plot_qq_grid(grouped_df, snakemake.output.qqplot)
 
