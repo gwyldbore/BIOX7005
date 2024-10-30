@@ -12,7 +12,7 @@ import scikit_posthocs as sp
 
 def main():
     input_files = snakemake.input
-    method_name = snakemake.wildcards.method_name
+    # method_name = snakemake.wildcards.method_name
 
     replicates = [pd.read_csv(file) for file in input_files]
     combined_df = pd.concat(replicates, ignore_index=True)
