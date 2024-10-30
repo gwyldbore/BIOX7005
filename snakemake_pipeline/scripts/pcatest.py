@@ -91,7 +91,7 @@ def main():
     nodes_to_label = embedding_dfs['info'].values
 
     print('opening ancestor')
-    with open("../data/marginal/ancestor_embedding_df.csv", "rb") as input_file:
+    with open("../data/ancestor_embedding_df.csv", "rb") as input_file:
         ancestor_embedding_df = pickle.load(input_file)
 
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='cd80')
