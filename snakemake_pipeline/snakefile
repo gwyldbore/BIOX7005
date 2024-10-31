@@ -1,7 +1,7 @@
 try:
     NUM_REPLICATES = config['num_replicates']
 except KeyError:
-    NUM_REPLICATES = 5
+    NUM_REPLICATES = 50
 
 # try:
 #     DATASET_PATH = config['dataset_path']
