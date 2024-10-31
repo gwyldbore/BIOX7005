@@ -202,6 +202,9 @@ def run_kruskal_wallis(df, outpath):
             # if a category is significant, do post-hoc dunns test 
             if significant:
                 f.write("Dunn's Post-hoc Test Results:\n")
+                # Set method as categorical to ensure all methods are included in post-hoc test
+                category_data['method'] = category_data['method'].cat.set_categories(df['method'].cat.categories)
+
                 # Run Dunn's test with Bonferroni correction
                 dunn_results = sp.posthoc_dunn(
                     category_data, val_col='num_mutation', group_col='method', p_adjust='bonferroni'
