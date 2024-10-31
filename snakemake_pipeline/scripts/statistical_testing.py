@@ -167,7 +167,10 @@ def run_kruskal_wallis(df, outpath):
     for category in categories:
         # Group by method within the category
         category_data = df[df['overall_prediction'] == category]
-        print(f'category data: {category_data}')
+
+        category_data['method'] = pd.Categorical(category_data['method'], categories=df['method'].cat.categories)
+
+
         # Prepare data for Kruskal-Wallis test (grouped by method)
         grouped_data = [
             group['num_mutation'].values for _, group in category_data.groupby('method')
@@ -180,7 +183,6 @@ def run_kruskal_wallis(df, outpath):
         # Run the Kruskal-Wallis test
         stat, p_value = kruskal(*grouped_data)
 
-        # significant = p_value <= 0.05
         # Store the result
         results.append({
             'Category': category,
@@ -199,20 +201,18 @@ def run_kruskal_wallis(df, outpath):
                 significant = True
             f.write(f"Statistic: {result['Statistic']:.4f}, p-value: {result['p-value']:.4e}, significant: {significant}\n")
 
-            # # if a category is significant, do post-hoc dunns test 
-            # if significant:
-            #     f.write("Dunn's Post-hoc Test Results:\n")
-            #     # Set method as categorical to ensure all methods are included in post-hoc test
-            #     category_data['method'] = category_data['method'].cat.set_categories(df['method'].cat.categories)
+            # if a category is significant, do post-hoc dunns test 
+            if significant:
+                f.write("Dunn's Post-hoc Test Results:\n")
 
-            #     # Run Dunn's test with Bonferroni correction
-            #     dunn_results = sp.posthoc_dunn(
-            #         category_data, val_col='num_mutation', group_col='method', p_adjust='bonferroni'
-            #     )
+                # Run Dunn's test with Bonferroni correction
+                dunn_results = sp.posthoc_dunn(
+                    category_data, val_col='num_mutation', group_col='method', p_adjust='bonferroni'
+                )
 
-            #     # Write Dunn's test results to file in table format
-            #     f.write(dunn_results.to_string())
-            #     f.write("\n\n")
+                # Write Dunn's test results to file in table format
+                f.write(dunn_results.to_string())
+                f.write("\n\n")
 
 
             f.write("-" * 40 + "\n")
