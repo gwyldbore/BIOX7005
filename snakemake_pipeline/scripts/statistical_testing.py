@@ -199,40 +199,40 @@ def run_kruskal_wallis(df, outpath):
             print(f"Kruskal-Wallis result for {category}: p-value = {p_value} \n\n")
         
 
-            # Store the result
-            results.append({
-                'Category': category,
-                'Statistic': stat,
-                'p-value': p_value,
-            })
+            # # Store the result
+            # results.append({
+            #     'Category': category,
+            #     'Statistic': stat,
+            #     'p-value': p_value,
+            # })
 
         
 
-            for result in results:
-                f.write(f"Category: {result['Category']}\n")
-                significant = False
-                if result['p-value'] <= 0.05:
-                    significant = True
-                f.write(f"Statistic: {result['Statistic']:.4f}, p-value: {result['p-value']:.4e}, significant: {significant}\n")
+            # for result in results:
+            f.write(f"Category: {result['Category']}\n")
+            significant = False
+            if result['p-value'] <= 0.05:
+                significant = True
+            f.write(f"Statistic: {result['Statistic']:.4f}, p-value: {result['p-value']:.4e}, significant: {significant}\n")
 
-                # if a category is significant, do post-hoc dunns test 
-                if significant:
-                    f.write("Dunn's Post-hoc Test Results:\n")
+            # if a category is significant, do post-hoc dunns test 
+            if significant:
+                f.write("Dunn's Post-hoc Test Results:\n")
 
-                    print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}\n\n\n")
-
-
-                    # Run Dunn's test with Bonferroni correction
-                    dunn_results = sp.posthoc_dunn(
-                        category_data, val_col='num_mutation', group_col='method', p_adjust='bonferroni'
-                    )
-
-                    # Write Dunn's test results to file in table format
-                    f.write(dunn_results.to_string())
-                    f.write("\n\n")
+                print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}\n\n\n")
 
 
-                f.write("-" * 40 + "\n")
+                # Run Dunn's test with Bonferroni correction
+                dunn_results = sp.posthoc_dunn(
+                    category_data, val_col='num_mutation', group_col='method', p_adjust='bonferroni'
+                )
+
+                # Write Dunn's test results to file in table format
+                f.write(dunn_results.to_string())
+                f.write("\n\n")
+
+
+            f.write("-" * 40 + "\n")
 
 
 
