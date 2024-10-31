@@ -170,7 +170,7 @@ def run_kruskal_wallis(df, outpath):
     # Iterate over categories
     for category in categories:
         # Group by method within the category
-        print(f'processing {category} right now \n\n')
+        print(f'processing {category} right now')
         category_data = df[df['overall_prediction'] == category]
 
         category_data['method'] = pd.Categorical(category_data['method'], categories=df['method'].cat.categories)
@@ -188,7 +188,7 @@ def run_kruskal_wallis(df, outpath):
         # Run the Kruskal-Wallis test
         stat, p_value = kruskal(*grouped_data)
 
-        print(f"Kruskal-Wallis result for {category}: p-value = {p_value}")
+        print(f"Kruskal-Wallis result for {category}: p-value = {p_value} \n\n")
     
 
         # Store the result
