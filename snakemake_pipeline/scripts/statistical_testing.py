@@ -93,6 +93,9 @@ def perform_statistical_tests(df, category):
         *[group['num_mutation'].values for name, group in category_data.groupby('method')]
     )
     print(f"Kruskal-Wallis result for {category}: p-value = {kruskal_result.pvalue}")
+    print()
+    print()
+    print()
 
     if kruskal_result.pvalue < 0.05:
         # Perform post-hoc Tukey HSD test if significant
@@ -230,8 +233,8 @@ def plot_qq_grid(df, outpath):
     # Get unique categories and methods
     categories = df['overall_prediction'].dropna().unique()
     methods = df['method'].dropna().unique()
-    print(f'methods: {methods}')
-    print(f'categories: {categories}')
+    # print(f'methods: {methods}')
+    # print(f'categories: {categories}')
 
     # Dynamically adjust the grid size based on valid combinations
     num_categories = len(categories)
