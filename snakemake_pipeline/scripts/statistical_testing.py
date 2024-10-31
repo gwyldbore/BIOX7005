@@ -291,6 +291,11 @@ def main():
         ax.set_title(clean_name(original_title), fontsize=14, fontweight='bold', pad=10)
         ax.set_xlabel('')
 
+        # Rotate x-axis labels for readability
+        for label in ax.get_xticklabels():
+            label.set_rotation(45)
+            label.set_ha('right')
+
     # Adjust the title and labels
     g.set_axis_labels('Method', 'Number of Mutations')
     # Add a single x-axis label for the entire plot
