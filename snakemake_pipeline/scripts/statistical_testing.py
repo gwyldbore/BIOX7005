@@ -180,13 +180,12 @@ def run_kruskal_wallis(df, outpath):
         # Run the Kruskal-Wallis test
         stat, p_value = kruskal(*grouped_data)
 
-        significant = p_value <= 0.05
+        # significant = p_value <= 0.05
         # Store the result
         results.append({
             'Category': category,
             'Statistic': stat,
             'p-value': p_value,
-            'significant': significant
         })
 
     # Write the results to a text file
@@ -195,6 +194,9 @@ def run_kruskal_wallis(df, outpath):
         f.write("=" * 40 + "\n")
         for result in results:
             f.write(f"Category: {result['Category']}\n")
+            significant = False
+            if result['p_value'] <= 0.05:
+                significant = True
             f.write(f"Statistic: {result['Statistic']:.4f}, p-value: {result['p-value']:.4e}, significant: {significant}\n")
 
             # if a category is significant, do post-hoc dunns test 
