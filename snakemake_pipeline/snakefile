@@ -43,7 +43,7 @@ except KeyError:
 try:
     METHOD_NAMES = config['method_names']
 except KeyError:
-    METHOD_NAMES = ['random', 'nonconservative', 'grantham_distances', 'marginal_weights', 'consurf']
+    METHOD_NAMES = ['random', 'nonconservative', 'grantham_distances', 'marginal_weights', 'ConSurf']
 
 
 rule all:
