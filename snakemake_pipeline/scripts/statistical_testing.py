@@ -195,7 +195,7 @@ def run_kruskal_wallis(df, outpath):
         for result in results:
             f.write(f"Category: {result['Category']}\n")
             significant = False
-            if result['p_value'] <= 0.05:
+            if result['p-value'] <= 0.05:
                 significant = True
             f.write(f"Statistic: {result['Statistic']:.4f}, p-value: {result['p-value']:.4e}, significant: {significant}\n")
 
