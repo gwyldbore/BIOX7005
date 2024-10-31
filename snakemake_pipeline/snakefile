@@ -1,7 +1,7 @@
 try:
     NUM_REPLICATES = config['num_replicates']
 except KeyError:
-    NUM_REPLICATES = 50
+    NUM_REPLICATES = 5
 
 # try:
 #     DATASET_PATH = config['dataset_path']
@@ -31,7 +31,7 @@ except KeyError:
 try:
     ALL_DATAFILE_NAMES = config['all_datafile_names']
 except KeyError:
-    ALL_DATAFILE_NAMES = ['NR1toNR4_N6_N81', 'NR4toNR1_N81_N6', 'JOINTtoNR1_N5_N6']
+    # ALL_DATAFILE_NAMES = ['NR1toNR4_N6_N81', 'NR4toNR1_N81_N6', 'JOINTtoNR1_N5_N6']
     ALL_DATAFILE_NAMES = ['NR1toNR4_N7_N186', 'NR4toNR1_N186_N7', 'JOINTtoNR1_N6_N7']
     # ALL_DATAFILE_NAMES = ['NR1toNR4_N7_N299', 'NR4toNR1_N299_N7']
 
@@ -43,7 +43,7 @@ except KeyError:
 try:
     METHOD_NAMES = config['method_names']
 except KeyError:
-    METHOD_NAMES = ['random', 'nonconservative', 'grantham_distances', 'marginal_weights']
+    METHOD_NAMES = ['random', 'nonconservative', 'grantham_distances', 'marginal_weights', 'consurf']
 
 
 rule all:

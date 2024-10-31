@@ -384,6 +384,104 @@ def get_grantham_mutations(seq1, seq2):
     return sampled_positions
 
 
+def assign_consurf_priority(row):
+
+    # basically if moving to highly conserved, that's higher priority
+    # or if indel 
+
+    origin = row['conservation_origin']
+    target = row['conservation_target']
+
+    if origin >= 8: #origin high conservation
+        if target >= 8: #high to high, high priority
+            return 1
+        elif target >= 6: #high to low, mid priority
+            return 5
+        elif target > 0: #high to none, mid-low priority
+            return 5
+        else: #0 represents gap - high priority
+            return 2
+        
+    elif origin >= 6:
+        if target >= 8: #low to high, high priority
+            return 2
+        elif target >= 6: #low to low, mid priority
+            return 6
+        elif target > 0: #low to none, low priority
+            return 7
+        else: # low to gap - high-ish priority
+            return 3
+        
+    elif origin > 0:
+        if target >= 8: # none to high, high priority
+            return 1
+        elif target >= 6: #none to low, mid priority
+            return 5
+        elif target > 0: #none to none, very low priority
+            return 9
+        else: # none to gap - low priority
+            return 2
+        
+    else:
+        if target >= 8: #gap to high, higher priority
+            return 1
+        elif target >= 6: #gap to low, high priority
+            return 3
+        elif target > 0: #gap to none, mid-low priority
+            return 8
+        else: # gap to gap - not possible as matching position
+            return 10
+
+
+def calculate_consurf_mutation_positions(inputfile, removed_at):
+    # expecting input datapath/dataset_direction_origin_target.extension
+    dataset, originseq, targetseq = parse_filename(inputfile)
+
+    datapath = '/'.join(inputfile.split('/')[:-1])
+    originseq_file = f'{datapath}/{dataset}_{originseq}_consurf.csv'
+    targetseq_file = f'{datapath}/{dataset}_{targetseq}_consurf.csv'
+
+    df_origin = pd.read_csv(originseq_file, sep=',')
+    df_target = pd.read_csv(targetseq_file, sep=',')
+
+    # a workaround for having different indexes to the actual seq, just in case
+    df_origin_cleaned = df_origin[~df_origin['index'].isin(removed_at)]
+    df_target_cleaned = df_target[~df_target['index'].isin(removed_at)]
+
+    # reset the indexing
+    i = 0
+    for index, row in df_origin_cleaned.iterrows():
+        df_origin_cleaned.at[index, 'index'] = i
+        df_target_cleaned.at[index, 'index'] = i
+        i += 1
+
+    df_origin = df_origin_cleaned
+    df_target = df_target_cleaned
+
+    # merge the dataframes for comparison
+    df_merged = pd.merge(df_origin, df_target, on='index', suffixes=('_origin', '_target'))
+
+    # remove rows where characters are the same
+    df_merged = df_merged[df_merged['character_origin'] != df_merged['character_target']]
+
+    df_merged['priority'] = df_merged.apply(assign_consurf_priority, axis=1)
+
+    # invert the priority to use it as a weight
+    df_merged['weight'] = 1 / df_merged['priority']
+    # then normalise the weights
+    df_merged['weight'] = df_merged['weight'] / df_merged['weight'].sum()
+
+    # sample probabilistically from the possibilities to get mutation order
+    mutation_order = df_merged.sample(n=len(df_merged), weights='weight', replace=False)['index'].tolist()
+
+    return mutation_order
+
+
+
+# ===============================================================================
+
+
+
 def generate_mutations(inputfile, outputfile, mutation_position_output, method_type, positions=None, seed=42):
     """
     Assumes inputfile is fasta of two aligned sequences, 
@@ -456,6 +554,12 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
         # print(f'length origin {len(origin)}, length target {len(target)}')
 
         mutation_positions = get_probabilistic_mutations(inputfile, removed_at)
+        possible_mutations = get_specified_mutations(origin, target, mutation_positions)
+
+    elif method_type == 'ConSurf':
+        origin, target, removed_at = remove_common_gaps(origin, target)
+
+        mutation_positions = calculate_consurf_mutation_positions(inputfile, removed_at)
         possible_mutations = get_specified_mutations(origin, target, mutation_positions)
 
 
@@ -543,3 +647,6 @@ generate_mutations(snakemake.input.fasta,
                    snakemake.output.generated_sequences, 
                    snakemake.output.mutation_positions, 
                    snakemake.wildcards.method_name)
+
+# generate_mutations('../data/reportdata/cd80_NR1toNR4_N7_N186.fasta','../data/testoutput.fasta','testposlist.txt',
+#                    'ConSurf')
