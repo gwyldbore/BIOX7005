@@ -167,6 +167,14 @@ def run_kruskal_wallis(df, outpath):
      # Set 'method' as categorical with all unique levels in the main dataframe
     df['method'] = pd.Categorical(df['method'], categories=df['method'].unique())
 
+
+
+    # Write the results to a text file
+    with open(outpath, 'w') as f:
+        f.write("Kruskal-Wallis Test Results\n")
+        f.write("=" * 40 + "\n")
+
+        
     # Iterate over categories
     for category in categories:
         # Group by method within the category
@@ -198,10 +206,8 @@ def run_kruskal_wallis(df, outpath):
             'p-value': p_value,
         })
 
-    # Write the results to a text file
-    with open(outpath, 'w') as f:
-        f.write("Kruskal-Wallis Test Results\n")
-        f.write("=" * 40 + "\n")
+    
+
         for result in results:
             f.write(f"Category: {result['Category']}\n")
             significant = False
