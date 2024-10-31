@@ -1,7 +1,7 @@
 try:
     NUM_REPLICATES = config['num_replicates']
 except KeyError:
-    NUM_REPLICATES = 50
+    NUM_REPLICATES = 15
 
 # try:
 #     DATASET_PATH = config['dataset_path']
@@ -48,24 +48,31 @@ except KeyError:
 
 rule all:
     input:
-        statsplot= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_{graph_type}_{method_name}.png",
+        merged_df= expand("workflows/{dataset_name}/{method_name}/merged/{datafile_name}_{rep}.csv",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
-        graph_type=['mutation', 'position']
-        ),
+        rep=range(1, NUM_REPLICATES + 1),
+        ), 
 
-        single_pca= expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations_{method_name}.png",
-        dataset_name=ALL_DATASET_NAMES,
-        datafile_name=ALL_DATAFILE_NAMES,
-        method_name=METHOD_NAMES,
-        rep=range(1, NUM_REPLICATES + 1, 10),
-        ),
+        # statsplot= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_{graph_type}_{method_name}.png",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # method_name=METHOD_NAMES,
+        # graph_type=['mutation', 'position']
+        # ),
 
-        calculate_stats= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg",
-        dataset_name=ALL_DATASET_NAMES,
-        datafile_name=ALL_DATAFILE_NAMES,
-        ),
+        # single_pca= expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations_{method_name}.png",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # method_name=METHOD_NAMES,
+        # rep=range(1, NUM_REPLICATES + 1, 10),
+        # ),
+
+        # calculate_stats= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # ),
 
         # grouped_pca = expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_mutations_grouped.png",
         # dataset_name=ALL_DATASET_NAMES,
@@ -84,13 +91,7 @@ rule all:
         # rep=range(1, NUM_REPLICATES + 1),
         # ),
 
-        # # merged_df= expand("workflows/{dataset_name}/merged/{dataset_name}_{rep}.csv",
-        # merged_df= expand("workflows/{dataset_name}/{method_name}/merged/{datafile_name}_{rep}.csv",
-        # dataset_name=ALL_DATASET_NAMES,
-        # datafile_name=ALL_DATAFILE_NAMES,
-        # method_name=METHOD_NAMES,
-        # rep=range(1, NUM_REPLICATES + 1),
-        # ),        
+       
 
         # predict= expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv",
         # dataset_name=ALL_DATASET_NAMES,
