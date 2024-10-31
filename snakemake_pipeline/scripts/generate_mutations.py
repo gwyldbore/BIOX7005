@@ -655,13 +655,13 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
 # put this into the generate_mutations signature and do an if else statement for how to get the list of positions
 
 
-# generate_mutations(snakemake.input.fasta, 
-#                    snakemake.output.generated_sequences, 
-#                    snakemake.output.mutation_positions, 
-#                    snakemake.wildcards.method_name)
+generate_mutations(snakemake.input.fasta, 
+                   snakemake.output.generated_sequences, 
+                   snakemake.output.mutation_positions, 
+                   snakemake.wildcards.method_name)
 
 # generate_mutations('../data/reportdata/cd80_NR1toNR4_N7_N186.fasta','../data/testoutput.fasta','testposlist.txt',
 #                    'ConSurf')
 
-generate_mutations('../data/reportdata/cd80_NR1toNR4_N7_N186.fasta','../data/testoutput.fasta','testposlist.txt',
-                   'grantham_distances')
+# generate_mutations('../data/reportdata/cd80_NR1toNR4_N7_N186.fasta','../data/testoutput.fasta','testposlist.txt',
+#                    'grantham_distances')
