@@ -208,6 +208,9 @@ def run_kruskal_wallis(df, outpath):
             if significant:
                 f.write("Dunn's Post-hoc Test Results:\n")
 
+                print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}")
+
+
                 # Run Dunn's test with Bonferroni correction
                 dunn_results = sp.posthoc_dunn(
                     category_data, val_col='num_mutation', group_col='method', p_adjust='bonferroni'
