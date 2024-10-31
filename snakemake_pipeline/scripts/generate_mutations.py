@@ -325,6 +325,64 @@ def get_probabilistic_mutations(inputfile, removed_at):
     return mutation_order
 
 
+def get_grantham_distance(residue1, residue2):
+    grantham_map = {
+        'S':{'R':110, 'L':145, 'P':74, 'T':58, 'A':99 , 'V':124, 'G':56, 'I':142, 'F':155, 'Y':144, 'C':112, 'H':89, 'Q':68, 'N':46, 'K':121, 'D':65, 'E':80, 'M':135, 'W':177},
+        'R':{'L':102, 'P':103, 'T':71, 'A':112, 'V':96, 'G':125, 'I':97, 'F':97, 'Y':77, 'C':180, 'H':29, 'Q':43, 'N':86, 'K':26, 'D':96, 'E':54, 'M':91, 'W':101},
+        'L':{'P':98, 'T':92, 'A':96, 'V':32, 'G':138 ,'I':5, 'F':22, 'Y':36, 'C':198, 'H':99, 'Q':113, 'N':153, 'K':107, 'D':172, 'E':138, 'M':15, 'W':61},
+        'P':{'T':38, 'A':27, 'V':68, 'G':42 ,'I':95, 'F':114, 'Y':110, 'C':169, 'H':77, 'Q':76, 'N':91, 'K':103, 'D':108, 'E':93, 'M':87, 'W':147},
+        'T':{'A':58, 'V':69, 'G':59 ,'I':89, 'F':103, 'Y':92, 'C':149, 'H':47, 'Q':42, 'N':65, 'K':78, 'D':85, 'E':65, 'M':81, 'W':128},
+        'A':{'V':64, 'G':60 ,'I':94, 'F':113, 'Y':112, 'C':195, 'H':86, 'Q':91, 'N':111, 'K':106, 'D':126, 'E':107, 'M':84, 'W':148}, 
+        'V':{'G':109 ,'I':29, 'F':50, 'Y':55, 'C':192, 'H':84, 'Q':96, 'N':133, 'K':97, 'D':152, 'E':121, 'M':21, 'W':88},
+        'G':{'I':135, 'F':153, 'Y':147, 'C':159, 'H':98, 'Q':87, 'N':80, 'K':127, 'D':94, 'E':98, 'M':127, 'W':184}, 
+        'I':{'F':21, 'Y':33, 'C':198, 'H':94, 'Q':109, 'N':149, 'K':102, 'D':168, 'E':134, 'M':10, 'W':61}, 
+        'F':{'Y':22, 'C':205, 'H':100, 'Q':116, 'N':158, 'K':102, 'D':177, 'E':140, 'M':28, 'W':40}, 
+        'Y':{'C':194, 'H':83, 'Q':99, 'N':143, 'K':85, 'D':160, 'E':122, 'M':36, 'W':37},
+        'C':{'H':174, 'Q':154, 'N':139, 'K':202, 'D':154, 'E':170, 'M':196, 'W':215}, 
+        'H':{'Q':24, 'N':68, 'K':32, 'D':81, 'E':40, 'M':87, 'W':115}, 
+        'Q':{'N':46, 'K':53, 'D':61, 'E':29, 'M':101, 'W':130}, 
+        'N':{'K':94, 'D':23, 'E':42, 'M':142, 'W':174}, 
+        'K':{'D':101, 'E':56, 'M':95, 'W':110}, 
+        'D':{'E':45, 'M':160, 'W':181}, 
+        'E':{'M':126, 'W':152},
+        'M':{'W':67}
+        }
+    
+    try:
+        distance = grantham_map[residue1][residue2]
+    except KeyError:
+        distance = grantham_map[residue2][residue1]
+
+    return distance
+
+def get_grantham_mutations(seq1, seq2):
+    # if the position is the same, ignore
+    # if not, get distance
+
+    # normalise distances to weights
+    # select order by probability of weight
+    # higher number means further away, so higher number = higher weight
+
+    distances = []
+    for position, (residue1, residue2) in enumerate(zip(seq1, seq2)):
+        if residue1 != residue2:  # Only consider non-identical amino acids
+            distance = get_grantham_distance(residue1, residue2)
+            distances.append((position, residue2, distance))  # Store position, seq2 residue, and distance
+
+    # Step 2: Calculate weightings based on distances
+    max_distance = max(d for _, _, d in distances) if distances else 1  # Handle empty distances
+    weightings = [(pos, res2, max_distance - d + 1) for pos, res2, d in distances]  # Add 1 to avoid zero weighting
+    total_weight = sum(w for _, _, w in weightings)
+    
+    # Normalize weights to create probabilities
+    probabilities = [(pos, res2, w / total_weight) for pos, res2, w in weightings]
+
+    # Step 3: Sample each position based on weighted probabilities
+    positions, residues, prob_weights = zip(*probabilities)  # Separate components for sampling
+    sampled_positions = random.choices(list(zip(positions, residues)), weights=prob_weights, k=len(prob_weights))
+
+    return sampled_positions
+
 
 def generate_mutations(inputfile, outputfile, mutation_position_output, method_type, positions=None, seed=42):
     """
@@ -383,6 +441,12 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
 
         # shuffle the mutations
         random.shuffle(possible_mutations)
+
+    elif method_type == 'grantham_distances':
+        # remove the gaps that are common (i.e. gaps in both sequences)
+        origin, target, _ = remove_common_gaps(origin, target)
+
+        possible_mutations = get_nonconservative_mutations(origin, target)
 
 
     elif method_type == 'marginal_weights':
