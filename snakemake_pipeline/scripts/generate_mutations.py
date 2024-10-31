@@ -3,6 +3,7 @@ from Bio.Seq import Seq, MutableSeq
 from Bio.SeqRecord import SeqRecord
 import random
 import pandas as pd
+import numpy as np
 
 
 def calculate_differences(seq1, seq2):
@@ -369,17 +370,27 @@ def get_grantham_mutations(seq1, seq2):
             distance = get_grantham_distance(residue1, residue2)
             distances.append((position, residue2, distance))  # Store position, seq2 residue, and distance
 
-    # Step 2: Calculate weightings based on distances
+    # calculate weightings based on distances
     max_distance = max(d for _, _, d in distances) if distances else 1  # Handle empty distances
     weightings = [(pos, res2, max_distance - d + 1) for pos, res2, d in distances]  # Add 1 to avoid zero weighting
     total_weight = sum(w for _, _, w in weightings)
     
-    # Normalize weights to create probabilities
+    # normalize weights to create probabilities
     probabilities = [(pos, res2, w / total_weight) for pos, res2, w in weightings]
 
-    # Step 3: Sample each position based on weighted probabilities
+    # sample each position based on weighted probabilities
     positions, residues, prob_weights = zip(*probabilities)  # Separate components for sampling
-    sampled_positions = random.choices(list(zip(positions, residues)), weights=prob_weights, k=len(prob_weights))
+
+    # Convert to numpy arrays for easier handling
+    positions_array = np.array(list(zip(positions, residues)))
+    probabilities = np.array(prob_weights)
+
+    # Use numpy's choice function with replace=False to avoid getting duplicate mutations
+    indices = np.random.choice(len(positions_array), size=len(prob_weights), replace=False, p=probabilities)
+    sampled_positions = [(int(positions_array[i][0]), positions_array[i][1]) for i in indices]
+
+    # this was giving replacements which was baaaaad
+    # sampled_positions = random.choices(list(zip(positions, residues)), weights=prob_weights, k=len(prob_weights))
 
     return sampled_positions
 
@@ -539,14 +550,15 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
 
         # shuffle the mutations
         random.shuffle(possible_mutations)
-        print(f'noncon mutations: {possible_mutations}')
+        # print(f'noncon mutations: {possible_mutations}')
 
     elif method_type == 'grantham_distances':
         # remove the gaps that are common (i.e. gaps in both sequences)
         origin, target, _ = remove_common_gaps(origin, target)
 
         possible_mutations = get_grantham_mutations(origin, target)
-        print(f'grantham mutations: {possible_mutations}')
+        # possible_mutations = get_specified_mutations(origin, target, mutation_positions)
+        # print(f'grantham mutations: {possible_mutations}')
 
 
     elif method_type == 'marginal_weights':
@@ -643,10 +655,13 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
 # put this into the generate_mutations signature and do an if else statement for how to get the list of positions
 
 
-generate_mutations(snakemake.input.fasta, 
-                   snakemake.output.generated_sequences, 
-                   snakemake.output.mutation_positions, 
-                   snakemake.wildcards.method_name)
+# generate_mutations(snakemake.input.fasta, 
+#                    snakemake.output.generated_sequences, 
+#                    snakemake.output.mutation_positions, 
+#                    snakemake.wildcards.method_name)
 
 # generate_mutations('../data/reportdata/cd80_NR1toNR4_N7_N186.fasta','../data/testoutput.fasta','testposlist.txt',
 #                    'ConSurf')
+
+generate_mutations('../data/reportdata/cd80_NR1toNR4_N7_N186.fasta','../data/testoutput.fasta','testposlist.txt',
+                   'grantham_distances')
