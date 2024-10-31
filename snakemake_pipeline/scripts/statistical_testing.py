@@ -163,6 +163,9 @@ def run_kruskal_wallis(df, outpath):
     categories = df['overall_prediction'].unique().dropna()
     results = []
 
+     # Set 'method' as categorical with all unique levels in the main dataframe
+    df['method'] = pd.Categorical(df['method'], categories=df['method'].unique())
+
     # Iterate over categories
     for category in categories:
         # Group by method within the category
