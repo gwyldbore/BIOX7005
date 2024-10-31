@@ -77,36 +77,34 @@ def get_prediction_order(initial_category):
         return base_order
     
 
-    # Define a function to perform ANOVA or Kruskal-Wallis and post-hoc testing
-def perform_statistical_tests(df, category):
-    """Perform statistical tests for a given category."""
-    # Filter data for the current category
-    category_data = df[df['overall_prediction'] == category]
+#     # Define a function to perform ANOVA or Kruskal-Wallis and post-hoc testing
+# def perform_statistical_tests(df, category):
+#     """Perform statistical tests for a given category."""
+#     # Filter data for the current category
+#     category_data = df[df['overall_prediction'] == category]
 
-    # Check if there are enough unique methods for comparison
-    if category_data['method'].nunique() < 2:
-        print(f"Not enough methods for comparison in category: {category}")
-        return None
+#     # Check if there are enough unique methods for comparison
+#     if category_data['method'].nunique() < 2:
+#         print(f"Not enough methods for comparison in category: {category}")
+#         return None
 
-    # Perform Kruskal-Wallis test (non-parametric)
-    kruskal_result = kruskal(
-        *[group['num_mutation'].values for name, group in category_data.groupby('method')]
-    )
-    print(f"Kruskal-Wallis result for {category}: p-value = {kruskal_result.pvalue}")
-    print()
-    print()
-    print()
+#     # Perform Kruskal-Wallis test (non-parametric)
+#     kruskal_result = kruskal(
+#         *[group['num_mutation'].values for name, group in category_data.groupby('method')]
+#     )
+#     print(f"Kruskal-Wallis result for {category}: p-value = {kruskal_result.pvalue} \n\n\n")
+    
 
-    if kruskal_result.pvalue < 0.05:
-        # Perform post-hoc Tukey HSD test if significant
-        tukey = pairwise_tukeyhsd(
-            endog=category_data['num_mutation'],
-            groups=category_data['method'],
-            alpha=0.05
-        )
-        print(f"Tukey HSD post-hoc test for {category}:\n{tukey}\n")
-    else:
-        print(f"No significant differences found in {category}.\n")
+#     if kruskal_result.pvalue < 0.05:
+#         # Perform post-hoc Tukey HSD test if significant
+#         tukey = pairwise_tukeyhsd(
+#             endog=category_data['num_mutation'],
+#             groups=category_data['method'],
+#             alpha=0.05
+#         )
+#         print(f"Tukey HSD post-hoc test for {category}:\n{tukey}\n")
+#     else:
+#         print(f"No significant differences found in {category}.\n")
 
 
 
@@ -189,6 +187,9 @@ def run_kruskal_wallis(df, outpath):
         # Run the Kruskal-Wallis test
         stat, p_value = kruskal(*grouped_data)
 
+        print(f"Kruskal-Wallis result for {category}: p-value = {p_value}")
+    
+
         # Store the result
         results.append({
             'Category': category,
@@ -211,7 +212,7 @@ def run_kruskal_wallis(df, outpath):
             if significant:
                 f.write("Dunn's Post-hoc Test Results:\n")
 
-                print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}")
+                print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}\n\n\n")
 
 
                 # Run Dunn's test with Bonferroni correction
