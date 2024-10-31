@@ -298,6 +298,7 @@ def main():
 
     # Adjust the title and labels
     g.set_axis_labels('Method', 'Number of Mutations')
+    g.figure.subplots_adjust(bottom=0.25)
     # Add a single x-axis label for the entire plot
     plt.savefig(snakemake.output.boxplot)
     plt.close() # close to save memory
