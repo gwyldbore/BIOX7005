@@ -174,65 +174,65 @@ def run_kruskal_wallis(df, outpath):
         f.write("Kruskal-Wallis Test Results\n")
         f.write("=" * 40 + "\n")
 
+            
+        # Iterate over categories
+        for category in categories:
+            # Group by method within the category
+            print(f'processing {category} right now')
+            category_data = df[df['overall_prediction'] == category]
+
+            category_data['method'] = pd.Categorical(category_data['method'], categories=df['method'].cat.categories)
+
+
+            # Prepare data for Kruskal-Wallis test (grouped by method)
+            grouped_data = [
+                group['num_mutation'].values for _, group in category_data.groupby('method')
+            ]
+
+            if len(grouped_data) < 2:
+                print(f"Not enough methods for comparison in category: {category}")
+                continue
+
+            # Run the Kruskal-Wallis test
+            stat, p_value = kruskal(*grouped_data)
+
+            print(f"Kruskal-Wallis result for {category}: p-value = {p_value} \n\n")
         
-    # Iterate over categories
-    for category in categories:
-        # Group by method within the category
-        print(f'processing {category} right now')
-        category_data = df[df['overall_prediction'] == category]
 
-        category_data['method'] = pd.Categorical(category_data['method'], categories=df['method'].cat.categories)
+            # Store the result
+            results.append({
+                'Category': category,
+                'Statistic': stat,
+                'p-value': p_value,
+            })
 
+        
 
-        # Prepare data for Kruskal-Wallis test (grouped by method)
-        grouped_data = [
-            group['num_mutation'].values for _, group in category_data.groupby('method')
-        ]
+            for result in results:
+                f.write(f"Category: {result['Category']}\n")
+                significant = False
+                if result['p-value'] <= 0.05:
+                    significant = True
+                f.write(f"Statistic: {result['Statistic']:.4f}, p-value: {result['p-value']:.4e}, significant: {significant}\n")
 
-        if len(grouped_data) < 2:
-            print(f"Not enough methods for comparison in category: {category}")
-            continue
+                # if a category is significant, do post-hoc dunns test 
+                if significant:
+                    f.write("Dunn's Post-hoc Test Results:\n")
 
-        # Run the Kruskal-Wallis test
-        stat, p_value = kruskal(*grouped_data)
-
-        print(f"Kruskal-Wallis result for {category}: p-value = {p_value} \n\n")
-    
-
-        # Store the result
-        results.append({
-            'Category': category,
-            'Statistic': stat,
-            'p-value': p_value,
-        })
-
-    
-
-        for result in results:
-            f.write(f"Category: {result['Category']}\n")
-            significant = False
-            if result['p-value'] <= 0.05:
-                significant = True
-            f.write(f"Statistic: {result['Statistic']:.4f}, p-value: {result['p-value']:.4e}, significant: {significant}\n")
-
-            # if a category is significant, do post-hoc dunns test 
-            if significant:
-                f.write("Dunn's Post-hoc Test Results:\n")
-
-                print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}\n\n\n")
+                    print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}\n\n\n")
 
 
-                # Run Dunn's test with Bonferroni correction
-                dunn_results = sp.posthoc_dunn(
-                    category_data, val_col='num_mutation', group_col='method', p_adjust='bonferroni'
-                )
+                    # Run Dunn's test with Bonferroni correction
+                    dunn_results = sp.posthoc_dunn(
+                        category_data, val_col='num_mutation', group_col='method', p_adjust='bonferroni'
+                    )
 
-                # Write Dunn's test results to file in table format
-                f.write(dunn_results.to_string())
-                f.write("\n\n")
+                    # Write Dunn's test results to file in table format
+                    f.write(dunn_results.to_string())
+                    f.write("\n\n")
 
 
-            f.write("-" * 40 + "\n")
+                f.write("-" * 40 + "\n")
 
 
 
