@@ -293,7 +293,7 @@ def main():
 
         # Rotate x-axis labels for readability
         for label in ax.get_xticklabels():
-            label.set_rotation(45)
+            label.set_rotation(30)
             label.set_ha('right')
 
     # Adjust the title and labels
