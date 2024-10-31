@@ -184,9 +184,13 @@ def run_kruskal_wallis(df, outpath):
             category_data['method'] = pd.Categorical(category_data['method'], categories=df['method'].cat.categories)
 
 
-            # Prepare data for Kruskal-Wallis test (grouped by method)
+            # # Prepare data for Kruskal-Wallis test (grouped by method)
+            # grouped_data = [
+            #     group['num_mutation'].values for _, group in category_data.groupby('method')
+            # ]
+
             grouped_data = [
-                group['num_mutation'].values for _, group in category_data.groupby('method')
+                group['num_mutation'].values for _, group in category_data.groupby('method') if len(group) > 0
             ]
 
             if len(grouped_data) < 2:
