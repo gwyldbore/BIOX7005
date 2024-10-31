@@ -441,12 +441,14 @@ def generate_mutations(inputfile, outputfile, mutation_position_output, method_t
 
         # shuffle the mutations
         random.shuffle(possible_mutations)
+        print(f'noncon mutations: {possible_mutations}')
 
     elif method_type == 'grantham_distances':
         # remove the gaps that are common (i.e. gaps in both sequences)
         origin, target, _ = remove_common_gaps(origin, target)
 
-        possible_mutations = get_nonconservative_mutations(origin, target)
+        possible_mutations = get_grantham_mutations(origin, target)
+        print(f'grantham mutations: {possible_mutations}')
 
 
     elif method_type == 'marginal_weights':
