@@ -170,6 +170,7 @@ def run_kruskal_wallis(df, outpath):
     # Iterate over categories
     for category in categories:
         # Group by method within the category
+        print(f'processing {category} right now \n\n')
         category_data = df[df['overall_prediction'] == category]
 
         category_data['method'] = pd.Categorical(category_data['method'], categories=df['method'].cat.categories)
