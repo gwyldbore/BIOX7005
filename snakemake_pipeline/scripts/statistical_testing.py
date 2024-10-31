@@ -209,11 +209,11 @@ def run_kruskal_wallis(df, outpath):
         
 
             # for result in results:
-            f.write(f"Category: {result['Category']}\n")
+            f.write(f"Category: {category}\n")
             significant = False
-            if result['p-value'] <= 0.05:
+            if p_value <= 0.05:
                 significant = True
-            f.write(f"Statistic: {result['Statistic']:.4f}, p-value: {result['p-value']:.4e}, significant: {significant}\n")
+            f.write(f"Statistic: {stat:.4f}, p-value: {p_value:.4e}, significant: {significant}\n")
 
             # if a category is significant, do post-hoc dunns test 
             if significant:
