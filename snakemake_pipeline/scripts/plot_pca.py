@@ -81,8 +81,6 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
 def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
 
-    print(ancestor_embeddings)
-
     pca = PCA(n_components=2)
     pca_result = pca.fit(ancestor_embeddings)
 
@@ -290,6 +288,7 @@ def main():
     # Filter for only NR1 or NR4 clades
     # specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
     specific_ancestor_embedding_df = ancestor_embedding_df
+    print(specific_ancestor_embedding_df)
 
     # Concatenate the embeddings and ancestor embeddings
     # all_embeddings_df = pd.concat([embedding_df, specific_ancestor_embedding_df])
