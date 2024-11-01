@@ -290,7 +290,7 @@ def main():
 
 
     for _, row in specific_ancestor_embedding_df.iterrows():
-        if row['Clade'] != 'Other':
+        if row['Clade'] == 'NR4':
             print(row)
 
     # Concatenate the embeddings and ancestor embeddings
