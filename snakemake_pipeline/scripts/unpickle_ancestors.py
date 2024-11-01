@@ -1,7 +1,7 @@
 import pickle
 
 
-with open('../data/ancestor_embedding_combined_df.csv', 'rb') as input_file:
+with open('../data/reportdata/ancestor_embedding_combined_df.csv', 'rb') as input_file:
     embeddings_df = pickle.load(input_file)
 
 
