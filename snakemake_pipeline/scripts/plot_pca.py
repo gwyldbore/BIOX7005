@@ -357,7 +357,7 @@ def main():
     # all_embeddings_prediction_df = pd.concat([embedding_predictions, specific_ancestor_embedding_df])
     # mutation_prediction_df = pd.concat([embedding_predictions, embedding_df])
     # plot_pca_colour_by_predicted(all_embeddings_prediction_df, nodes_to_label, snakemake.output.plot_prediction)
-    # plot_pca_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
+    plot_pca_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
 
 
 
