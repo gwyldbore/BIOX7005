@@ -79,7 +79,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     plt.savefig(outpath)
 
 def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
-    for _, row in ancestors_df:
+    for _, row in ancestors_df.iterrows():
         if row['Clade'] == 'NR4':
             print(row)
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
@@ -291,10 +291,6 @@ def main():
     # specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
     specific_ancestor_embedding_df = ancestor_embedding_df
 
-
-    for _, row in specific_ancestor_embedding_df.iterrows():
-        if row['Clade'] == 'NR4':
-            print(row)
 
     # Concatenate the embeddings and ancestor embeddings
     # all_embeddings_df = pd.concat([embedding_df, specific_ancestor_embedding_df])
