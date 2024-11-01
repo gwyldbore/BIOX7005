@@ -79,9 +79,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     plt.savefig(outpath)
 
 def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
-    for _, row in ancestors_df.iterrows():
-        if row['Clade'] == 'NR4':
-            print(row)
+    
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
 
     pca = PCA(n_components=2)
@@ -101,6 +99,7 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
 
     # Plot entries from ancestors_df with clades in different colors
     clades_with_color = ancestors_df['Clade'].unique()
+    print('clades with colour:', clades_with_color)
     num_clades = len(clades_with_color)
 
     clade_cmap = ListedColormap(['#d3d3d3', '#ffca8a'])
