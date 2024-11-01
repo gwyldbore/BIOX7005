@@ -81,6 +81,8 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
 def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
 
+    print(ancestor_embeddings)
+
     pca = PCA(n_components=2)
     pca_result = pca.fit(ancestor_embeddings)
 
