@@ -1,4 +1,5 @@
 import pickle
+import pandas as pd
 
 
 with open('./data/reportdata/ancestor_embedding_combined_df.csv', 'rb') as input_file:
