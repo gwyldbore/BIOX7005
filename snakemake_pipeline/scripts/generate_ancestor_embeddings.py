@@ -100,7 +100,8 @@ def main():
     dataset_name = 'combined'
     df['Clade'] = df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
 
-    print(df['Clade']) if df["Clade"] == 'NR4' else print('Other')
+    for row in df.iterrows:
+        print(row)
 
     
 
