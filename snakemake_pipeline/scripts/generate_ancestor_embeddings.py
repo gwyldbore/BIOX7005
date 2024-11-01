@@ -96,10 +96,13 @@ def main():
 
 
     df = seq_utils.get_sequence_df('data/reportdata/combined_nodes/combined_ancestors.fa')
+    print(df)
+
+    
     dataset_name = 'combined'
     df['Clade'] = df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
 
-    print(df['Clade'])
+    
 
 
 
