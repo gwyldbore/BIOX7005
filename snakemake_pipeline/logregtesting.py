@@ -47,7 +47,7 @@ def tag_node(info):
     
 
 
-embeddings_df = load_dataframe('data/ancestor_embedding_combined_df.csv')
+embeddings_df = load_dataframe('data/reportdata/ancestor_embedding_combined_df.csv')
 embeddings_df['Clade'] = embeddings_df['info'].apply(tag_node)
 df = embeddings_df.drop(columns=['info', 'sequence', 'model_name', 
                                  'protbert_max_embedding', 'protbert_mean_embedding', 
