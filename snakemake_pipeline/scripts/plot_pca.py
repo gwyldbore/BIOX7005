@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
+import umap
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
 
