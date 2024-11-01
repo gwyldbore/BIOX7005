@@ -20,7 +20,8 @@ def load_dataframe(inputfile, dataset_name):
 
 def main():    
     # Load the df with the ancestor sequences
-    embedding_df = load_dataframe(snakemake.input.ancestor_embeddings, snakemake.wildcards.dataset_name)
+    # embedding_df = load_dataframe(snakemake.input.ancestor_embeddings, snakemake.wildcards.dataset_name)
+    embedding_df = load_dataframe(snakemake.input.ancestor_embeddings, "combined")
 
     # drop the columns i don't want
     df = embedding_df.drop(columns=['info', 'sequence', 'model_name', 

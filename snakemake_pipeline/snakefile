@@ -120,7 +120,8 @@ rule generate_ancestor_embeddings:
     input:
         input_sequences=DATASET_PATH + "/{dataset_name}_ancestors.fa"
     output:
-        embedding_df="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
+        # embedding_df="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
+        embedding_df=DATASET_PATH + "/reportdata/ancestor_embedding_combined_df.csv"
     script:
         "scripts/generate_ancestor_embeddings.py"
 
@@ -140,10 +141,11 @@ rule generate_mutations:
 
 rule train_logistic_regression:
     input:
-        ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
+        ancestor_embeddings=DATASET_PATH + "/reportdata/ancestor_embedding_combined_df.csv"
+        # ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
         # ancestor_embeddings="data/ancestor_embedding_df.csv"
     output:
-        model_output="workflows/{dataset_name}/logregmodel/trained_logreg.pkl"
+        # model_output="workflows/{dataset_name}/logregmodel/trained_logreg.pkl"
     script:
         "scripts/train_logistic_regression.py"
 
