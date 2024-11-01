@@ -105,7 +105,6 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
 
     # Plot points with clades in different colors
     for clade, color in zip(clades_with_color, colors):
-        print(clade)
         subset = ancestors_df[ancestors_df['Clade'] == clade]
         ax.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
 

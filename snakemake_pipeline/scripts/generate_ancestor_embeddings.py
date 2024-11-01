@@ -99,6 +99,8 @@ def main():
     dataset_name = 'combined'
     df['Clade'] = df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
 
+    print(df['Clade'])
+
 
 
     # Set model name and output paths
