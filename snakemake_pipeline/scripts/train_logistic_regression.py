@@ -55,6 +55,7 @@ def main():
 
     # save the trained model for later use
     joblib.dump((logistic_model, label_encoder), snakemake.output.model_output)
+    print('logistic regression trained!')
 
 
 
