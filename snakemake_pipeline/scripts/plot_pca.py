@@ -105,6 +105,7 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
 
     # Plot points with clades in different colors
     for clade, color in zip(clades_with_color, colors):
+        print(clade)
         subset = ancestors_df[ancestors_df['Clade'] == clade]
         ax.scatter(subset['pca1'], subset['pca2'], label=clade, color=color)
 
@@ -169,7 +170,7 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     prediction_df = all_embeddings_df.dropna(subset=['overall_prediction'])
     unique_predictions = prediction_df['overall_prediction'].unique()
     unique_predictions.sorted()
-    print(unique_predictions)
+    # print(unique_predictions)
 
     # Define a new colormap for predictions
     prediction_cmap = ListedColormap(['mediumorchid', 'red', 'royalblue', 'forestgreen'])
@@ -278,7 +279,6 @@ def main():
     #     ancestor_embedding_df = pickle.load(input_file)
     with open(snakemake.input.ancestor_embeddings, "rb") as input_file:
         ancestor_embedding_df = pickle.load(input_file)
-        print(ancestor_embedding_df)
 
     dataset_name = snakemake.wildcards.dataset_name
 
