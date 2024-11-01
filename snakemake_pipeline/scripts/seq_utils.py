@@ -122,6 +122,7 @@ def tag_node(info, dataset):
     if info in nr1_names:
         return 'NR1'
     elif info in nr4_names:
+        print('nr4')
         return 'NR4'
     else:
         return 'Other'
