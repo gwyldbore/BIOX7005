@@ -309,6 +309,57 @@ def plot_tsne_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpa
     plt.legend()
     plt.savefig(outpath)
 
+def plot_tsne_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding', perplexity=30, n_iter=1000):
+    # Stack ancestor embeddings and perform t-SNE
+    ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
+    tsne = TSNE(n_components=2, perplexity=perplexity, n_iter=n_iter, random_state=42)
+    tsne_result_ancestors = tsne.fit_transform(ancestor_embeddings)
+    
+    # Add the t-SNE results back to ancestors_df
+    ancestors_df[['tsne1', 'tsne2']] = tsne_result_ancestors
+
+    # Perform t-SNE on mutations_df
+    mutation_embeddings = np.vstack(mutations_df[col_name].values)
+    tsne_result_mutations = tsne.fit_transform(mutation_embeddings)
+    mutations_df[['tsne1', 'tsne2']] = tsne_result_mutations
+
+    # Set up the plot
+    fig, ax = plt.subplots(figsize=(20, 14))
+
+    # Plot entries from ancestors_df with clades in different colors
+    clades_with_color = ancestors_df['Clade'].unique()
+    num_clades = len(clades_with_color)
+
+    # Define colors for clades
+    clade_cmap = ListedColormap(['#d3d3d3', '#ffca8a'])
+    colors = plt.get_cmap(clade_cmap, num_clades).colors
+
+    for clade, color in zip(clades_with_color, colors):
+        subset = ancestors_df[ancestors_df['Clade'] == clade]
+        ax.scatter(subset['tsne1'], subset['tsne2'], label=clade, color=color, alpha=0.7, s=50)
+
+    # Overlay predictions with new colors
+    prediction_df = mutations_df.dropna(subset=['overall_prediction'])
+    unique_predictions = prediction_df['overall_prediction'].unique()
+
+    # Define new cmap for predictions
+    prediction_cmap = ListedColormap(['mediumorchid', 'red', 'royalblue', 'forestgreen'])
+    if unique_predictions[0] == 'NR4':
+        prediction_cmap = ListedColormap(['forestgreen', 'royalblue', 'red', 'mediumorchid'])
+
+    prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
+
+    for prediction, color in zip(unique_predictions, prediction_colors):
+        pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
+        plt.scatter(pred_subset['tsne1'], pred_subset['tsne2'], 
+                    color=color, label=f'Prediction: {prediction}', alpha=0.6, s=50)
+
+    # Set plot titles and labels
+    plt.title("t-SNE by Clade")
+    plt.xlabel("t-SNE Component 1")
+    plt.ylabel("t-SNE Component 2")
+    plt.legend()
+    plt.savefig(outpath)
 
 
 
@@ -357,8 +408,8 @@ def main():
     # all_embeddings_prediction_df = pd.concat([embedding_predictions, specific_ancestor_embedding_df])
     # mutation_prediction_df = pd.concat([embedding_predictions, embedding_df])
     # plot_pca_colour_by_predicted(all_embeddings_prediction_df, nodes_to_label, snakemake.output.plot_prediction)
-    plot_pca_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
-
+    # plot_pca_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
+    plot_tsne_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
 
 
 
