@@ -363,8 +363,49 @@ def plot_tsne_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, n
     plt.savefig(outpath)
 
 
+def plot_umap_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding', n_neighbors=15, min_dist=0.1):
+    # Stack ancestor embeddings and perform UMAP
+    ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
+    umap_model = umap.UMAP(n_components=2, n_neighbors=n_neighbors, min_dist=min_dist, random_state=42)
+    umap_result_ancestors = umap_model.fit_transform(ancestor_embeddings)
 
+    # Add the UMAP results back to ancestors_df
+    ancestors_df[['umap1', 'umap2']] = umap_result_ancestors
 
+    # Perform UMAP on mutations_df
+    mutation_embeddings = np.vstack(mutations_df[col_name].values)
+    umap_result_mutations = umap_model.fit_transform(mutation_embeddings)
+    mutations_df[['umap1', 'umap2']] = umap_result_mutations
+
+    # Set up the plot
+    fig, ax = plt.subplots(figsize=(20, 14))
+
+    # Plot entries from ancestors_df with clades in different colors
+    clades_with_color = ancestors_df['Clade'].unique()
+    num_clades = len(clades_with_color)
+
+    clade_cmap = ListedColormap(['#d3d3d3', '#ffca8a', '#99ff8a'])
+    colors = plt.get_cmap(clade_cmap, num_clades).colors
+
+    for clade, color in zip(clades_with_color, colors):
+        subset = ancestors_df[ancestors_df['Clade'] == clade]
+        ax.scatter(subset['umap1'], subset['umap2'], label=clade, color=color, alpha=0.7, s=50)
+
+    # Plot mutations with color based on 'num_mutation'
+    mutation_df = mutations_df.dropna(subset=['num_mutation'])
+    scatter = ax.scatter(mutation_df['umap1'], mutation_df['umap2'], 
+                         c=[int(x) for x in mutation_df['num_mutation']], cmap='cool', alpha=0.6, s=50)
+
+    # Add colorbar for mutation count
+    cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
+    fig.colorbar(scatter, cax=cax, orientation='horizontal')
+
+    # Set plot titles and labels
+    plt.title("UMAP by Clade")
+    plt.xlabel("UMAP Component 1")
+    plt.ylabel("UMAP Component 2")
+    plt.legend()
+    plt.savefig(outpath)
 def plot_umap_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding', n_neighbors=15, min_dist=0.1):
     # Stack ancestor embeddings and perform UMAP
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
