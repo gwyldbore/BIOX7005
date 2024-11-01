@@ -83,7 +83,6 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
 
     # Save embedding_df with full embeddings
     ancestor_embedding_df.to_pickle(embedding_df_path)
-    ancestor_embedding_df.to_csv('combined_ancestor_embeddings_nonpickle_fromscript.csv')
     merged_df = pd.merge(df, ancestor_embedding_df, on=['info', 'sequence'], how='left')
 
     return merged_df
