@@ -25,7 +25,7 @@ try:
 except KeyError:
     # ALL_DATASET_NAMES = ['NR4_NR1_ancestors_unaligned']
     # ALL_DATASET_NAMES = ['cd70']
-    # ALL_DATASET_NAMES = ['cd80']
+    ALL_DATASET_NAMES = ['cd80']
     # ALL_DATASET_NAMES = ['cd85']
 
 try:
