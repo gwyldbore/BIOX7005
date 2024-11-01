@@ -118,10 +118,12 @@ rule all:
 
 rule generate_ancestor_embeddings:
     input:
-        input_sequences=DATASET_PATH + "/{dataset_name}_ancestors.fa"
+        input_sequences="data/reportdata/combined_nodes/combined_ancestors.fa"
+        # input_sequences=DATASET_PATH + "/{dataset_name}_ancestors.fa"
     output:
+        embedding_df="data/reportdata/ancestor_embedding_combined_df.csv"
         # embedding_df="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
-        embedding_df="workflows/{dataset_name}/reportdata/ancestor_embedding_combined_df.csv"
+        # embedding_df="workflows/{dataset_name}/reportdata/ancestor_embedding_combined_df.csv"
     script:
         "scripts/generate_ancestor_embeddings.py"
 
@@ -141,7 +143,8 @@ rule generate_mutations:
 
 rule train_logistic_regression:
     input:
-        ancestor_embeddings="workflows/{dataset_name}/reportdata/ancestor_embedding_combined_df.csv"
+        ancestor_embeddings="data/reportdata/ancestor_embedding_combined_df.csv"
+        # ancestor_embeddings="workflows/{dataset_name}/reportdata/ancestor_embedding_combined_df.csv"
         # ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv"
         # ancestor_embeddings="data/ancestor_embedding_df.csv"
     output:
@@ -253,7 +256,7 @@ rule single_pca:
     input:
         embedding_df="workflows/{dataset_name}/{method_name}/embeddings/{datafile_name}_{rep}.csv",
         # ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv",
-        ancestor_embeddings="workflows/{dataset_name}/reportdata/ancestor_embedding_combined_df.csv",
+        ancestor_embeddings="data/reportdata/ancestor_embedding_combined_df.csv"
         predictions_df="workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv"
     output:
         plot_mutation="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations_{method_name}.png",
