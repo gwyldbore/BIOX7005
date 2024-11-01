@@ -113,5 +113,7 @@ def main():
     embedding_df = process_and_store_embeddings(df, bert_model_name, bert_embedding_df_path, model_type='protbert')
 
 
+    print(embedding_df)
+
 if __name__ == "__main__":
     main()
