@@ -85,6 +85,17 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
     pca = PCA(n_components=2)
     pca_result = pca.fit(ancestor_embeddings)
 
+    explained_variance_ratio = pca.explained_variance_ratio_
+
+    # Plot the variance explained by each component
+    plt.figure(figsize=(10, 6))
+    plt.bar(range(1, len(explained_variance_ratio) + 1), explained_variance_ratio, alpha=0.7, align='center')
+    plt.step(range(1, len(explained_variance_ratio) + 1), explained_variance_ratio.cumsum(), where='mid', color='orange')
+    plt.xlabel('Principal Component')
+    plt.ylabel('Variance Explained')
+    plt.title('Variance Explained by Each Principal Component')
+    plt.savefig('PCA_explained.png')
+
 
     # Transform both ancestors_df and mutations_df using the fitted PCA
     ancestors_df[['pca1', 'pca2']] = pca.transform(ancestor_embeddings)
@@ -284,7 +295,7 @@ def main():
 
     # ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='combined')
-    print(ancestor_embedding_df['Clade'])
+
     # Filter for only NR1 or NR4 clades
     # specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
     specific_ancestor_embedding_df = ancestor_embedding_df
