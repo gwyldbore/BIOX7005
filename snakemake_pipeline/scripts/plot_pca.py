@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 
 
@@ -206,9 +207,6 @@ def plot_pca_colour_by_predicted(all_embeddings_df, nodes_to_label, outpath, col
     plt.legend()
     plt.savefig(outpath)
 
-
-
-
 def plot_pca_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
 
@@ -265,7 +263,51 @@ def plot_pca_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, no
 
 
 
+def plot_tsne_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding', perplexity=30, n_iter=1000):
+    
+    # Stack ancestor embeddings and perform t-SNE
+    ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
+    tsne = TSNE(n_components=2, perplexity=perplexity, n_iter=n_iter, random_state=42)
+    tsne_result_ancestors = tsne.fit_transform(ancestor_embeddings)
+    
+    # Add the t-SNE results back to ancestors_df
+    ancestors_df[['tsne1', 'tsne2']] = tsne_result_ancestors
 
+    # Perform t-SNE on mutations_df
+    mutation_embeddings = np.vstack(mutations_df[col_name].values)
+    tsne_result_mutations = tsne.fit_transform(mutation_embeddings)
+    mutations_df[['tsne1', 'tsne2']] = tsne_result_mutations
+
+    # Set up the plot
+    fig, ax = plt.subplots(figsize=(20, 14))
+
+    # Plot entries from ancestors_df with clades in different colors
+    clades_with_color = ancestors_df['Clade'].unique()
+    num_clades = len(clades_with_color)
+
+    # Define colors for clades
+    clade_cmap = ListedColormap(['#d3d3d3', '#ffca8a', '#99ff8a'])
+    colors = plt.get_cmap(clade_cmap, num_clades).colors
+
+    for clade, color in zip(clades_with_color, colors):
+        subset = ancestors_df[ancestors_df['Clade'] == clade]
+        ax.scatter(subset['tsne1'], subset['tsne2'], label=clade, color=color, alpha=0.7, s=50)
+
+    # Plot mutations with color based on 'num_mutation'
+    mutation_df = mutations_df.dropna(subset=['num_mutation'])
+    scatter = ax.scatter(mutation_df['tsne1'], mutation_df['tsne2'], 
+                         c=[int(x) for x in mutation_df['num_mutation']], cmap='cool', alpha=0.6, s=50)
+    
+    # Add colorbar for mutation count
+    cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
+    fig.colorbar(scatter, cax=cax, orientation='horizontal')
+
+    # Set plot titles and labels
+    plt.title("t-SNE by Clade")
+    plt.xlabel("t-SNE Component 1")
+    plt.ylabel("t-SNE Component 2")
+    plt.legend()
+    plt.savefig(outpath)
 
 
 
@@ -307,13 +349,15 @@ def main():
 
     # Plot PCA
     # plot_pca(all_embeddings_df, nodes_to_label, snakemake.output.plot_mutation)
-    plot_pca_ancestors_static(embedding_df, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
+    # plot_pca_ancestors_static(embedding_df, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
+
+    plot_tsne_ancestors_static(embedding_df, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
 
 
     # all_embeddings_prediction_df = pd.concat([embedding_predictions, specific_ancestor_embedding_df])
     # mutation_prediction_df = pd.concat([embedding_predictions, embedding_df])
     # plot_pca_colour_by_predicted(all_embeddings_prediction_df, nodes_to_label, snakemake.output.plot_prediction)
-    plot_pca_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
+    # plot_pca_colour_by_predicted_ancestors_static(embedding_predictions, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_prediction)
 
 
 
