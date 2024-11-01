@@ -83,7 +83,7 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
 
     # pca = PCA(n_components=2)
-    pca = PCA()
+    pca = PCA(n_components=10)
     pca_result = pca.fit(ancestor_embeddings)
 
     explained_variance_ratio = pca.explained_variance_ratio_
