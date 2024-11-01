@@ -45,7 +45,6 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
     tokenizer = AutoTokenizer.from_pretrained(model_name)
 
     # Load existing embeddings if they exist
-    print('loading pickle df')
     if os.path.exists(embedding_df_path):
         ancestor_embedding_df = pd.read_pickle(embedding_df_path)
     else:
@@ -66,7 +65,6 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
         if not existing_row.empty and f"{model_type}_mean_embedding" in existing_row.columns:
             # Ensure the specific column has data
             if not existing_row[f"{model_type}_mean_embedding"].empty:
-                print('embeddings for this sequence already exist')
                 continue  # Skip if embeddings for this sequence already exist
 
         try:
@@ -113,7 +111,7 @@ def main():
     embedding_df = process_and_store_embeddings(df, bert_model_name, bert_embedding_df_path, model_type='protbert')
 
 
-    print(embedding_df)
+    
 
 if __name__ == "__main__":
     main()
