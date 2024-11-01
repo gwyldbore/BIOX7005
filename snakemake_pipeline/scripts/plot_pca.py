@@ -79,7 +79,7 @@ def plot_pca(all_embeddings_df, nodes_to_label, outpath, col_name='protbert_cls_
     plt.savefig(outpath)
 
 def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpath, col_name='protbert_cls_embedding'):
-    
+    print(ancestor_embeddings)
     ancestor_embeddings = np.vstack(ancestors_df[col_name].values)
 
     pca = PCA(n_components=2)
@@ -301,68 +301,6 @@ def main():
 
 
 
-
-
-
-
-# def main():
-#     input_embeddings = snakemake.input.embedding_df
-#     input_predictions = snakemake.input.predictions_df
-
-
-#     # concatenate the embedding dataframes
-    
-#     emb_list = []
-#     pred_list = []
-
-#     def adjust_info(row, index):
-#         row['info'] += f'_{index}'
-
-#     i = 0
-#     for file in input_embeddings:
-
-#         with open(file, "rb") as input_file:
-#             df = pickle.load(input_file)
-#         # df = pickle.load(file)
-#         df.apply(adjust_info, index=i, axis=1)
-#         emb_list.append(df)
-#         i += 1
-#     embedding_dfs = pd.concat(emb_list)
-
-#     i = 0
-#     for file in input_predictions:
-#         df = pd.read_csv(file)
-#         df.apply(adjust_info, index=i, axis=1)
-#         pred_list.append(df)
-#         i += 1
-#     prediction_dfs = pd.concat(pred_list)
-    
-#     # embedding_dfs = pd.concat([pickle.load(input_file) for input_file in input_embeddings])
-#     # prediction_dfs = pd.concat([pickle.load(input_file) for input_file in input_predictions])
-
-#     nodes_to_label = embedding_dfs['info'].values
-
-#     embedding_predictions = pd.merge(embedding_dfs, prediction_dfs[['info', 'overall_prediction']], 
-#                                     on='info', how='left')
-
-#     # Load previously calculated ancestor embeddings
-#     with open("./data/ancestor_embedding_df.csv", "rb") as input_file:
-#         ancestor_embedding_df = pickle.load(input_file)
-
-#     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node)
-
-#     # Filter for only NR1 or NR4 clades
-#     specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
-
-#     # Concatenate the embeddings and ancestor embeddings
-#     all_embeddings_df = pd.concat([embedding_dfs, specific_ancestor_embedding_df])
-
-#     # Plot PCA
-#     plot_pca(all_embeddings_df, nodes_to_label, snakemake.output.plot_mutation)
-
-
-#     all_embeddings_prediction_df = pd.concat([embedding_predictions, specific_ancestor_embedding_df])
-#     plot_pca_colour_by_predicted(all_embeddings_prediction_df, nodes_to_label, snakemake.output.plot_prediction)
 
 
 
