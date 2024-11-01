@@ -331,7 +331,7 @@ def plot_tsne_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, n
     num_clades = len(clades_with_color)
 
     # Define colors for clades
-    clade_cmap = ListedColormap(['#d3d3d3', '#ffca8a'])
+    clade_cmap = ListedColormap(['#d3d3d3', '#ffca8a', '#99ff8a'])
     colors = plt.get_cmap(clade_cmap, num_clades).colors
 
     for clade, color in zip(clades_with_color, colors):
@@ -391,8 +391,8 @@ def main():
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='combined')
 
     # # Filter for only NR1 or NR4 clades
-    # specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
-    specific_ancestor_embedding_df = ancestor_embedding_df
+    specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
+    # specific_ancestor_embedding_df = ancestor_embedding_df
 
 
     # Concatenate the embeddings and ancestor embeddings
@@ -401,7 +401,6 @@ def main():
     # Plot PCA
     # plot_pca(all_embeddings_df, nodes_to_label, snakemake.output.plot_mutation)
     # plot_pca_ancestors_static(embedding_df, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
-
     plot_tsne_ancestors_static(embedding_df, specific_ancestor_embedding_df, nodes_to_label, snakemake.output.plot_mutation)
 
 
