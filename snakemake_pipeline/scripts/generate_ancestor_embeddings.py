@@ -90,17 +90,22 @@ def process_and_store_embeddings(df, model_name, embedding_df_path, model_type):
 
 
 def main():
-    # df = seq_utils.get_sequence_df(snakemake.input.generated_sequences_padded, alignment=True)
-    # df = seq_utils.get_sequence_df(snakemake.input.generated_sequences_padded)
-    df = seq_utils.get_sequence_df(snakemake.input.input_sequences)
-    dataset_name = snakemake.wildcards.dataset_name
+    # df = seq_utils.get_sequence_df(snakemake.input.input_sequences)
+    # dataset_name = snakemake.wildcards.dataset_name
+    # df['Clade'] = df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
+
+
+    df = seq_utils.get_sequence_df('data/reportdata/combined_nodes/combined_ancestors.fa')
+    dataset_name = 'combined'
     df['Clade'] = df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
-    # df['Clade'] = df['info'].apply(seq_utils.tag_node, dataset='combined')
+
 
 
     # Set model name and output paths
     bert_model_name = "yarongef/DistilProtBert"
-    bert_embedding_df_path = snakemake.output.embedding_df
+    # bert_embedding_df_path = snakemake.output.embedding_df
+
+    bert_embedding_df_path = 'data/reportdata/ancestor_embedding_combined_df.csv'
 
     # Process and store embeddings
     embedding_df = process_and_store_embeddings(df, bert_model_name, bert_embedding_df_path, model_type='protbert')
