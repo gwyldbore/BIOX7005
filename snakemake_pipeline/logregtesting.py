@@ -32,10 +32,10 @@ def load_dataframe(inputfile):
 
 
 def tag_node(info):
-    with open('../data/reportdata/combined_nodes/NR1_ids.txt', 'r') as file:
+    with open('./data/reportdata/combined_nodes/NR1_ids.txt', 'r') as file:
         nr1_names = set(line.strip() for line in file)
 
-    with open('../data/reportdata/combined_nodes/NR4_ids.txt', 'r') as file:
+    with open('./data/reportdata/combined_nodes/NR4_ids.txt', 'r') as file:
         nr4_names = set(line.strip() for line in file)
 
     if info in nr1_names:
@@ -47,7 +47,7 @@ def tag_node(info):
     
 
 
-embeddings_df = load_dataframe('../data/ancestor_embedding_combined_df.csv')
+embeddings_df = load_dataframe('./data/ancestor_embedding_combined_df.csv')
 embeddings_df['Clade'] = embeddings_df['info'].apply(tag_node)
 df = embeddings_df.drop(columns=['info', 'sequence', 'model_name', 
                                  'protbert_max_embedding', 'protbert_mean_embedding', 
