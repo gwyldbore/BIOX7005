@@ -101,7 +101,8 @@ def main():
     df['Clade'] = df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
 
     for row in df.iterrows():
-        print(row)
+        if row['Clade'] != 'Other':
+            print(row)
 
     
 
