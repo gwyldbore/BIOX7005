@@ -100,7 +100,7 @@ def main():
     dataset_name = 'combined'
     df['Clade'] = df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
 
-    for row in df.iterrows:
+    for row in df.iterrows():
         print(row)
 
     
