@@ -99,10 +99,9 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
 
     # Plot entries from ancestors_df with clades in different colors
     clades_with_color = ancestors_df['Clade'].unique()
-    print('clades with colour:', clades_with_color)
     num_clades = len(clades_with_color)
 
-    clade_cmap = ListedColormap(['#d3d3d3', '#ffca8a'])
+    clade_cmap = ListedColormap(['#d3d3d3', '#ffca8a', '#99ff8a'])
     colors = plt.get_cmap(clade_cmap, num_clades).colors
 
     # Plot points with clades in different colors
