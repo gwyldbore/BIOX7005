@@ -100,12 +100,6 @@ def main():
     dataset_name = 'combined'
     df['Clade'] = df['info'].apply(seq_utils.tag_node, dataset=dataset_name)
 
-    for _, row in df.iterrows():
-        if row['Clade'] != 'Other':
-            print(row)
-
-    
-
 
 
     # Set model name and output paths

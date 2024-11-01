@@ -288,6 +288,11 @@ def main():
     # specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
     specific_ancestor_embedding_df = ancestor_embedding_df
 
+
+    for _, row in specific_ancestor_embedding_df.iterrows():
+        if row['Clade'] != 'Other':
+            print(row)
+
     # Concatenate the embeddings and ancestor embeddings
     # all_embeddings_df = pd.concat([embedding_df, specific_ancestor_embedding_df])
 
