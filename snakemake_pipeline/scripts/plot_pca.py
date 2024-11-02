@@ -438,6 +438,7 @@ def plot_umap_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, n
     # Overlay predictions with new colors
     prediction_df = mutations_df.dropna(subset=['overall_prediction'])
     unique_predictions = prediction_df['overall_prediction'].unique()
+    print(f'unique predictions: {unique_predictions}')
 
     # Define new cmap for predictions
     prediction_cmap = ListedColormap(['mediumorchid', 'red', 'royalblue', 'forestgreen', 'teal'])
