@@ -259,7 +259,7 @@ def main():
             key = f"{prefix}_{type}"
             if not combined_dataframes[key].empty:
                 title = f"Mutation Counts at {type.capitalize()} Family Prediction Change by Method - {prefix} Combined"
-                output_path = f"workflows/combineddata/{prefix}_{type}_boxplot.png"
+                output_path = f"results/{prefix}_{type}_boxplot.png"
                 plot_combined_boxplots(combined_dataframes[key], title, output_path, prefix)
 
 if __name__ == "__main__":
