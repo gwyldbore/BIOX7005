@@ -49,151 +49,79 @@ except KeyError:
     #  'ConSurf' - #need to add back in, just not processed for 70 or 85 yet
 
 
-try:
-    MERGING_DATASET_TO_FILE = config['merging_datasets_to_file']
-except KeyError:
-    MERGING_DATASET_TO_FILE = {
-        "cd70": ["NR1toNR4_N6_N81", "NR4toNR1_N81_N6"],
-        "cd80": ["NR1toNR4_N7_N186", "NR4toNR1_N186_N7"],
-        "cd85": ["NR1toNR4_N7_N299", "NR4toNR1_N299_N7"]
-    }
+MERGING_DATASET_TO_FILE = {
+    "cd70": ["NR1toNR4_N6_N81", "NR4toNR1_N81_N6"],
+    "cd80": ["NR1toNR4_N7_N186", "NR4toNR1_N186_N7"],
+    "cd85": ["NR1toNR4_N7_N299", "NR4toNR1_N299_N7"]
+}
 
-try:
-    THREE_DATASETS = config['three_datasets']
-except KeyError:
-    THREE_DATASETS = ['cd70', 'cd80', 'cd85']
-
-
-# rule all:
-#     input:
-#         merged_df= expand("workflows/{dataset_name}/{method_name}/merged/{datafile_name}_{rep}.csv",
-#         dataset_name=ALL_DATASET_NAMES,
-#         datafile_name=ALL_DATAFILE_NAMES,
-#         method_name=METHOD_NAMES,
-#         rep=range(1, NUM_REPLICATES + 1),
-#         ), 
-
-#         statsplot= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_{graph_type}_{method_name}.png",
-#         dataset_name=ALL_DATASET_NAMES,
-#         datafile_name=ALL_DATAFILE_NAMES,
-#         method_name=METHOD_NAMES,
-#         graph_type=['mutation', 'position']
-#         ),
-
-#         single_pca= expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations_{method_name}.png",
-#         dataset_name=ALL_DATASET_NAMES,
-#         datafile_name=ALL_DATAFILE_NAMES,
-#         method_name=METHOD_NAMES,
-#         rep=range(1, NUM_REPLICATES + 1, 10),
-#         ),
-
-#         calculate_stats= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_first.png",
-#         dataset_name=ALL_DATASET_NAMES,
-#         datafile_name=ALL_DATAFILE_NAMES,
-#         ),
-
-#         grouped_pca = expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_{method_name}_mutations_grouped.png",
-#         dataset_name=ALL_DATASET_NAMES,
-#         datafile_name=ALL_DATAFILE_NAMES,
-#         method_name=METHOD_NAMES,
-#         batch=range(1, (NUM_REPLICATES + 4) // 5),
-#         ),
-
-#         # grouped_stats="workflows/combineddata/combined_boxplot_first.png",
-#         # "workflows/combineddata/combined_boxplot_multi.png",
-#         # "workflows/combineddata/combined_qqplot.png",
-#         # "workflows/combineddata/combined_shapiro.txt",
-#         # "workflows/combineddata/combined_kruskal.txt"
-
-
-
-#         # # interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
-#         # interproscan_df = expand("workflows/{dataset_name}/{method_name}/interproscan/{datafile_name}_{rep}.csv",
-#         # dataset_name=ALL_DATASET_NAMES,
-#         # datafile_name=ALL_DATAFILE_NAMES,
-#         # method_name=METHOD_NAMES,
-#         # rep=range(1, NUM_REPLICATES + 1),
-#         # ),
-
-       
-
-#         # predict= expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv",
-#         # dataset_name=ALL_DATASET_NAMES,
-#         # datafile_name=ALL_DATAFILE_NAMES,
-#         # method_name=METHOD_NAMES,
-#         # rep=range(1, NUM_REPLICATES + 1),
-#         # ),
-
-#         # statplots= expand("workflows/{dataset_name}/results/{datafile_name}.png",
-#         # dataset_name=ALL_DATASET_NAMES,
-#         # datafile_name=ALL_DATAFILE_NAMES,
-#         # ),
-
-# #         generate_sequences = expand(
-# #         "workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
-# #         dataset_name=ALL_DATASET_NAMES,
-# #         rep=range(1, NUM_REPLICATES + 1)
-# #         ),
+THREE_DATASETS = ['cd70', 'cd80', 'cd85']
 
 
 rule all:
     input:
-        # Merged dataframes
-        merged_df= [
-            expand("workflows/{dataset_name}/{method_name}/merged/{datafile_name}_{rep}.csv",
-                   dataset_name=dataset,
-                   datafile_name=MERGING_DATASET_TO_FILE[dataset],
-                   method_name=METHOD_NAMES,
-                   rep=range(1, NUM_REPLICATES + 1))
-            for dataset in ALL_DATASET_NAMES
-        ],
+        merged_df= expand("workflows/{dataset_name}/{method_name}/merged/{datafile_name}_{rep}.csv",
+        dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
+        method_name=METHOD_NAMES,
+        rep=range(1, NUM_REPLICATES + 1),
+        ), 
 
-        # Stats plot
-        statsplot=[
-            expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_{graph_type}_{method_name}.png",
-                   dataset_name=dataset,
-                   datafile_name=MERGING_DATASET_TO_FILE[dataset],
-                   method_name=METHOD_NAMES,
-                   graph_type=['mutation', 'position'])
-            for dataset in ALL_DATASET_NAMES
-        ],
+        statsplot= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_{graph_type}_{method_name}.png",
+        dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
+        method_name=METHOD_NAMES,
+        graph_type=['mutation', 'position']
+        ),
 
-        # Single PCA plots
-        single_pca=[
-            expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations_{method_name}.png",
-                   dataset_name=dataset,
-                   datafile_name=MERGING_DATASET_TO_FILE[dataset],
-                   method_name=METHOD_NAMES,
-                   rep=range(1, NUM_REPLICATES + 1, 10))
-            for dataset in ALL_DATASET_NAMES
-        ],
+        single_pca= expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{rep}_mutations_{method_name}.png",
+        dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
+        method_name=METHOD_NAMES,
+        rep=range(1, NUM_REPLICATES + 1, 10),
+        ),
 
-        # Calculate stats
-        calculate_stats=[
-            expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_first.png",
-                   dataset_name=dataset,
-                   datafile_name=MERGING_DATASET_TO_FILE[dataset])
-            for dataset in ALL_DATASET_NAMES
-        ],
+        calculate_stats= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_first.png",
+        dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
+        ),
 
-        # Grouped PCA plots
-        grouped_pca=[
-            expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_{method_name}_mutations_grouped.png",
-                   dataset_name=dataset,
-                   datafile_name=MERGING_DATASET_TO_FILE[dataset],
-                   method_name=METHOD_NAMES,
-                   batch=range(1, (NUM_REPLICATES + 4) // 5))
-            for dataset in ALL_DATASET_NAMES
-        ],
+        grouped_pca = expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_{method_name}_mutations_grouped.png",
+        dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
+        method_name=METHOD_NAMES,
+        batch=range(1, (NUM_REPLICATES + 4) // 5),
+        ),
 
-        # Aggregated stats for combined data
-        grouped_stats=[
-            "workflows/combineddata/combined_boxplot_first.png",
-            "workflows/combineddata/combined_boxplot_multi.png",
-            "workflows/combineddata/combined_qqplot.png",
-            "workflows/combineddata/combined_shapiro.txt",
-            "workflows/combineddata/combined_kruskal.txt"
-        ]
+
+
+        # # interproscan_df = expand("workflows/{dataset_name}/interproscan/{dataset_name}_{rep}.csv",
+        # interproscan_df = expand("workflows/{dataset_name}/{method_name}/interproscan/{datafile_name}_{rep}.csv",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # method_name=METHOD_NAMES,
+        # rep=range(1, NUM_REPLICATES + 1),
+        # ),
+
+       
+
+        # predict= expand("workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # method_name=METHOD_NAMES,
+        # rep=range(1, NUM_REPLICATES + 1),
+        # ),
+
+        # statplots= expand("workflows/{dataset_name}/results/{datafile_name}.png",
+        # dataset_name=ALL_DATASET_NAMES,
+        # datafile_name=ALL_DATAFILE_NAMES,
+        # ),
+
+#         generate_sequences = expand(
+#         "workflows/{dataset_name}/fasta/{dataset_name}_{rep}.fasta",
+#         dataset_name=ALL_DATASET_NAMES,
+#         rep=range(1, NUM_REPLICATES + 1)
+#         ),
 
 
 
@@ -212,19 +140,14 @@ rule all:
 rule generate_mutations:
     input:
         # fasta=DATASET_PATH + "/{dataset_name}.fasta"
-        fasta=DATASET_PATH + "/{dataset_name}/{datafile_name}.fasta"
+        fasta=DATASET_PATH + "/{dataset_name}_{datafile_name}.fasta"
     output:
         # generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
         # mutation_positions="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
         generated_sequences="workflows/{dataset_name}/{method_name}/fasta/ungapped/{datafile_name}_{rep}.fasta",
         mutation_positions="workflows/{dataset_name}/{method_name}/fasta/{datafile_name}_{rep}_mutationpos.txt"
-    # script:
-    #     "scripts/generate_mutations.py"
-    run:
-        if os.path.exists(input.fasta):
-            shell("python scripts/generate_mutations.py {input.fasta} {output.generated_sequences} {output.mutation_positions}")
-        else:
-            print(f"Skipping {input.fasta} as it does not exist.")
+    script:
+        "scripts/generate_mutations.py"
 
 
 rule train_logistic_regression:
@@ -412,37 +335,37 @@ rule perform_statistical_testing:
         "scripts/statistical_testing.py"
 
 
-rule aggregate_files:
-    input:
-        lambda wildcards: expand(
-            "workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv",
-            dataset_name=THREE_DATASETS,
-            datafile_name=MERGING_DATASET_TO_FILE[wildcards.dataset_name],
-            method_name=METHOD_NAMES,
-            rep=range(1, NUM_REPLICATES + 1)
-        )
-    output:
-        aggregated_file="workflows/combineddata/{dataset_name}_all_results.csv"
-    run:
-        import pandas as pd
-        # Read all files into a list of dataframes and concatenate
-        dataframes = [pd.read_csv(file) for file in input]
-        aggregated_df = pd.concat(dataframes, ignore_index=True)
-        aggregated_df.to_csv(output.aggregated_file, index=False)
+# rule aggregate_files:
+#     input:
+#         lambda wildcards: expand(
+#             "workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv",
+#             dataset_name=THREE_DATASETS,
+#             datafile_name=MERGING_DATASET_TO_FILE[wildcards.dataset_name],
+#             method_name=METHOD_NAMES,
+#             rep=range(1, NUM_REPLICATES + 1)
+#         )
+#     output:
+#         aggregated_file="workflows/combineddata/{dataset_name}_all_results.csv"
+#     run:
+#         import pandas as pd
+#         # Read all files into a list of dataframes and concatenate
+#         dataframes = [pd.read_csv(file) for file in input]
+#         aggregated_df = pd.concat(dataframes, ignore_index=True)
+#         aggregated_df.to_csv(output.aggregated_file, index=False)
 
-rule combined_stats:
-    input:
-        cd70="workflows/combineddata/cd70_all_results.csv",
-        cd80="workflows/combineddata/cd80_all_results.csv",
-        cd85="workflows/combineddata/cd85_all_results.csv",
-    output:
-        boxplot_first_combined="workflows/combineddata/combined_boxplot_first.png",
-        boxplot_multi_combined="workflows/combineddata/combined_boxplot_multi.png",
-        qqplot_combined="workflows/combineddata/combined_qqplot.png",
-        shapiro_combined="workflows/combineddata/combined_shapiro.txt",
-        kruskal_combined="workflows/combineddata/combined_kruskal.txt"
-    script:
-        "scripts/combined_stats.py"
+# rule combined_stats:
+#     input:
+#         cd70="workflows/combineddata/cd70_all_results.csv",
+#         cd80="workflows/combineddata/cd80_all_results.csv",
+#         cd85="workflows/combineddata/cd85_all_results.csv",
+#     output:
+#         boxplot_first_combined="workflows/combineddata/combined_boxplot_first.png",
+#         boxplot_multi_combined="workflows/combineddata/combined_boxplot_multi.png",
+#         qqplot_combined="workflows/combineddata/combined_qqplot.png",
+#         shapiro_combined="workflows/combineddata/combined_shapiro.txt",
+#         kruskal_combined="workflows/combineddata/combined_kruskal.txt"
+#     script:
+#         "scripts/combined_stats.py"
 
 
 
