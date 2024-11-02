@@ -444,7 +444,7 @@ def plot_umap_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, n
     if unique_predictions[0] == 'NR4':
         prediction_cmap = ListedColormap(['teal', 'forestgreen', 'royalblue', 'red', 'mediumorchid'])
 
-    prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
+    prediction_colors = plt.get_cmap(prediction_cmap, 5).colors
 
     for prediction, color in zip(unique_predictions, prediction_colors):
         pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
