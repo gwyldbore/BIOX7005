@@ -373,7 +373,7 @@ def main():
         col='overall_prediction',  # Create separate plots for each category
         kind='box',
         height=7,  # Adjust the height of each plot
-        aspect=1  # Control the aspect ratio of each plot
+        aspect=0.8  # Control the aspect ratio of each plot
     )
 
     # Remove individual x-axis labels from each subplot
@@ -407,7 +407,7 @@ def main():
         col='overall_prediction',  # Create separate plots for each category
         kind='box',
         height=7,  # Adjust the height of each plot
-        aspect=1  # Control the aspect ratio of each plot
+        aspect=0.8  # Control the aspect ratio of each plot
     )
     
 
