@@ -393,7 +393,7 @@ def main():
     g.set_axis_labels('Method', 'Number of Mutations')
     g.figure.subplots_adjust(bottom=0.25)
     g.set(ylim=(0, 150))
-    plt.title("Number of mutations required before overall prediction changes category for the first time")
+    plt.title("Number of mutations required before overall prediction changes category for the first time", loc='center')
     plt.savefig(snakemake.output.boxplot_first)
     plt.close() # close to save memory
 
@@ -426,7 +426,7 @@ def main():
 
     # Adjust the title and labels
     g.set_axis_labels('Method', 'Number of Mutations')
-    plt.title("Number of mutations required before overall prediction changes category")
+    plt.title("Number of mutations required before overall prediction changes category", loc='center')
     g.set(ylim=(0, 150))
     g.figure.subplots_adjust(bottom=0.25)
     plt.savefig(snakemake.output.boxplot_multi)
