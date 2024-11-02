@@ -33,6 +33,29 @@ def find_first_prediction_changes(df):
     valid_changes = changes[changes['overall_prediction'] != initial_category].iloc[1:]
 
     # # Keep only the first instance of each unique `overall_prediction` change.
+    first_unique_changes = valid_changes.drop_duplicates(subset=['overall_prediction'], keep='first')
+
+    return first_unique_changes
+
+
+def find_overall_prediction_changes(df):
+    """
+    Return the first row where each new `overall_prediction` occurs,
+    excluding the initial category and any reversion to it.
+    """
+    # Identify the initial category from the first row.
+    initial_category = get_initial_category(df)
+    
+    # Shift the `overall_prediction` column to compare with the previous row.
+    previous_predictions = df['overall_prediction'].shift(1)
+
+    # Identify where the prediction changes.
+    changes = df[df['overall_prediction'] != previous_predictions]
+
+    # Exclude the first row and any rows where the category reverts to the initial one.
+    valid_changes = changes[changes['overall_prediction'] != initial_category].iloc[1:]
+
+    # # Keep only the first instance of each unique `overall_prediction` change.
     # first_unique_changes = valid_changes.drop_duplicates(subset=['overall_prediction'], keep='first')
 
 
@@ -308,27 +331,71 @@ def main():
     input_files = snakemake.input
 
 
+    grouped_first_results = []
     grouped_results = []
 
     for file in input_files:
         df = pd.read_csv(file)
-        changes = find_first_prediction_changes(df)
+        first_changes = find_first_prediction_changes(df)
+        actual_changes = find_overall_prediction_changes(df)
 
-        grouped_results.append(changes)
+        grouped_first_results.append(first_changes)
+        grouped_results.append(actual_changes)
 
     # can just run this on the last one as it'll be the same for all of them
     initial_category = get_initial_category(df)
-    
-    
-    grouped_df = pd.concat(grouped_results, ignore_index=True)
-    grouped_df.to_csv('TESTFILE.csv')
-
-
     order = get_prediction_order(initial_category)
+    
+    # create the overall results group
+    grouped_df = pd.concat(grouped_results, ignore_index=True)
+    # grouped_df.to_csv('TESTFILE.csv')
     grouped_df['method'] = grouped_df['method'].apply(clean_name)
     grouped_df['overall_prediction'] = pd.Categorical(
         grouped_df['overall_prediction'], categories=order, ordered=True
     )
+
+    # create the first change only group
+    grouped_first_df = pd.concat(grouped_first_results, ignore_index=True)
+    grouped_first_df['method'] = grouped_first_df['method'].apply(clean_name)
+    grouped_first_df['overall_prediction'] = pd.Categorical(
+        grouped_first_df['overall_prediction'], categories=order, ordered=True
+    )
+
+
+
+
+    # CREATE FIRST CHANGE BOXPLOT
+    # Create a box plot for each overall_prediction category
+    g = sns.catplot(
+        data=grouped_first_df,
+        x='method',
+        y='num_mutation',
+        col='overall_prediction',  # Create separate plots for each category
+        kind='box',
+        height=5,  # Adjust the height of each plot
+        aspect=1.2  # Control the aspect ratio of each plot
+    )
+
+    # Remove individual x-axis labels from each subplot
+    for ax in g.axes.flat:
+        # Extract the original category name from the title
+        original_title = ax.get_title().split(' = ')[1]  # Extract the prediction value
+        # Set the cleaned title (with underscores replaced by spaces)
+        ax.set_title(clean_name(original_title), fontsize=14, fontweight='bold', pad=10)
+        ax.set_xlabel('')
+
+        # Rotate x-axis labels for readability
+        for label in ax.get_xticklabels():
+            label.set_rotation(30)
+            label.set_ha('right')
+
+    # Adjust the title and labels
+    g.set_axis_labels('Method', 'Number of Mutations')
+    g.figure.subplots_adjust(bottom=0.25)
+    # Add a single x-axis label for the entire plot
+    plt.savefig(snakemake.output.boxplot_first)
+    plt.close() # close to save memory
+
 
 
     # Create a box plot for each overall_prediction category
@@ -359,7 +426,7 @@ def main():
     g.set_axis_labels('Method', 'Number of Mutations')
     g.figure.subplots_adjust(bottom=0.25)
     # Add a single x-axis label for the entire plot
-    plt.savefig(snakemake.output.boxplot)
+    plt.savefig(snakemake.output.boxplot_multi)
     plt.close() # close to save memory
 
 
