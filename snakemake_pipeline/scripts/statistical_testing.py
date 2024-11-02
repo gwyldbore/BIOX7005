@@ -391,9 +391,9 @@ def main():
 
     # Adjust the title and labels
     g.set_axis_labels('Method', 'Number of Mutations')
-    g.figure.subplots_adjust(bottom=0.25, top=0.3)
+    g.figure.subplots_adjust(bottom=0.25, top=0.1)
     g.set(ylim=(0, 150))
-    g.figure.suptitle("Number of mutations before overall subfamily prediction changes for the first time", fontweight='bold')
+    g.figure.suptitle("Number of mutations required for overall subfamily prediction first changes", fontweight='bold')
     plt.savefig(snakemake.output.boxplot_first)
     plt.close() # close to save memory
 
@@ -428,7 +428,7 @@ def main():
     g.set_axis_labels('Method', 'Number of Mutations')
     g.figure.suptitle("Number of mutations before overall subfamily prediction changes")
     g.set(ylim=(0, 150))
-    g.figure.subplots_adjust(bottom=0.25)
+    g.figure.subplots_adjust(bottom=0.25, top=0.1)
     plt.savefig(snakemake.output.boxplot_multi)
     plt.close() # close to save memory
 
