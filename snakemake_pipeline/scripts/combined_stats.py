@@ -235,6 +235,11 @@ def main():
     first_changes_df = pd.concat(first_changes_list, ignore_index=True)
     overall_changes_df = pd.concat(overall_changes_list, ignore_index=True)
 
+
+    print(f'first changes: \n {first_changes_df}')
+    print(f'overall changes: \n {overall_changes_df}')
+
+
     # Generate boxplots
     create_boxplots(first_changes_df, "First Prediction Changes by Method - Combined Data", "results/first_changes_boxplot.png")
     create_boxplots(overall_changes_df, "Overall Prediction Changes by Method - Combined Data", "results/overall_changes_boxplot.png")
