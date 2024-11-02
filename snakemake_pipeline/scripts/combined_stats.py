@@ -157,52 +157,51 @@ def plot_qq_grid(df, output_path):
 
 
 def main():
-    # Load all datasets
+    # Define input and output file paths
     file_paths = {
-        snakemake.input.cd70: "cd70",
-        snakemake.input.cd80: "cd80",
-        snakemake.input.cd85: "cd85"
+        "workflows/combineddata/cd70_all_results.csv": "cd70",
+        "workflows/combineddata/cd80_all_results.csv": "cd80",
+        "workflows/combineddata/cd85_all_results.csv": "cd85"
     }
+    output_dir = "results/"
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Load and combine data
     combined_df = load_and_combine_data(file_paths)
 
-    # Process the combined data for first and overall prediction changes
-    first_changes_list = []
-    overall_changes_list = []
-
-    for (dataset, method), group_df in combined_df.groupby(['dataset', 'method_name']):
+    # Process for first and overall prediction changes
+    first_changes_list, overall_changes_list = [], []
+    for (dataset, method), group_df in combined_df.groupby(['dataset', 'method']):
         first_changes = find_first_prediction_changes(group_df)
         if not first_changes.empty:
-            first_changes['method'] = method
-            first_changes['dataset'] = dataset
+            first_changes['method'], first_changes['dataset'] = method, dataset
             first_changes_list.append(first_changes[['dataset', 'method', 'overall_prediction', 'num_mutation']])
-
         overall_changes = find_overall_prediction_changes(group_df)
         if not overall_changes.empty:
-            overall_changes['method'] = method
-            overall_changes['dataset'] = dataset
+            overall_changes['method'], overall_changes['dataset'] = method, dataset
             overall_changes_list.append(overall_changes[['dataset', 'method', 'overall_prediction', 'num_mutation']])
 
-    # Concatenate results
+    # Concatenate results for first and overall changes
     first_changes_df = pd.concat(first_changes_list, ignore_index=True)
     overall_changes_df = pd.concat(overall_changes_list, ignore_index=True)
 
-    # Define the prediction order for plotting
+    # Set prediction order
     initial_category = get_initial_category(combined_df)
     order = get_prediction_order(initial_category)
     first_changes_df['overall_prediction'] = pd.Categorical(first_changes_df['overall_prediction'], categories=order, ordered=True)
     overall_changes_df['overall_prediction'] = pd.Categorical(overall_changes_df['overall_prediction'], categories=order, ordered=True)
 
-
-
     # Generate the boxplots
-    create_boxplots(first_changes_df, "Mutation Counts at First Family Prediction Change by Method - Combined Datasets", snakemake.output.boxplot_first)
-    create_boxplots(overall_changes_df, "Mutation Counts at Overall Family Prediction Change by Method - Combined Datasets", snakemake.output.boxplot_multi)
-
+    create_boxplots(first_changes_df, "Mutation Counts at First Family Prediction Change by Method - Combined Datasets", f"{output_dir}combined_boxplot_first.png")
+    create_boxplots(overall_changes_df, "Mutation Counts at Overall Family Prediction Change by Method - Combined Datasets", f"{output_dir}combined_boxplot_multi.png")
 
     # Run statistical tests and QQ plots
-    run_shapiro_tests(overall_changes_df, snakemake.output.shapiro_combined)
-    run_kruskal_wallis(overall_changes_df, snakemake.output.kruskal_combined)
-    plot_qq_grid(overall_changes_df, snakemake.output.qqplot_combined)
+    run_shapiro_tests(overall_changes_df, f"{output_dir}combined_shapiro.txt")
+    run_kruskal_wallis(overall_changes_df, f"{output_dir}combined_kruskal.txt")
+    plot_qq_grid(overall_changes_df, f"{output_dir}combined_qqplot.png")
+
+if __name__ == "__main__":
+    main()
 
 
 
