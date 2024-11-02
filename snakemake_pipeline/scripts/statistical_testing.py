@@ -372,7 +372,7 @@ def main():
         y='num_mutation',
         col='overall_prediction',  # Create separate plots for each category
         kind='box',
-        height=5,  # Adjust the height of each plot
+        height=7,  # Adjust the height of each plot
         aspect=1.2  # Control the aspect ratio of each plot
     )
 
@@ -391,7 +391,7 @@ def main():
 
     # Adjust the title and labels
     g.set_axis_labels('Method', 'Number of Mutations')
-    g.figure.subplots_adjust(bottom=0.1, top=0.85)
+    g.figure.subplots_adjust(bottom=0.25, top=0.85)
     g.set(ylim=(0, 150))
     g.figure.suptitle("Number of mutations required for overall subfamily prediction first changes", fontweight='bold')
     plt.savefig(snakemake.output.boxplot_first)
@@ -406,7 +406,7 @@ def main():
         y='num_mutation',
         col='overall_prediction',  # Create separate plots for each category
         kind='box',
-        height=5,  # Adjust the height of each plot
+        height=7,  # Adjust the height of each plot
         aspect=1.2  # Control the aspect ratio of each plot
     )
     
