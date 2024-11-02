@@ -49,10 +49,10 @@ def extract_mutation_counts(input_files) -> dict:
             for _, row in transition.iterrows():
                 idx = row.name
                 if (idx + 4 < len(df) and 
-                    df.loc[idx + 1, 'overall_prediction'] == current_prediction and 
-                    df.loc[idx + 2, 'overall_prediction'] == current_prediction and
-                    df.loc[idx + 3, 'overall_prediction'] == current_prediction and
-                    df.loc[idx + 4, 'overall_prediction'] == current_prediction):
+                    df.loc[idx + 1, 'overall_prediction'] == category and 
+                    df.loc[idx + 2, 'overall_prediction'] == category and
+                    df.loc[idx + 3, 'overall_prediction'] == category and
+                    df.loc[idx + 4, 'overall_prediction'] == category):
                     mutation_counts[category].append(row['num_mutation'])
                     break  # Stop after the first valid transition
 
