@@ -77,12 +77,12 @@ rule all:
         datafile_name=ALL_DATAFILE_NAMES,
         ),
 
-        # grouped_pca = expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_mutations_grouped.png",
-        # dataset_name=ALL_DATASET_NAMES,
-        # datafile_name=ALL_DATAFILE_NAMES,
-        # method_name=METHOD_NAMES,
-        # batch=range(1, (NUM_REPLICATES + 4) // 5),
-        # ),
+        grouped_pca = expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_mutations_grouped.png",
+        dataset_name=ALL_DATASET_NAMES,
+        datafile_name=ALL_DATAFILE_NAMES,
+        method_name=METHOD_NAMES,
+        batch=range(1, (NUM_REPLICATES + 4) // 5),
+        ),
 
 
 
@@ -268,28 +268,28 @@ rule visualise_pca:
     script:
         "scripts/plot_pca.py"
 
-# rule grouped_pca:
-#     input:
-#         embedding_df=lambda wildcards: expand(
-#             "workflows/{dataset_name}/{method_name}/embeddings/{datafile_name}_{rep}.csv", 
-#             dataset_name=wildcards.dataset_name,
-#             method_name=wildcards.method_name,
-#             datafile_name=wildcards.datafile_name,
-#             rep=range(int(wildcards.batch) * 5, (int(wildcards.batch) + 1) * 5)
-#         ),
-#         predictions_df=lambda wildcards: expand(
-#             "workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv", 
-#             dataset_name=wildcards.dataset_name,
-#             method_name=wildcards.method_name,
-#             datafile_name=wildcards.datafile_name,
-#             rep=range(int(wildcards.batch) * 5, (int(wildcards.batch) + 1) * 5)
-#         ),
-#         ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv",
-#     output:
-#         plot_mutation="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_mutations_grouped.png",
-#         plot_prediction="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_predictions_grouped.png"
-#     script:
-#         "scripts/plot_pca_grouped.py"
+rule grouped_pca:
+    input:
+        embedding_df=lambda wildcards: expand(
+            "workflows/{dataset_name}/{method_name}/embeddings/{datafile_name}_{rep}.csv", 
+            dataset_name=wildcards.dataset_name,
+            method_name=wildcards.method_name,
+            datafile_name=wildcards.datafile_name,
+            rep=range(int(wildcards.batch) * 5, (int(wildcards.batch) + 1) * 5)
+        ),
+        predictions_df=lambda wildcards: expand(
+            "workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv", 
+            dataset_name=wildcards.dataset_name,
+            method_name=wildcards.method_name,
+            datafile_name=wildcards.datafile_name,
+            rep=range(int(wildcards.batch) * 5, (int(wildcards.batch) + 1) * 5)
+        ),
+        ancestor_embeddings="workflows/{dataset_name}/embeddings/ancestor_embedding_df.csv",
+    output:
+        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_mutations_grouped.png",
+        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_predictions_grouped.png"
+    script:
+        "scripts/plot_pca_grouped.py"
 
 
 
