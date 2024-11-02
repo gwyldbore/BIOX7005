@@ -49,6 +49,15 @@ except KeyError:
     #  'ConSurf' - #need to add back in, just not processed for 70 or 85 yet
 
 
+MERGING_DATASET_TO_FILE = {
+    "cd70": ["NR1toNR4_N6_N81", "NR4toNR1_N81_N6"],
+    "cd80": ["NR1toNR4_N7_N186", "NR4toNR1_N186_N7"],
+    "cd85": ["NR1toNR4_N7_N299", "NR4toNR1_N299_N7"]
+}
+
+THREE_DATASETS = ['cd70', 'cd80', 'cd85']
+
+
 rule all:
     input:
         merged_df= expand("workflows/{dataset_name}/{method_name}/merged/{datafile_name}_{rep}.csv",
@@ -324,6 +333,40 @@ rule perform_statistical_testing:
         kruskal="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_kruskal.txt",
     script:
         "scripts/statistical_testing.py"
+
+
+rule aggregate_files:
+    input:
+        lambda wildcards: expand(
+            "workflows/{dataset_name}/{method_name}/results/{datafile_name}_{rep}.csv",
+            dataset_name=THREE_DATASETS,
+            datafile_name=MERGING_DATASET_TO_FILE[wildcards.dataset_name],
+            method_name=METHOD_NAMES,
+            rep=range(1, NUM_REPLICATES + 1)
+        )
+    output:
+        aggregated_file="workflows/combineddata/{dataset_name}_all_results.csv"
+    run:
+        import pandas as pd
+        # Read all files into a list of dataframes and concatenate
+        dataframes = [pd.read_csv(file) for file in input]
+        aggregated_df = pd.concat(dataframes, ignore_index=True)
+        aggregated_df.to_csv(output.aggregated_file, index=False)
+
+rule combined_stats:
+    input:
+        cd70="workflows/combineddata/cd70_all_results.csv",
+        cd80="workflows/combineddata/cd80_all_results.csv",
+        cd85="workflows/combineddata/cd85_all_results.csv",
+    output:
+        boxplot_first_combined="workflows/combineddata/combined_boxplot_first.png",
+        boxplot_multi_combined="workflows/combineddata/combined_boxplot_multi.png",
+        qqplot_combined="workflows/combineddata/combined_qqplot.png",
+        shapiro_combined="workflows/combineddata/combined_shapiro.txt",
+        kruskal_combined="workflows/combineddata/combined_kruskal.txt"
+    script:
+        "scripts/combined_stats.py"
+
 
 
 
