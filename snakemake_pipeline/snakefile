@@ -77,7 +77,7 @@ rule all:
         datafile_name=ALL_DATAFILE_NAMES,
         ),
 
-        grouped_pca = expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_mutations_grouped.png",
+        grouped_pca = expand("workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_{method_name}_mutations_grouped.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         method_name=METHOD_NAMES,
