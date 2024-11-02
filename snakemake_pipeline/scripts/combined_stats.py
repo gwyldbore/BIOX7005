@@ -168,22 +168,53 @@ def plot_qq_grid(df, output_path):
 #             aggregated_df['method'] = method
 #             combined_data.append(aggregated_df)
 #     return pd.concat(combined_data, ignore_index=True)
-# Plotting function
-def plot_combined_boxplots(data, title, output_path):
+
+
+
+
+# Plotting function with custom order
+def plot_combined_boxplots(data, title, output_path, prefix):
+
+    # Define the order for each prefix
+    prediction_order = {
+        "NR1toNR4": ["NR1-like", "NR4-like", "NR4", "other"],
+        "NR4toNR1": ["NR4-like", "NR1-like", "NR4", "other"]
+    }
+    # Apply custom order to `overall_prediction`
+    order = prediction_order.get(prefix, None)
+    if order:
+        data['overall_prediction'] = pd.Categorical(data['overall_prediction'], categories=order, ordered=True)
+
+    # Create the box plot
     g = sns.catplot(
         data=data,
         x='method',
         y='num_mutation',
-        col='overall_prediction',
+        col='overall_prediction',  # Separate plots for each prediction category
         kind='box',
-        height=6,
+        height=7,
         aspect=0.8
     )
+
+    # Customize subplot titles and labels
+    for ax in g.axes.flat:
+        original_title = ax.get_title().split(' = ')[1]
+        ax.set_title(original_title, fontsize=12, fontweight='bold', pad=10)
+        ax.set_xlabel('')
+        for label in ax.get_xticklabels():
+            label.set_rotation(30)
+            label.set_ha('right')
+
+    # Set common axis labels and title
     g.set_axis_labels('Method', 'Number of Mutations')
+    g.set(ylim=(0, 150))
     g.figure.suptitle(title, fontsize='x-large', fontweight='bold')
-    plt.tight_layout()
+    g.figure.subplots_adjust(bottom=0.25, top=0.88)
+    
+    # Save the plot
     plt.savefig(output_path)
     plt.close()
+
 
 
 def main():
@@ -223,14 +254,13 @@ def main():
     print(combined_dataframes)
 
 
-    # Generate plots for each prefix and type combination
     for prefix in prefixes:
         for type in types:
             key = f"{prefix}_{type}"
             if not combined_dataframes[key].empty:
                 title = f"Mutation Counts at {type.capitalize()} Family Prediction Change by Method - {prefix} Combined"
-                output_path = f"results/{prefix}_{type}_boxplot.png"
-                plot_combined_boxplots(combined_dataframes[key], title, output_path)
+                output_path = f"workflows/combineddata/{prefix}_{type}_boxplot.png"
+                plot_combined_boxplots(combined_dataframes[key], title, output_path, prefix)
 
 if __name__ == "__main__":
     main()
