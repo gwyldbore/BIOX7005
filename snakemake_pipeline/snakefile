@@ -288,8 +288,8 @@ rule grouped_pca:
         ancestor_embeddings="data/ancestor_embedding_df.csv",
 
     output:
-        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_mutations_grouped.png",
-        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_predictions_grouped.png"
+        plot_mutation="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_{method_name}_mutations_grouped.png",
+        plot_prediction="workflows/{dataset_name}/{method_name}/plots/{dataset_name}_{datafile_name}_{batch}_{method_name}_predictions_grouped.png"
     script:
         "scripts/plot_pca_grouped.py"
 
