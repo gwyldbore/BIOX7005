@@ -218,8 +218,13 @@ rule generate_mutations:
         # mutation_positions="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
         generated_sequences="workflows/{dataset_name}/{method_name}/fasta/ungapped/{datafile_name}_{rep}.fasta",
         mutation_positions="workflows/{dataset_name}/{method_name}/fasta/{datafile_name}_{rep}_mutationpos.txt"
-    script:
-        "scripts/generate_mutations.py"
+    # script:
+    #     "scripts/generate_mutations.py"
+    run:
+    if os.path.exists(input.fasta):
+        shell("python scripts/generate_mutations.py {input.fasta} {output.generated_sequences} {output.mutation_positions}")
+    else:
+        print(f"Skipping {input.fasta} as it does not exist.")
 
 
 rule train_logistic_regression:
