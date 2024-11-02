@@ -191,6 +191,7 @@ def main():
     # Process for first and overall prediction changes
     first_changes_list, overall_changes_list = [], []
     for (dataset, method), group_df in combined_df.groupby(['dataset', 'method']):
+        print(group_df)
         first_changes = find_first_prediction_changes(group_df)
         if not first_changes.empty:
             first_changes['method'], first_changes['dataset'] = method, dataset
@@ -226,8 +227,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-
-
-
-if __name__ == "__main__":
-    main()
