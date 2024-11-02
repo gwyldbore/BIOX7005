@@ -277,7 +277,7 @@ def extract_individual_prediction_counts(input_files) -> list:
 
     return mutation_counts, max_sequence_length
 
-def plot_mutation_counts(mutation_counts_list, method_name):
+def plot_mutation_counts(mutation_counts_list, method_name, outpath):
     # Debugging statement to check structure of mutation_counts_list
     print("mutation_counts_list structure:", mutation_counts_list)
     
