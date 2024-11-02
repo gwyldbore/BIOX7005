@@ -72,7 +72,7 @@ rule all:
         rep=range(1, NUM_REPLICATES + 1, 10),
         ),
 
-        calculate_stats= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_first.svg",
+        calculate_stats= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_first.png",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         ),
