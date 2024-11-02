@@ -381,7 +381,7 @@ def main():
         # Extract the original category name from the title
         original_title = ax.get_title().split(' = ')[1]  # Extract the prediction value
         # Set the cleaned title (with underscores replaced by spaces)
-        ax.set_title(clean_name(original_title), fontsize=14, fontweight='bold', pad=10)
+        ax.set_title(clean_name(original_title), fontsize=12, fontweight='bold', pad=10)
         ax.set_xlabel('')
 
         # Rotate x-axis labels for readability
@@ -416,7 +416,7 @@ def main():
         # Extract the original category name from the title
         original_title = ax.get_title().split(' = ')[1]  # Extract the prediction value
         # Set the cleaned title (with underscores replaced by spaces)
-        ax.set_title(clean_name(original_title), fontsize=14, fontweight='bold', pad=10)
+        ax.set_title(clean_name(original_title), fontsize=12, fontweight='bold', pad=10)
         ax.set_xlabel('')
 
         # Rotate x-axis labels for readability
