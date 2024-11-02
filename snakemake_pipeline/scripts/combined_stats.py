@@ -184,13 +184,13 @@ def main():
 
     # Load CSV files and group by prefix and type
     for dataset in datasets:
-        print(f'dataset: {dataset}')
+        # print(f'dataset: {dataset}')
         for type in types:
-            print(f'type: {type}')
+            # print(f'type: {type}')
             # Path pattern to match CSV files
             csv_files = glob.glob(os.path.join(base_path, dataset, "results", f"{dataset}_*_{type}.csv"))
             for file in csv_files:
-                print(f'file: {file}')
+                # print(f'file: {file}')
                 df = pd.read_csv(file)
                 # Extract the datafile prefix (NR1toNR4 or NR4toNR1)
                 datafile_name = os.path.basename(file).split('_')[1]  # assumes dataset_name_datafile_type.csv format
@@ -200,6 +200,8 @@ def main():
                         df['dataset'] = dataset
                         # Append to appropriate list in the dictionary
                         dataframes[f"{prefix}_{type}"].append(df)
+
+    print(dataframes)
 
 if __name__ == "__main__":
     main()
