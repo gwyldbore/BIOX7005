@@ -152,22 +152,38 @@ def plot_qq_grid(df, output_path):
     plt.close()
 
 
-
+# Load, aggregate, and combine data for all datasets and methods
+def load_and_aggregate_data(base_path, datasets, methods, replicates):
+    combined_data = []
+    for dataset in datasets:
+        for method in methods:
+            # Pattern to match all replicate files for each dataset and method
+            file_pattern = os.path.join(base_path, dataset, method, "results", "*.csv")
+            files = glob.glob(file_pattern)
+            aggregated_df = pd.concat([pd.read_csv(file) for file in files], ignore_index=True)
+            aggregated_df['dataset'] = dataset
+            aggregated_df['method'] = method
+            combined_data.append(aggregated_df)
+    return pd.concat(combined_data, ignore_index=True)
 
 
 
 def main():
-    # Define input and output file paths
-    file_paths = {
-        "workflows/combineddata/cd70_all_results.csv": "cd70",
-        "workflows/combineddata/cd80_all_results.csv": "cd80",
-        "workflows/combineddata/cd85_all_results.csv": "cd85"
-    }
+    # Define input and output file paths and parameters
+    base_path = "workflows"
+    datasets = ["cd70", "cd80", "cd85"]
+    methods = ["random", "nonconservative", "grantham_distances", "marginal_weights", "ConSurf"]
     output_dir = "results/"
     os.makedirs(output_dir, exist_ok=True)
 
+    # Load and aggregate data
+    combined_df = load_and_aggregate_data(base_path, datasets, methods, NUM_REPLICATES=50)
+
+
+
+
     # Load and combine data
-    combined_df = load_and_combine_data(file_paths)
+    # combined_df = load_and_combine_data(file_paths)
 
     # Process for first and overall prediction changes
     first_changes_list, overall_changes_list = [], []
