@@ -257,8 +257,18 @@ def main():
     for prefix in prefixes:
         for type in types:
             key = f"{prefix}_{type}"
+            
+            if prefix == "NR1toNR4":
+                subtitle = "NR1 to NR4"
+            if prefix == "NR4toNR1":
+                subtitle = "NR4 to NR1"
+
+            if type == "firstchanges":
+                title = f"{subtitle} Mutation Counts at First Family Prediction Change by Method - Combined"
+            elif type == "multichanges":
+                title = f"{subtitle} Mutation Counts at Grouped Family Prediction Change by Method - Combined"
+
             if not combined_dataframes[key].empty:
-                title = f"Mutation Counts at {type.capitalize()} Family Prediction Change by Method - {prefix} Combined"
                 output_path = f"results/{prefix}_{type}_boxplot.png"
                 plot_combined_boxplots(combined_dataframes[key], title, output_path, prefix)
 
