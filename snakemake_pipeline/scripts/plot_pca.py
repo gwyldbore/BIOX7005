@@ -487,8 +487,8 @@ def main():
     ancestor_embedding_df['Clade'] = ancestor_embedding_df['info'].apply(seq_utils.tag_node, dataset='combined')
 
     # # Filter for only NR1 or NR4 clades
-    # specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
-    specific_ancestor_embedding_df = ancestor_embedding_df
+    specific_ancestor_embedding_df = ancestor_embedding_df[ancestor_embedding_df['Clade'].isin(['NR1', 'NR4'])]
+    # specific_ancestor_embedding_df = ancestor_embedding_df
 
 
     # Concatenate the embeddings and ancestor embeddings
