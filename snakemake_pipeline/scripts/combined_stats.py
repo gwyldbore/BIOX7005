@@ -174,7 +174,7 @@ def plot_combined_boxplots(data, title, output_path):
         data=data,
         x='method',
         y='num_mutation',
-        col='dataset',  # Separate plots for each dataset
+        col='overall_prediction',
         kind='box',
         height=6,
         aspect=0.8
