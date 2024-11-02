@@ -89,6 +89,71 @@ def get_prediction_order(initial_category):
     else:
         # default to base
         return base_order
+    
+# Shapiro-Wilk Test
+def run_shapiro_tests(df, output_path):
+    categories = df['overall_prediction'].dropna().unique()
+    methods = df['method'].dropna().unique()
+    results = []
+
+    for category in categories:
+        for method in methods:
+            method_data = df[(df['overall_prediction'] == category) & (df['method'] == method)]['num_mutation']
+            if len(method_data) >= 3:  # At least 3 samples required for Shapiro-Wilk test
+                stat, p_value = shapiro(method_data)
+                results.append({'Category': category, 'Method': method, 'W-Statistic': stat, 'p-value': p_value})
+            else:
+                results.append({'Category': category, 'Method': method, 'W-Statistic': 'N/A', 'p-value': 'Insufficient data'})
+
+    # Save results to a file
+    with open(output_path, 'w') as f:
+        f.write("Shapiro-Wilk Test Results\n")
+        f.write("=" * 40 + "\n")
+        for result in results:
+            f.write(f"Category: {result['Category']}, Method: {result['Method']}, W-Statistic: {result['W-Statistic']}, p-value: {result['p-value']}\n")
+
+# Kruskal-Wallis Test
+def run_kruskal_wallis(df, output_path):
+    categories = df['overall_prediction'].unique().dropna()
+    with open(output_path, 'w') as f:
+        f.write("Kruskal-Wallis Test Results\n")
+        f.write("=" * 40 + "\n")
+        for category in categories:
+            category_data = df[df['overall_prediction'] == category]
+            grouped_data = [group['num_mutation'].values for _, group in category_data.groupby('method') if len(group) > 0]
+            if len(grouped_data) < 2:
+                f.write(f"Not enough methods for comparison in category: {category}\n")
+                continue
+            stat, p_value = kruskal(*grouped_data)
+            f.write(f"Category: {category}, Statistic: {stat:.4f}, p-value: {p_value:.4e}\n")
+
+# QQ Plot
+def plot_qq_grid(df, output_path):
+    categories = df['overall_prediction'].dropna().unique()
+    methods = df['method'].dropna().unique()
+    num_categories = len(categories)
+    num_methods = len(methods)
+    fig, axes = plt.subplots(num_categories, num_methods, figsize=(6 * num_methods, 6 * num_categories), squeeze=False)
+    fig.suptitle('Q-Q Plots for All Categories and Methods', fontsize=18, fontweight='bold')
+
+    for i, category in enumerate(categories):
+        for j, method in enumerate(methods):
+            ax = axes[i, j]
+            method_data = df[(df['overall_prediction'] == category) & (df['method'] == method)]['num_mutation']
+            if method_data.empty:
+                ax.axis('off')
+                ax.text(0.5, 0.5, 'No Data', ha='center', va='center', fontsize=12)
+            else:
+                stats.probplot(method_data, dist="norm", plot=ax)
+                ax.set_title(f'{category} - {method}', fontsize=12)
+
+    plt.tight_layout(rect=[0, 0, 1, 0.98])
+    plt.savefig(output_path)
+    plt.close()
+
+
+
+
 
 
 def main():
@@ -132,6 +197,15 @@ def main():
     # Generate the boxplots
     create_boxplots(first_changes_df, "Mutation Counts at First Family Prediction Change by Method - Combined Datasets", snakemake.output.boxplot_first)
     create_boxplots(overall_changes_df, "Mutation Counts at Overall Family Prediction Change by Method - Combined Datasets", snakemake.output.boxplot_multi)
+
+
+    # Run statistical tests and QQ plots
+    run_shapiro_tests(overall_changes_df, snakemake.output.shapiro_combined)
+    run_kruskal_wallis(overall_changes_df, snakemake.output.kruskal_combined)
+    plot_qq_grid(overall_changes_df, snakemake.output.qqplot_combined)
+
+
+
 
 if __name__ == "__main__":
     main()
