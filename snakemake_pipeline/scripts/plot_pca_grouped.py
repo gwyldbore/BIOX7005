@@ -46,17 +46,16 @@ def plot_pca_ancestors_static(mutations_df, ancestors_df, nodes_to_label, outpat
                 4: 's'}
 
     mutation_df = mutations_df.dropna(subset=['num_mutation'])
-    # scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
-    #             c=[int(x) for x in mutation_df['num_mutation']], cmap='cool',
-    #             marker=marker_dict[mutation_df['filegroup']])
+    scatter = ax.scatter(mutation_df['pca1'], mutation_df['pca2'], 
+                c=[int(x) for x in mutation_df['num_mutation']], cmap='cool')
     
-    for group, marker in marker_dict.items():
-        group_subset = mutation_df[mutation_df['filegroup'] == group]
-        scatter = ax.scatter(
-            group_subset['pca1'], group_subset['pca2'],
-            c=[int(x) for x in group_subset['num_mutation']],
-            cmap='cool', marker=marker, alpha=0.8
-        )
+    # for group, marker in marker_dict.items():
+    #     group_subset = mutation_df[mutation_df['filegroup'] == group]
+    #     scatter = ax.scatter(
+    #         group_subset['pca1'], group_subset['pca2'],
+    #         c=[int(x) for x in group_subset['num_mutation']],
+    #         cmap='cool', marker=marker, alpha=0.8
+    #     )
     
     cax = ax.inset_axes([0.05, 0.05, 0.3, 0.05])
     fig.colorbar(scatter, cax=cax, orientation='horizontal')
