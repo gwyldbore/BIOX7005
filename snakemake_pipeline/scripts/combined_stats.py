@@ -5,6 +5,12 @@ import seaborn as sns
 from scipy.stats import shapiro, kruskal
 import os
 import glob
+import scikit_posthocs as sp
+
+import scipy.stats as stats
+import numpy as np
+import statsmodels.api as sm
+from statsmodels.formula.api import ols
 
 
 
@@ -113,7 +119,19 @@ def run_shapiro_tests(df, output_path):
         f.write("Shapiro-Wilk Test Results\n")
         f.write("=" * 40 + "\n")
         for result in results:
-            f.write(f"Category: {result['Category']}, Method: {result['Method']}, W-Statistic: {result['W-Statistic']}, p-value: {result['p-value']}\n")
+            f.write(f"Category: {result['Category']}, Method: {result['Method']}\n")
+            normal = 'False'
+            # check that pvalue is actually calculated
+            if (not isinstance(result['p-value'], str)):
+                if result['p-value'] > 0.05:
+                    normal = 'True'
+                f.write(f"W-Statistic: {result['W-Statistic']:.4f}, p-value: {result['p-value']:.4e}, normal: {normal}\n")
+            # otherwise if there was insufficient data to calculate
+            else:
+                f.write(f"W-Statistic: {result['W-Statistic']}, p-value: {result['p-value']}, normal: {normal}\n")
+            f.write("-" * 40 + "\n")
+
+
 
 # Kruskal-Wallis Test
 def run_kruskal_wallis(df, output_path):
@@ -128,7 +146,30 @@ def run_kruskal_wallis(df, output_path):
                 f.write(f"Not enough methods for comparison in category: {category}\n")
                 continue
             stat, p_value = kruskal(*grouped_data)
-            f.write(f"Category: {category}, Statistic: {stat:.4f}, p-value: {p_value:.4e}\n")
+            f.write(f"Category: {category}\n")
+            significant = False
+            if p_value <= 0.05:
+                significant = True
+            f.write(f"Statistic: {stat:.4f}, p-value: {p_value:.4e}, significant: {significant}\n")
+
+            # if a category is significant, do post-hoc dunns test 
+            if significant:
+                f.write("Dunn's Post-hoc Test Results:\n")
+
+                print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}\n\n\n")
+
+
+                # Run Dunn's test with Bonferroni correction
+                dunn_results = sp.posthoc_dunn(
+                    category_data, val_col='num_mutation', group_col='method', p_adjust='bonferroni'
+                )
+
+                # Write Dunn's test results to file in table format
+                f.write(dunn_results.to_string())
+                f.write("\n\n")
+
+
+            f.write("-" * 40 + "\n")
 
 # QQ Plot
 def plot_qq_grid(df, output_path):
