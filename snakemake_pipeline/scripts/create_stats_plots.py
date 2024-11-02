@@ -229,14 +229,10 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
 
 
 
-def extract_individual_prediction_counts(input_files) -> dict:
-    # Initialize a nested dictionary to store mutation counts for each prediction type and target category
-    mutation_counts = {
-        "blast_prediction": {"NR1": [], "NR4": [], "other": []},
-        "interproscan_prediction": {"NR1": [], "NR4": [], "other": []},
-        "embedding_prediction": {"NR1": [], "NR4": [], "other": []},
-    }
-    
+def extract_individual_prediction_counts(input_files) -> list:
+    # Initialize a list to store mutation counts dictionaries for each prediction type
+    mutation_counts = []
+
     # Initialize a variable to track the maximum sequence length
     max_sequence_length = 0
 
@@ -248,15 +244,20 @@ def extract_individual_prediction_counts(input_files) -> dict:
         # Add a column for the sequence length if available
         df['sequence_length'] = df['sequence'].apply(lambda x: len(str(x)) if pd.notna(x) else 0)
         max_sequence_length = max(max_sequence_length, df['sequence_length'].max())
-        
+
+        # Track mutation counts for each prediction type separately
+        prediction_counts = {"blast_prediction": {"NR1": [], "NR4": [], "other": []},
+                             "interproscan_prediction": {"NR1": [], "NR4": [], "other": []},
+                             "embedding_prediction": {"NR1": [], "NR4": [], "other": []}}
+
         # Loop through each individual prediction type
         for prediction_type in ["blast_prediction", "interproscan_prediction", "embedding_prediction"]:
             starting_value = df[prediction_type].iloc[0]
             categories_to_track = ["NR1", "NR4", "other"]
-            
+
             # Exclude the starting value from categories to track
             categories_to_track = [cat for cat in categories_to_track if cat != starting_value]
-            
+
             # Track transitions for each category in this prediction type
             for category in categories_to_track:
                 transition = df[(df[prediction_type].shift() != df[prediction_type]) &
@@ -268,24 +269,40 @@ def extract_individual_prediction_counts(input_files) -> dict:
                     if (idx + 2 < len(df) and 
                         df.loc[idx + 1, prediction_type] == category and 
                         df.loc[idx + 2, prediction_type] == category):
-                        mutation_counts[prediction_type][category].append(row['num_mutation'])
+                        prediction_counts[prediction_type][category].append(row['num_mutation'])
                         break
+
+        # Append the dictionary for this file to the list
+        mutation_counts.append(prediction_counts)
 
     return mutation_counts, max_sequence_length
 
-def plot_mutation_counts(mutation_counts, method_name, outpath):
-    # Prepare data for box plot by combining mutation counts into a single DataFrame
+def plot_mutation_counts(mutation_counts_list, method_name):
+    # Debugging statement to check structure of mutation_counts_list
+    print("mutation_counts_list structure:", mutation_counts_list)
+    
+    # Prepare data for box plot by combining mutation counts from each prediction dictionary in the list
     plot_data = []
-    for prediction_type, categories in mutation_counts.items():
-        for category, counts in categories.items():
-            for count in counts:
-                plot_data.append({"Prediction Type": prediction_type, "Category": category, 
-                                  "Mutation Count": count, "Method": method_name})
+    for mutation_counts in mutation_counts_list:
+        # Ensure each item is a dictionary
+        if isinstance(mutation_counts, dict):
+            for prediction_type in mutation_counts:
+                categories = mutation_counts[prediction_type]
+                # Debugging statement to check structure of categories
+                print(f"Categories for {prediction_type}:", categories)
+                for category, counts in categories.items():
+                    for count in counts:
+                        plot_data.append({"Prediction Type": prediction_type, "Category": category, 
+                                          "Mutation Count": count, "Method": method_name})
+        else:
+            print("Expected dictionary but found:", type(mutation_counts))
+            continue
 
+    # Convert to DataFrame for plotting
     plot_df = pd.DataFrame(plot_data)
 
     # Create box plots for each prediction type, grouped by category
-    sns.set_theme(style="whitegrid")
+    sns.set(style="whitegrid")
     plt.figure(figsize=(15, 8))
     sns.boxplot(data=plot_df, x="Category", y="Mutation Count", hue="Method")
     plt.title(f"Mutation Counts by Prediction Type for {method_name}")
