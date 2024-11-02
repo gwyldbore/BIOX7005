@@ -320,6 +320,7 @@ rule perform_statistical_testing:
         qqplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_qqplot.svg",
         shapiro="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_shapiro.txt",
         kruskal="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_kruskal.txt",
+        
     script:
         "scripts/statistical_testing.py"
 
@@ -340,5 +341,6 @@ rule plot_summary_statistics:
         mutation_graphs="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_mutation_{method_name}.png",
         position_graphs="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_position_{method_name}.png",
         mutation_spread="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_mutationspread_{method_name}.png",
+        boxplot_by_prediction="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_predictions_{method_name}.png"
     script:
         "scripts/create_stats_plots.py"
