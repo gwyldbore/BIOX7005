@@ -204,6 +204,10 @@ def main():
     first_changes_df = pd.concat(first_changes_list, ignore_index=True)
     overall_changes_df = pd.concat(overall_changes_list, ignore_index=True)
 
+
+    print("First Prediction Changes:", first_changes.head())
+    print("Overall Prediction Changes:", overall_changes.head())
+
     # Set prediction order
     initial_category = get_initial_category(combined_df)
     order = get_prediction_order(initial_category)
