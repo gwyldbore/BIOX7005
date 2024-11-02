@@ -178,7 +178,7 @@ def plot_combined_boxplots(data, title, output_path, prefix):
     # Define the order for each prefix
     prediction_order = {
         "NR1toNR4": ["NR1-like", "NR4-like", "NR4", "other"],
-        "NR4toNR1": ["NR4-like", "NR1-like", "NR4", "other"]
+        "NR4toNR1": ["NR4-like", "NR1-like", "NR1", "other"]
     }
     # Apply custom order to `overall_prediction`
     order = prediction_order.get(prefix, None)
@@ -257,7 +257,7 @@ def main():
     for prefix in prefixes:
         for type in types:
             key = f"{prefix}_{type}"
-            
+
             if prefix == "NR1toNR4":
                 subtitle = "NR1 to NR4"
             if prefix == "NR4toNR1":
