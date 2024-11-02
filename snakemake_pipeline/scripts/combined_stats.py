@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.stats as stats
 import seaborn as sns
+from scipy.stats import shapiro, kruskal
 import os
 import glob
 
