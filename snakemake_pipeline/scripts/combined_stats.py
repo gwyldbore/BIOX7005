@@ -313,6 +313,8 @@ def main():
 
             if not combined_dataframes[key].empty:
                 output_path = f"results/{prefix}_{type}_boxplot.png"
+
+                print(f'df: {combined_dataframes[key]}')
                 plot_combined_boxplots(combined_dataframes[key], title, output_path, prefix)
 
                 shapiro_out = f"results/{prefix}_{type}_shapiro.txt"
