@@ -212,43 +212,35 @@ def main():
         dataframes[key] = pd.concat(dataframes[key], ignore_index=True)
 
 
-    # Load and combine data
-    # combined_df = load_and_combine_data(file_paths)
+    # Initialize lists to store aggregated results
+    first_changes_list = []
+    overall_changes_list = []
 
-    # Process for first and overall prediction changes
-    first_changes_list, overall_changes_list = [], []
-    for (dataset, method), group_df in combined_df.groupby(['dataset', 'method']):
-        first_changes = find_first_prediction_changes(group_df)
-        if not first_changes.empty:
-            first_changes['method'], first_changes['dataset'] = method, dataset
-            first_changes_list.append(first_changes[['dataset', 'method', 'overall_prediction', 'num_mutation']])
-        overall_changes = find_overall_prediction_changes(group_df)
-        if not overall_changes.empty:
-            overall_changes['method'], overall_changes['dataset'] = method, dataset
-            overall_changes_list.append(overall_changes[['dataset', 'method', 'overall_prediction', 'num_mutation']])
+    # Process each dataframe in dataframes dictionary
+    for (dataset, datafile_name, method), df in dataframes.items():
+        # Find first and overall prediction changes
+        first_changes = find_first_prediction_changes(df)
+        overall_changes = find_overall_prediction_changes(df)
+        
+        # Annotate and add to lists
+        first_changes['method'] = method
+        first_changes['dataset'] = dataset
+        first_changes_list.append(first_changes[['dataset', 'method', 'overall_prediction', 'num_mutation']])
 
-    # Concatenate results for first and overall changes
+        overall_changes['method'] = method
+        overall_changes['dataset'] = dataset
+        overall_changes_list.append(overall_changes[['dataset', 'method', 'overall_prediction', 'num_mutation']])
+
+    # Concatenate aggregated data
     first_changes_df = pd.concat(first_changes_list, ignore_index=True)
     overall_changes_df = pd.concat(overall_changes_list, ignore_index=True)
 
+    # Generate boxplots
+    create_boxplots(first_changes_df, "First Prediction Changes by Method - Combined Data", "results/first_changes_boxplot.png")
+    create_boxplots(overall_changes_df, "Overall Prediction Changes by Method - Combined Data", "results/overall_changes_boxplot.png")
 
-    print("First Prediction Changes:", first_changes.head())
-    print("Overall Prediction Changes:", overall_changes.head())
 
-    # Set prediction order
-    initial_category = get_initial_category(combined_df)
-    order = get_prediction_order(initial_category)
-    first_changes_df['overall_prediction'] = pd.Categorical(first_changes_df['overall_prediction'], categories=order, ordered=True)
-    overall_changes_df['overall_prediction'] = pd.Categorical(overall_changes_df['overall_prediction'], categories=order, ordered=True)
 
-    # Generate the boxplots
-    create_boxplots(first_changes_df, "Mutation Counts at First Family Prediction Change by Method - Combined Datasets", f"{output_dir}combined_boxplot_first.png")
-    create_boxplots(overall_changes_df, "Mutation Counts at Overall Family Prediction Change by Method - Combined Datasets", f"{output_dir}combined_boxplot_multi.png")
-
-    # Run statistical tests and QQ plots
-    run_shapiro_tests(overall_changes_df, f"{output_dir}combined_shapiro.txt")
-    run_kruskal_wallis(overall_changes_df, f"{output_dir}combined_kruskal.txt")
-    plot_qq_grid(overall_changes_df, f"{output_dir}combined_qqplot.png")
 
 if __name__ == "__main__":
     main()
