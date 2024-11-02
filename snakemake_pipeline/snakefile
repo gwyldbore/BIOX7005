@@ -99,7 +99,7 @@ rule all:
         batch=range(1, (NUM_REPLICATES + 4) // 5),
         ),
 
-        # grouped_stats="workflows/combineddata/combined_boxplot_first.png",
+        grouped_stats="workflows/combineddata/combined_boxplot_first.png",
         # "workflows/combineddata/combined_boxplot_multi.png",
         # "workflows/combineddata/combined_qqplot.png",
         # "workflows/combineddata/combined_shapiro.txt",
