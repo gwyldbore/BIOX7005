@@ -212,7 +212,7 @@ rule all:
 rule generate_mutations:
     input:
         # fasta=DATASET_PATH + "/{dataset_name}.fasta"
-        fasta=DATASET_PATH + "/{dataset_name}_{datafile_name}.fasta"
+        fasta=DATASET_PATH + "/{dataset_name}/{datafile_name}.fasta"
     output:
         # generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
         # mutation_positions="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
