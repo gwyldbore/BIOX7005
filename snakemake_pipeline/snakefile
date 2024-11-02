@@ -49,19 +49,23 @@ except KeyError:
     #  'ConSurf' - #need to add back in, just not processed for 70 or 85 yet
 
 
-MERGING_DATASET_TO_FILE = {
-    "cd70": ["NR1toNR4_N6_N81", "NR4toNR1_N81_N6"],
-    "cd80": ["NR1toNR4_N7_N186", "NR4toNR1_N186_N7"],
-    "cd85": ["NR1toNR4_N7_N299", "NR4toNR1_N299_N7"]
-}
+try:
+    MERGING_DATASET_TO_FILE = config['merging_datasets_to_file']
+except KeyError:
+    MERGING_DATASET_TO_FILE = {
+        "cd70": ["NR1toNR4_N6_N81", "NR4toNR1_N81_N6"],
+        "cd80": ["NR1toNR4_N7_N186", "NR4toNR1_N186_N7"],
+        "cd85": ["NR1toNR4_N7_N299", "NR4toNR1_N299_N7"]
+    }
 
-THREE_DATASETS = ['cd70', 'cd80', 'cd85']
+try:
+    THREE_DATASETS = config['three_datasets']
+except KeyError:
+    THREE_DATASETS = ['cd70', 'cd80', 'cd85']
 
 
 rule all:
     input:
-        grouped_stats="workflows/combineddata/combined_boxplot_first.png",
-
         merged_df= expand("workflows/{dataset_name}/{method_name}/merged/{datafile_name}_{rep}.csv",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
@@ -95,7 +99,7 @@ rule all:
         batch=range(1, (NUM_REPLICATES + 4) // 5),
         ),
 
-        
+        # grouped_stats="workflows/combineddata/combined_boxplot_first.png",
         # "workflows/combineddata/combined_boxplot_multi.png",
         # "workflows/combineddata/combined_qqplot.png",
         # "workflows/combineddata/combined_shapiro.txt",
