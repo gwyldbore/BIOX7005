@@ -93,11 +93,11 @@ rule all:
         batch=range(1, (NUM_REPLICATES + 4) // 5),
         ),
 
-        "workflows/combineddata/combined_boxplot_first.png",
-        "workflows/combineddata/combined_boxplot_multi.png",
-        "workflows/combineddata/combined_qqplot.png",
-        "workflows/combineddata/combined_shapiro.txt",
-        "workflows/combineddata/combined_kruskal.txt"
+        grouped_stats="workflows/combineddata/combined_boxplot_first.png",
+        # "workflows/combineddata/combined_boxplot_multi.png",
+        # "workflows/combineddata/combined_qqplot.png",
+        # "workflows/combineddata/combined_shapiro.txt",
+        # "workflows/combineddata/combined_kruskal.txt"
 
 
 
