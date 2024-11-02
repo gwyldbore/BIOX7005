@@ -356,12 +356,16 @@ def main():
         grouped_df['overall_prediction'], categories=order, ordered=True
     )
 
+    grouped_df.to_csv(snakemake.output.multi_df)
+
     # create the first change only group
     grouped_first_df = pd.concat(grouped_first_results, ignore_index=True)
     grouped_first_df['method'] = grouped_first_df['method'].apply(clean_name)
     grouped_first_df['overall_prediction'] = pd.Categorical(
         grouped_first_df['overall_prediction'], categories=order, ordered=True
     )
+
+    grouped_first_df.to_csv(snakemake.output.first_df)
 
 
 
