@@ -72,7 +72,7 @@ rule all:
         rep=range(1, NUM_REPLICATES + 1, 10),
         ),
 
-        calculate_stats= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg",
+        calculate_stats= expand("workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_first.svg",
         dataset_name=ALL_DATASET_NAMES,
         datafile_name=ALL_DATAFILE_NAMES,
         ),
@@ -313,7 +313,8 @@ rule perform_statistical_testing:
             rep=range(1, NUM_REPLICATES + 1)
         )
     output:
-        boxplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot.svg",
+        boxplot_first="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_first.svg",
+        boxplot_multi="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_multi.svg",
         qqplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_qqplot.svg",
         shapiro="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_shapiro.txt",
         kruskal="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_kruskal.txt",
