@@ -272,6 +272,21 @@ def main():
                 output_path = f"results/{prefix}_{type}_boxplot.png"
                 plot_combined_boxplots(combined_dataframes[key], title, output_path, prefix)
 
+                shapiro_out = f"results/{prefix}_{type}_shapiro.txt"
+                kruskal_out = f"results/{prefix}_{type}_kruskal.txt"
+                qq_out = f"results/{prefix}_{type}_qq.png"
+
+                # Shapiro-Wilk test
+                run_shapiro_tests(df, shapiro_out)
+                
+                # Kruskal-Wallis and Dunn's post-hoc tests
+                run_kruskal_wallis(df, kruskal_out)
+
+                # QQ plot
+                plot_qq_grid(df, qq_out)
+
+
+
 if __name__ == "__main__":
     main()
 
