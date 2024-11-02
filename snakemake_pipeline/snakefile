@@ -221,10 +221,10 @@ rule generate_mutations:
     # script:
     #     "scripts/generate_mutations.py"
     run:
-    if os.path.exists(input.fasta):
-        shell("python scripts/generate_mutations.py {input.fasta} {output.generated_sequences} {output.mutation_positions}")
-    else:
-        print(f"Skipping {input.fasta} as it does not exist.")
+        if os.path.exists(input.fasta):
+            shell("python scripts/generate_mutations.py {input.fasta} {output.generated_sequences} {output.mutation_positions}")
+        else:
+            print(f"Skipping {input.fasta} as it does not exist.")
 
 
 rule train_logistic_regression:
