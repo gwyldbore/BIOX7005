@@ -8,11 +8,16 @@ import seaborn as sns
 
 def extract_mutation_counts(input_files) -> dict:
     # Initialize a dictionary to store mutation counts for each target category
+    # mutation_counts = {
+    #     "NR1": [],
+    #     "NR1-like": [],
+    #     "NR4-like": [],
+    #     "NR4": []
+    # }
     mutation_counts = {
-        "NR1": [],
-        "NR1-like": [],
-        "NR4-like": [],
-        "NR4": []
+        'NR1':[],
+        'NR4':[],
+        'other':[]
     }
     max_sequence_length = 0
 
@@ -22,41 +27,38 @@ def extract_mutation_counts(input_files) -> dict:
         df = pd.read_csv(file)
 
         # Identify the starting value (first prediction in this file)
-        starting_value = df['overall_prediction'].iloc[0]
+        # starting_value = df['overall_prediction'].iloc[0]
+        starting_value = df['embedding_prediction']
 
         df['sequence_length'] = df['sequence'].apply(lambda x: len(str(x)) if pd.notna(x) else 0)
         max_sequence_length = max(max_sequence_length, df['sequence_length'].max())
 
         # Define the other categories to track (excluding the starting value)
-        categories_to_track = ["NR1", "NR1-like", "NR4-like", "NR4"]
-        categories_to_track.remove(starting_value)
+        # categories_to_track = ["NR1", "NR1-like", "NR4-like", "NR4"]
+        categories_to_track = ["NR1", "NR4", "other"]
+        # categories_to_track.remove(starting_value)
         
-        if starting_value == 'NR4':
-            categories_to_track.reverse()
-            mutation_counts.pop('NR4', '')
-        elif starting_value == 'NR1':
-            mutation_counts.pop('NR1', '')
+        # if starting_value == 'NR4':
+        #     categories_to_track.reverse()
+        #     mutation_counts.pop('NR4', '')
+        # elif starting_value == 'NR1':
+        #     mutation_counts.pop('NR1', '')
 
         # Track the first transition to each non-starting category
         for category in categories_to_track:
-            # # Identify where the prediction changes to the target category
-            # transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & (df['overall_prediction'] == category)]
-
-            # # If there is at least one such transition, store the first one
-            # if not transition.empty:
-            #     first_transition = transition.iloc[0]
-            #     mutation_counts[category].append(first_transition['num_mutation'])
-
+ 
             # Identify where the prediction changes to the target category
-            transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & 
-                            (df['overall_prediction'] == category)]
+            # transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & 
+            #                 (df['overall_prediction'] == category)]
+            transition = df[(df['embedding_prediction'].shift() != df['embedding_prediction']) & 
+                            (df['embedding_prediction'] == category)]
 
             # If there is at least one transition, store the first one if the next two predictions match
             for _, row in transition.iterrows():
                 idx = row.name
                 if (idx + 2 < len(df) and 
-                    df.loc[idx + 1, 'overall_prediction'] == category and 
-                    df.loc[idx + 2, 'overall_prediction'] == category):
+                    df.loc[idx + 1, 'embedding_prediction'] == category and 
+                    df.loc[idx + 2, 'embedding_prediction'] == category):
                     mutation_counts[category].append(row['num_mutation'])
                     break  # Stop after the first valid transition
 
@@ -229,88 +231,6 @@ def plot_mutated_positions(ordered_positions, sequence_length, output_path):
 
 
 
-def extract_individual_prediction_counts(input_files) -> list:
-    # Initialize a list to store mutation counts dictionaries for each prediction type
-    mutation_counts = []
-
-    # Initialize a variable to track the maximum sequence length
-    max_sequence_length = 0
-
-    # Loop through each input file and extract transitions
-    for file in input_files:
-        # Load the data from the file
-        df = pd.read_csv(file)
-
-        # Add a column for the sequence length if available
-        df['sequence_length'] = df['sequence'].apply(lambda x: len(str(x)) if pd.notna(x) else 0)
-        max_sequence_length = max(max_sequence_length, df['sequence_length'].max())
-
-        # Track mutation counts for each prediction type separately
-        prediction_counts = {"blast_prediction": {"NR1": [], "NR4": [], "other": []},
-                             "interproscan_prediction": {"NR1": [], "NR4": [], "other": []},
-                             "embedding_prediction": {"NR1": [], "NR4": [], "other": []}}
-
-        # Loop through each individual prediction type
-        for prediction_type in ["blast_prediction", "interproscan_prediction", "embedding_prediction"]:
-            starting_value = df[prediction_type].iloc[0]
-            categories_to_track = ["NR1", "NR4", "other"]
-
-            # Exclude the starting value from categories to track
-            categories_to_track = [cat for cat in categories_to_track if cat != starting_value]
-
-            # Track transitions for each category in this prediction type
-            for category in categories_to_track:
-                transition = df[(df[prediction_type].shift() != df[prediction_type]) &
-                                (df[prediction_type] == category)]
-
-                # Store the first valid transition where the next two predictions match
-                for _, row in transition.iterrows():
-                    idx = row.name
-                    if (idx + 2 < len(df) and 
-                        df.loc[idx + 1, prediction_type] == category and 
-                        df.loc[idx + 2, prediction_type] == category):
-                        prediction_counts[prediction_type][category].append(row['num_mutation'])
-                        break
-
-        # Append the dictionary for this file to the list
-        mutation_counts.append(prediction_counts)
-
-    return mutation_counts, max_sequence_length
-
-def plot_mutation_counts(mutation_counts_list, method_name, outpath):
-    # Debugging statement to check structure of mutation_counts_list
-    print("mutation_counts_list structure:", mutation_counts_list)
-    
-    # Prepare data for box plot by combining mutation counts from each prediction dictionary in the list
-    plot_data = []
-    for mutation_counts in mutation_counts_list:
-        # Ensure each item is a dictionary
-        if isinstance(mutation_counts, dict):
-            for prediction_type in mutation_counts:
-                categories = mutation_counts[prediction_type]
-                # Debugging statement to check structure of categories
-                print(f"Categories for {prediction_type}:", categories)
-                for category, counts in categories.items():
-                    for count in counts:
-                        plot_data.append({"Prediction Type": prediction_type, "Category": category, 
-                                          "Mutation Count": count, "Method": method_name})
-        else:
-            print("Expected dictionary but found:", type(mutation_counts))
-            continue
-
-    # Convert to DataFrame for plotting
-    plot_df = pd.DataFrame(plot_data)
-
-    # Create box plots for each prediction type, grouped by category
-    sns.set(style="whitegrid")
-    plt.figure(figsize=(15, 8))
-    sns.boxplot(data=plot_df, x="Category", y="Mutation Count", hue="Method")
-    plt.title(f"Mutation Counts by Prediction Type for {method_name}")
-    plt.xlabel("Prediction Category")
-    plt.ylabel("Mutation Count")
-    plt.legend(title="Method", loc="upper right")
-    plt.savefig(outpath)
-
 
 
 def main():
@@ -324,12 +244,8 @@ def main():
     plot_mutated_positions(ordered_positions, sequence_length, snakemake.output.position_graphs)
 
     
-    ordered_counts_individual, sequence_length = extract_individual_prediction_counts(input_files)
-    plot_mutation_counts(ordered_positions, snakemake.wildcards.method_name, snakemake.output.boxplot_by_prediction)
-
-
-                
-    
+    # ordered_counts_individual, sequence_length = extract_individual_prediction_counts(input_files)
+    # plot_mutation_counts(ordered_positions, snakemake.wildcards.method_name, snakemake.output.boxplot_by_prediction)
 
     
 
