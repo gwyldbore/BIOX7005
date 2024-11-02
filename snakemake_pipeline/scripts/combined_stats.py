@@ -182,7 +182,7 @@ def main():
     # Load and aggregate data
     combined_df = load_and_aggregate_data(base_path, datasets, methods, replicates=50)
 
-
+    print(combined_df)
 
 
     # Load and combine data
