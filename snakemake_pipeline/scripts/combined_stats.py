@@ -134,8 +134,8 @@ def run_shapiro_tests(df, output_path):
 
 
 # Kruskal-Wallis Test
-def run_kruskal_wallis(df, output_path):
-    categories = df['overall_prediction'].dropna().unique()
+def run_kruskal_wallis(df, output_path, categories):
+    # categories = df['overall_prediction'].unique()
     print(f'categories kruskal: {categories}')
 
     with open(output_path, 'w') as f:
@@ -303,8 +303,10 @@ def main():
 
             if prefix == "NR1toNR4":
                 subtitle = "NR1 to NR4"
+                categories = ["NR1-like", "NR4-like", "NR4", "other"]
             if prefix == "NR4toNR1":
                 subtitle = "NR4 to NR1"
+                categories = ['NR4-like', 'NR1-like', 'NR1', 'other']
 
             if type == "firstchanges":
                 title = f"{subtitle} Mutation Counts at First Family Prediction Change by Method - Combined"
@@ -326,7 +328,7 @@ def main():
                 run_shapiro_tests(df, shapiro_out)
                 
                 # Kruskal-Wallis and Dunn's post-hoc tests
-                run_kruskal_wallis(df, kruskal_out)
+                run_kruskal_wallis(df, kruskal_out, categories)
 
                 # QQ plot
                 plot_qq_grid(df, qq_out)
