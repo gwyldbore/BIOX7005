@@ -128,17 +128,17 @@ rule all:
 #         "scripts/generate_ancestor_embeddings.py"
 
 
-# rule generate_mutations:
-#     input:
-#         # fasta=DATASET_PATH + "/{dataset_name}.fasta"
-#         fasta=DATASET_PATH + "/{dataset_name}_{datafile_name}.fasta"
-#     output:
-#         # generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
-#         # mutation_positions="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
-#         generated_sequences="workflows/{dataset_name}/{method_name}/fasta/ungapped/{datafile_name}_{rep}.fasta",
-#         mutation_positions="workflows/{dataset_name}/{method_name}/fasta/{datafile_name}_{rep}_mutationpos.txt"
-#     script:
-#         "scripts/generate_mutations.py"
+rule generate_mutations:
+    input:
+        # fasta=DATASET_PATH + "/{dataset_name}.fasta"
+        fasta=DATASET_PATH + "/{dataset_name}_{datafile_name}.fasta"
+    output:
+        # generated_sequences="workflows/{dataset_name}/fasta/ungapped/{dataset_name}_{rep}.fasta",
+        # mutation_positions="workflows/{dataset_name}/fasta/{dataset_name}_{rep}_mutationpos.txt"
+        generated_sequences="workflows/{dataset_name}/{method_name}/fasta/ungapped/{datafile_name}_{rep}.fasta",
+        mutation_positions="workflows/{dataset_name}/{method_name}/fasta/{datafile_name}_{rep}_mutationpos.txt"
+    script:
+        "scripts/generate_mutations.py"
 
 
 rule train_logistic_regression:
