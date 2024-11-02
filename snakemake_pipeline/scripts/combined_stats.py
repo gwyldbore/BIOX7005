@@ -136,6 +136,8 @@ def run_shapiro_tests(df, output_path):
 # Kruskal-Wallis Test
 def run_kruskal_wallis(df, output_path):
     categories = df['overall_prediction'].dropna().unique()
+    print(f'categories kruskal: {categories}')
+
     with open(output_path, 'w') as f:
         f.write("Kruskal-Wallis Test Results\n")
         f.write("=" * 40 + "\n")
@@ -156,7 +158,7 @@ def run_kruskal_wallis(df, output_path):
             if significant:
                 f.write("Dunn's Post-hoc Test Results:\n")
 
-                print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}\n\n\n")
+                # print(f"Dunn's test for category '{category}' with methods: {category_data['method'].unique()}\n\n\n")
 
 
                 # Run Dunn's test with Bonferroni correction
@@ -292,7 +294,7 @@ def main():
 
     # Concatenate dataframes by prefix and type
     combined_dataframes = {key: pd.concat(dfs, ignore_index=True) for key, dfs in dataframes.items()}
-    print(combined_dataframes)
+    
 
 
     for prefix in prefixes:
@@ -317,6 +319,7 @@ def main():
                 kruskal_out = f"results/{prefix}_{type}_kruskal.txt"
                 qq_out = f"results/{prefix}_{type}_qq.png"
 
+                print(f'running tests on {prefix} {type}')
                 # Shapiro-Wilk test
                 run_shapiro_tests(df, shapiro_out)
                 
