@@ -244,9 +244,9 @@ def plot_pca_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, no
     unique_predictions = prediction_df['overall_prediction'].unique()
 
     # define new cmap 
-    prediction_cmap = ListedColormap(['darkorchid', 'forestgreen', 'magenta', 'red',  'royalblue'])
+    prediction_cmap = ListedColormap(['darkorchid', 'forestgreen', 'magenta', 'firebrick',  'royalblue'])
     if unique_predictions[0] == 'NR4':
-        prediction_cmap = ListedColormap(['royalblue', 'red', 'magenta', 'forestgreen', 'darkorchid'])
+        prediction_cmap = ListedColormap(['royalblue', 'firebrick', 'magenta', 'forestgreen', 'darkorchid'])
 
 
     prediction_colors = plt.get_cmap(prediction_cmap, len(unique_predictions)).colors
@@ -254,7 +254,7 @@ def plot_pca_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, no
     for prediction, color in zip(unique_predictions, prediction_colors):
         pred_subset = prediction_df[prediction_df['overall_prediction'] == prediction]
         plt.scatter(pred_subset['pca1'], pred_subset['pca2'], 
-                    color=color, label=f'Prediction: {prediction}')
+                    color=color, label=f'Prediction: {prediction}', alpha=0.8)
 
     # Set plot titles and labels
     plt.title("PCA by Clade")
