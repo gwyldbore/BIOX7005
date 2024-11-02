@@ -38,13 +38,27 @@ def extract_mutation_counts(input_files) -> dict:
 
         # Track the first transition to each non-starting category
         for category in categories_to_track:
-            # Identify where the prediction changes to the target category
-            transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & (df['overall_prediction'] == category)]
+            # # Identify where the prediction changes to the target category
+            # transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & (df['overall_prediction'] == category)]
 
-            # If there is at least one such transition, store the first one
-            if not transition.empty:
-                first_transition = transition.iloc[0]
-                mutation_counts[category].append(first_transition['num_mutation'])
+            # # If there is at least one such transition, store the first one
+            # if not transition.empty:
+            #     first_transition = transition.iloc[0]
+            #     mutation_counts[category].append(first_transition['num_mutation'])
+
+            # Identify where the prediction changes to the target category
+            transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) & 
+                            (df['overall_prediction'] == category)]
+
+            # If there is at least one transition, store the first one if the next two predictions match
+            for _, row in transition.iterrows():
+                idx = row.name
+                if (idx + 2 < len(df) and 
+                    df.loc[idx + 1, 'overall_prediction'] == category and 
+                    df.loc[idx + 2, 'overall_prediction'] == category):
+                    mutation_counts[category].append(row['num_mutation'])
+                    break  # Stop after the first valid transition
+
 
     # Reorder mutation counts based on the valid categories order
     ordered_counts = {cat: mutation_counts[cat] for cat in categories_to_track if cat in mutation_counts}
@@ -81,11 +95,24 @@ def extract_mutated_positions(input_files):
             mutated_positions.pop('NR1', '')
 
         for category in categories_to_track:
+            # transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) &
+            #                 (df['overall_prediction'] == category)]
+            # if not transition.empty:
+            #     first_transition = transition.iloc[0]
+            #     mutated_positions[category].extend(first_transition['mutated_positions'])
+            
+            # Identify where the prediction changes to the target category
             transition = df[(df['overall_prediction'].shift() != df['overall_prediction']) &
                             (df['overall_prediction'] == category)]
-            if not transition.empty:
-                first_transition = transition.iloc[0]
-                mutated_positions[category].extend(first_transition['mutated_positions'])
+            
+            # If there is at least one transition, store the first one if the next two predictions match
+            for _, row in transition.iterrows():
+                idx = row.name
+                if (idx + 2 < len(df) and 
+                    df.loc[idx + 1, 'overall_prediction'] == category and 
+                    df.loc[idx + 2, 'overall_prediction'] == category):
+                    mutated_positions[category].extend(row['mutated_positions'])
+                    break  # Stop after the first valid transition
 
         ordered_positions = {cat: mutated_positions[cat] for cat in categories_to_track if mutated_positions[cat]}
     return ordered_positions, max_sequence_length
