@@ -109,7 +109,8 @@ def plot_pca_colour_by_predicted_ancestors_static(mutations_df, ancestors_df, no
 
     # Overlay predictions with new colors
     prediction_df = mutations_df.dropna(subset=['overall_prediction'])
-    unique_predictions = prediction_df['overall_prediction'].unique()
+    # unique_predictions = prediction_df['overall_prediction'].unique()
+    unique_predictions = ['NR1', 'NR1-like', 'NR4-like', 'NR4', 'other']
 
     # define new cmap
     prediction_cmap = ListedColormap(['darkorchid', 'forestgreen', 'magenta', 'firebrick',  'royalblue'])
