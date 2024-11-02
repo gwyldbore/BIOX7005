@@ -408,6 +408,7 @@ def main():
         height=5,  # Adjust the height of each plot
         aspect=1.2  # Control the aspect ratio of each plot
     )
+    
 
     # Remove individual x-axis labels from each subplot
     for ax in g.axes.flat:
@@ -424,6 +425,7 @@ def main():
 
     # Adjust the title and labels
     g.set_axis_labels('Method', 'Number of Mutations')
+    g.set(ylim=(0, 150))
     g.figure.subplots_adjust(bottom=0.25)
     # Add a single x-axis label for the entire plot
     plt.savefig(snakemake.output.boxplot_multi)
