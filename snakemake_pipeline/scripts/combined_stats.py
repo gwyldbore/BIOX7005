@@ -168,7 +168,22 @@ def plot_qq_grid(df, output_path):
 #             aggregated_df['method'] = method
 #             combined_data.append(aggregated_df)
 #     return pd.concat(combined_data, ignore_index=True)
-
+# Plotting function
+def plot_combined_boxplots(data, title, output_path):
+    g = sns.catplot(
+        data=data,
+        x='method',
+        y='num_mutation',
+        col='dataset',  # Separate plots for each dataset
+        kind='box',
+        height=6,
+        aspect=0.8
+    )
+    g.set_axis_labels('Method', 'Number of Mutations')
+    g.figure.suptitle(title, fontsize='x-large', fontweight='bold')
+    plt.tight_layout()
+    plt.savefig(output_path)
+    plt.close()
 
 
 def main():
@@ -206,6 +221,16 @@ def main():
     # Concatenate dataframes by prefix and type
     combined_dataframes = {key: pd.concat(dfs, ignore_index=True) for key, dfs in dataframes.items()}
     print(combined_dataframes)
+
+
+    # Generate plots for each prefix and type combination
+    for prefix in prefixes:
+        for type in types:
+            key = f"{prefix}_{type}"
+            if not combined_dataframes[key].empty:
+                title = f"Mutation Counts at {type.capitalize()} Family Prediction Change by Method - {prefix} Combined"
+                output_path = f"results/{prefix}_{type}_boxplot.png"
+                plot_combined_boxplots(combined_dataframes[key], title, output_path)
 
 if __name__ == "__main__":
     main()
