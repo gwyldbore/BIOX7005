@@ -155,34 +155,61 @@ def plot_qq_grid(df, output_path):
     plt.close()
 
 
-# Load, aggregate, and combine data for all datasets and methods
-def load_and_aggregate_data(base_path, datasets, methods, replicates):
-    combined_data = []
-    for dataset in datasets:
-        for method in methods:
-            # Pattern to match all replicate files for each dataset and method
-            file_pattern = os.path.join(base_path, dataset, method, "results", "*.csv")
-            files = glob.glob(file_pattern)
-            aggregated_df = pd.concat([pd.read_csv(file) for file in files], ignore_index=True)
-            aggregated_df['dataset'] = dataset
-            aggregated_df['method'] = method
-            combined_data.append(aggregated_df)
-    return pd.concat(combined_data, ignore_index=True)
+# # Load, aggregate, and combine data for all datasets and methods
+# def load_and_aggregate_data(base_path, datasets, methods, replicates):
+#     combined_data = []
+#     for dataset in datasets:
+#         for method in methods:
+#             # Pattern to match all replicate files for each dataset and method
+#             file_pattern = os.path.join(base_path, dataset, method, "results", "*.csv")
+#             files = glob.glob(file_pattern)
+#             aggregated_df = pd.concat([pd.read_csv(file) for file in files], ignore_index=True)
+#             aggregated_df['dataset'] = dataset
+#             aggregated_df['method'] = method
+#             combined_data.append(aggregated_df)
+#     return pd.concat(combined_data, ignore_index=True)
 
 
 
 def main():
-    # Define input and output file paths and parameters
-    base_path = "workflows"
-    datasets = ["cd70", "cd80", "cd85"]
-    methods = ["random", "nonconservative", "grantham_distances", "marginal_weights", "ConSurf"]
-    output_dir = "results/"
-    os.makedirs(output_dir, exist_ok=True)
+    # Define parameters
+    datasets = ['cd70', 'cd80', 'cd85']
+    methods = ['random', 'nonconservative', 'grantham_distances', 'marginal_weights', 'ConSurf']
+    reps = range(1, 51)
+    datafile_names = {
+        "cd70": ["NR1toNR4_N6_N81", "NR4toNR1_N81_N6"],
+        "cd80": ["NR1toNR4_N7_N186", "NR4toNR1_N186_N7"],
+        "cd85": ["NR1toNR4_N7_N299", "NR4toNR1_N299_N7"]
+    }
 
-    # Load and aggregate data
-    combined_df = load_and_aggregate_data(base_path, datasets, methods, replicates=50)
+    # Dictionary to store the data
+    dataframes = {}
 
-    print(combined_df)
+    # Load only the specified files
+    for dataset in datasets:
+        for method in methods:
+            for datafile_name in datafile_names[dataset]:
+                for rep in reps:
+                    # Construct file path
+                    file_path = f"workflows/{dataset}/{method}/results/{datafile_name}_{rep}.csv"
+                    
+                    # Check if file exists before loading
+                    if os.path.exists(file_path):
+                        # Initialize storage for each unique combination if not already present
+                        key = (dataset, datafile_name, method)
+                        if key not in dataframes:
+                            dataframes[key] = []
+                        
+                        # Read the CSV and append to the appropriate list
+                        df = pd.read_csv(file_path)
+                        df['dataset'] = dataset
+                        df['datafile_name'] = datafile_name
+                        df['method'] = method
+                        dataframes[key].append(df)
+
+    # Concatenate all dataframes for each key
+    for key in dataframes:
+        dataframes[key] = pd.concat(dataframes[key], ignore_index=True)
 
 
     # Load and combine data
@@ -191,7 +218,6 @@ def main():
     # Process for first and overall prediction changes
     first_changes_list, overall_changes_list = [], []
     for (dataset, method), group_df in combined_df.groupby(['dataset', 'method']):
-        print(group_df)
         first_changes = find_first_prediction_changes(group_df)
         if not first_changes.empty:
             first_changes['method'], first_changes['dataset'] = method, dataset
