@@ -325,13 +325,13 @@ def main():
 
                 print(f'running tests on {prefix} {type}')
                 # Shapiro-Wilk test
-                run_shapiro_tests(df, shapiro_out)
+                run_shapiro_tests(combined_dataframes[key], shapiro_out)
                 
                 # Kruskal-Wallis and Dunn's post-hoc tests
-                run_kruskal_wallis(df, kruskal_out, categories)
+                run_kruskal_wallis(combined_dataframes[key], kruskal_out, categories)
 
                 # QQ plot
-                plot_qq_grid(df, qq_out)
+                plot_qq_grid(combined_dataframes[key], qq_out)
 
 
 
