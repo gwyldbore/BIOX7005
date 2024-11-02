@@ -172,80 +172,34 @@ def plot_qq_grid(df, output_path):
 
 
 def main():
-    # Define parameters
-    datasets = ['cd70', 'cd80', 'cd85']
-    methods = ['random', 'nonconservative', 'grantham_distances', 'marginal_weights', 'ConSurf']
-    reps = range(1, 51)
-    datafile_names = {
-        "cd70": ["NR1toNR4_N6_N81", "NR4toNR1_N81_N6"],
-        "cd80": ["NR1toNR4_N7_N186", "NR4toNR1_N186_N7"],
-        "cd85": ["NR1toNR4_N7_N299", "NR4toNR1_N299_N7"]
-    }
+    # Define paths and prefixes
+    base_path = "workflows"
+    datasets = ["cd70", "cd80", "cd85"]
+    types = ["multichanges", "firstchanges"]
+    prefixes = ["NR1toNR4", "NR4toNR1"]
 
-    # Dictionary to store the data
-    dataframes = {}
+    # Initialize dictionaries to store dataframes for each prefix and type
+    dataframes = {f"{prefix}_{type}": [] for prefix in prefixes for type in types}
 
-    # Load only the specified files
+
+    # Load CSV files and group by prefix and type
     for dataset in datasets:
-        for method in methods:
-            for datafile_name in datafile_names[dataset]:
-                for rep in reps:
-                    # Construct file path
-                    file_path = f"workflows/{dataset}/{method}/results/{datafile_name}_{rep}.csv"
-                    
-                    # Check if file exists before loading
-                    if os.path.exists(file_path):
-                        # Initialize storage for each unique combination if not already present
-                        key = (dataset, datafile_name, method)
-                        if key not in dataframes:
-                            dataframes[key] = []
-                        
-                        # Read the CSV and append to the appropriate list
-                        df = pd.read_csv(file_path)
+        print(f'dataset: {dataset}')
+        for type in types:
+            print(f'type: {type}')
+            # Path pattern to match CSV files
+            csv_files = glob.glob(os.path.join(base_path, dataset, "results", f"{dataset}_*_{type}.csv"))
+            for file in csv_files:
+                print(f'file: {file}')
+                df = pd.read_csv(file)
+                # Extract the datafile prefix (NR1toNR4 or NR4toNR1)
+                datafile_name = os.path.basename(file).split('_')[1]  # assumes dataset_name_datafile_type.csv format
+                for prefix in prefixes:
+                    if datafile_name.startswith(prefix):
+                        # Add dataset information
                         df['dataset'] = dataset
-                        df['datafile_name'] = datafile_name
-                        df['method'] = method
-                        dataframes[key].append(df)
-
-    # Concatenate all dataframes for each key
-    for key in dataframes:
-        dataframes[key] = pd.concat(dataframes[key], ignore_index=True)
-
-
-    # Initialize lists to store aggregated results
-    first_changes_list = []
-    overall_changes_list = []
-
-    # Process each dataframe in dataframes dictionary
-    for (dataset, datafile_name, method), df in dataframes.items():
-        # Find first and overall prediction changes
-        first_changes = find_first_prediction_changes(df)
-        overall_changes = find_overall_prediction_changes(df)
-        
-        # Annotate and add to lists
-        first_changes['method'] = method
-        first_changes['dataset'] = dataset
-        first_changes_list.append(first_changes[['dataset', 'method', 'overall_prediction', 'num_mutation']])
-
-        overall_changes['method'] = method
-        overall_changes['dataset'] = dataset
-        overall_changes_list.append(overall_changes[['dataset', 'method', 'overall_prediction', 'num_mutation']])
-
-    # Concatenate aggregated data
-    first_changes_df = pd.concat(first_changes_list, ignore_index=True)
-    overall_changes_df = pd.concat(overall_changes_list, ignore_index=True)
-
-
-    print(f'first changes: \n {first_changes_df}')
-    print(f'overall changes: \n {overall_changes_df}')
-
-
-    # Generate boxplots
-    create_boxplots(first_changes_df, "First Prediction Changes by Method - Combined Data", "results/first_changes_boxplot.png")
-    create_boxplots(overall_changes_df, "Overall Prediction Changes by Method - Combined Data", "results/overall_changes_boxplot.png")
-
-
-
+                        # Append to appropriate list in the dictionary
+                        dataframes[f"{prefix}_{type}"].append(df)
 
 if __name__ == "__main__":
     main()
