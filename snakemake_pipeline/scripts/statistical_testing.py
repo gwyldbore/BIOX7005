@@ -431,6 +431,7 @@ def main():
     g.figure.subplots_adjust(bottom=0.25, top=0.88)
     plt.savefig(snakemake.output.boxplot_multi)
     plt.close() # close to save memory
+    
 
 
 
