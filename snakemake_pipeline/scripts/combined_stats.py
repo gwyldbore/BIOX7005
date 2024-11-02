@@ -178,7 +178,7 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
 
     # Load and aggregate data
-    combined_df = load_and_aggregate_data(base_path, datasets, methods, NUM_REPLICATES=50)
+    combined_df = load_and_aggregate_data(base_path, datasets, methods, replicates=50)
 
 
 
