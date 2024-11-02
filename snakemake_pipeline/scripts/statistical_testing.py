@@ -32,10 +32,28 @@ def find_first_prediction_changes(df):
     # Exclude the first row and any rows where the category reverts to the initial one.
     valid_changes = changes[changes['overall_prediction'] != initial_category].iloc[1:]
 
-    # Keep only the first instance of each unique `overall_prediction` change.
-    first_unique_changes = valid_changes.drop_duplicates(subset=['overall_prediction'], keep='first')
+    # # Keep only the first instance of each unique `overall_prediction` change.
+    # first_unique_changes = valid_changes.drop_duplicates(subset=['overall_prediction'], keep='first')
 
-    return first_unique_changes
+
+        # Create an empty list to store the rows that meet the condition.
+    filtered_changes = []
+
+    # Loop over valid changes and check if the next two rows match the current category.
+    for idx, row in valid_changes.iterrows():
+        current_prediction = row['overall_prediction']
+        
+        # Check if the next two predictions are the same as the current prediction
+        if (idx + 2 < len(df) and 
+            df.loc[idx + 1, 'overall_prediction'] == current_prediction and 
+            df.loc[idx + 2, 'overall_prediction'] == current_prediction):
+            filtered_changes.append(row)
+    
+    # Convert the list back to a DataFrame
+    result_df = pd.DataFrame(filtered_changes)
+
+    # return first_unique_changes
+    return result_df
 
 
 
