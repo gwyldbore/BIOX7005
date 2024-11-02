@@ -117,7 +117,7 @@ def run_shapiro_tests(df, output_path):
 
 # Kruskal-Wallis Test
 def run_kruskal_wallis(df, output_path):
-    categories = df['overall_prediction'].unique().dropna()
+    categories = df['overall_prediction'].dropna().unique()
     with open(output_path, 'w') as f:
         f.write("Kruskal-Wallis Test Results\n")
         f.write("=" * 40 + "\n")
