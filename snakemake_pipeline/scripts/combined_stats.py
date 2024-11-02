@@ -201,7 +201,11 @@ def main():
                         # Append to appropriate list in the dictionary
                         dataframes[f"{prefix}_{type}"].append(df)
 
-    print(dataframes)
+    # print(dataframes)
+
+    # Concatenate dataframes by prefix and type
+    combined_dataframes = {key: pd.concat(dfs, ignore_index=True) for key, dfs in dataframes.items()}
+    print(combined_dataframes)
 
 if __name__ == "__main__":
     main()
