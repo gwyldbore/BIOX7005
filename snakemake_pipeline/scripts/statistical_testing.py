@@ -66,10 +66,12 @@ def find_overall_prediction_changes(df):
     for idx, row in valid_changes.iterrows():
         current_prediction = row['overall_prediction']
         
-        # Check if the next two predictions are the same as the current prediction
-        if (idx + 2 < len(df) and 
+        # Check if the next four predictions are the same as the current prediction
+        if (idx + 4 < len(df) and 
             df.loc[idx + 1, 'overall_prediction'] == current_prediction and 
-            df.loc[idx + 2, 'overall_prediction'] == current_prediction):
+            df.loc[idx + 2, 'overall_prediction'] == current_prediction and
+            df.loc[idx + 3, 'overall_prediction'] == current_prediction and
+            df.loc[idx + 4, 'overall_prediction'] == current_prediction):
             filtered_changes.append(row)
     
     # Convert the list back to a DataFrame

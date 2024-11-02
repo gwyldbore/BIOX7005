@@ -48,9 +48,11 @@ def extract_mutation_counts(input_files) -> dict:
             # If there is at least one transition, store the first one if the next two predictions match
             for _, row in transition.iterrows():
                 idx = row.name
-                if (idx + 2 < len(df) and 
-                    df.loc[idx + 1, 'overall_prediction'] == category and 
-                    df.loc[idx + 2, 'overall_prediction'] == category):
+                if (idx + 4 < len(df) and 
+                    df.loc[idx + 1, 'overall_prediction'] == current_prediction and 
+                    df.loc[idx + 2, 'overall_prediction'] == current_prediction and
+                    df.loc[idx + 3, 'overall_prediction'] == current_prediction and
+                    df.loc[idx + 4, 'overall_prediction'] == current_prediction):
                     mutation_counts[category].append(row['num_mutation'])
                     break  # Stop after the first valid transition
 
@@ -103,9 +105,11 @@ def extract_mutated_positions(input_files):
             # If there is at least one transition, store the first one if the next two predictions match
             for _, row in transition.iterrows():
                 idx = row.name
-                if (idx + 2 < len(df) and 
+                if (idx + 4 < len(df) and 
                     df.loc[idx + 1, 'overall_prediction'] == category and 
-                    df.loc[idx + 2, 'overall_prediction'] == category):
+                    df.loc[idx + 2, 'overall_prediction'] == category and
+                    df.loc[idx + 3, 'overall_prediction'] == category and
+                    df.loc[idx + 4, 'overall_prediction'] == category):
                     mutated_positions[category].extend(row['mutated_positions'])
                     break  # Stop after the first valid transition
 
