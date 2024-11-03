@@ -335,6 +335,7 @@ def main():
 
     grouped_first_results = []
     grouped_results = []
+    all_data = []
 
     for file in input_files:
         df = pd.read_csv(file)
@@ -343,6 +344,7 @@ def main():
 
         grouped_first_results.append(first_changes)
         grouped_results.append(actual_changes)
+        all_data.append(df)
 
     # can just run this on the last one as it'll be the same for all of them
     initial_category = get_initial_category(df)
@@ -457,49 +459,47 @@ def main():
 
 
     # CREATE A VERSION THAT PLOTS ALL OF THE VALUES FOR A FAMILY NOT JUST WHERE IT CHANGES
-    # Combine both first changes and overall changes dataframes for a unified plot
-    grouped_all_values = pd.concat([grouped_first_df, grouped_df], ignore_index=True)
+
+    combined_df = pd.concat(all_data, ignore_index=True)
 
     # Clean method names if not already cleaned
-    grouped_all_values['method'] = grouped_all_values['method'].apply(clean_name)
+    combined_df['method'] = combined_df['method'].apply(clean_name)
 
     # Define the categorical order for `overall_prediction`
-    initial_category = get_initial_category(grouped_all_values)
-    order = get_prediction_order(initial_category)
-    grouped_all_values['overall_prediction'] = pd.Categorical(
-        grouped_all_values['overall_prediction'], categories=order, ordered=True
-    )
+    initial_category = get_initial_category(combined_df)
+    if initial_category == "NR1":
+        order = ["NR1", "NR1-like", "NR4-like", "NR4", "other"]
+    else:
+        order = ['other', 'NR4', 'NR4-like', 'NR1-like', 'NR1']
 
-    # Save the concatenated all-values dataframe to a CSV file
-    # grouped_all_values.to_csv(snakemake.output.all_values_df, index=False)
+    # Set order for plotting
+    combined_df['overall_prediction'] = pd.Categorical(combined_df['overall_prediction'], categories=order, ordered=True)
 
-    # Plot combined box plot with all values, grouped by method
+    # Plot range of values across predictions grouped by method
+    plt.figure(figsize=(10, 8))
     g = sns.catplot(
-        data=grouped_all_values,
+        data=combined_df,
         x='method',
         y='num_mutation',
-        col='overall_prediction',  # Separate plots for each category
+        col='overall_prediction',  # Separate plot for each prediction
         kind='box',
-        height=7,
-        aspect=0.8
+        height=6,
+        aspect=0.7
     )
 
-    # Customize plot titles and labels
+    # Adjust layout and labels
     for ax in g.axes.flat:
-        original_title = ax.get_title().split(' = ')[1]
-        ax.set_title(clean_name(original_title), fontsize=12, fontweight='bold', pad=10)
         ax.set_xlabel('')
-        for label in ax.get_xticklabels():
-            label.set_rotation(30)
-            label.set_ha('right')
+        ax.set_title(ax.get_title().replace('overall_prediction = ', ''))
 
-    # Adjust the title and labels
+    # Set main plot title
     g.set_axis_labels('Method', 'Number of Mutations')
-    g.figure.suptitle("Combined Mutation Counts by Overall Prediction Category and Method", fontsize='x-large', fontweight='bold')
-    g.set(ylim=(0, 150))
-    g.figure.subplots_adjust(bottom=0.25, top=0.88)
+    g.figure.suptitle("Mutation Counts Across All Predictions by Method", fontsize='x-large', fontweight='bold')
+    g.figure.subplots_adjust(top=0.9)  # Adjust to fit title
+
+    # Save the plot
     plt.savefig(snakemake.output.boxplot_combined)
-    plt.close()  # Free memory
+    plt.close()
 
     # Run additional statistical tests if desired
     # plot_qq_grid(grouped_all_values, snakemake.output.qqplot_combined)
