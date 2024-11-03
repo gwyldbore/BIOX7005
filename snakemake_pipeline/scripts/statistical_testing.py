@@ -470,7 +470,7 @@ def main():
     if initial_category == "NR1":
         order = ["NR1", "NR1-like", "NR4-like", "NR4", "other"]
     else:
-        order = ['other', 'NR4', 'NR4-like', 'NR1-like', 'NR1']
+        order = ['NR4', 'NR4-like', 'NR1-like', 'NR1', 'other']
 
     # Set order for plotting
     combined_df['overall_prediction'] = pd.Categorical(combined_df['overall_prediction'], categories=order, ordered=True)
@@ -492,10 +492,15 @@ def main():
         ax.set_xlabel('')
         ax.set_title(ax.get_title().replace('overall_prediction = ', ''))
 
+        # Rotate x-axis labels for readability
+        for label in ax.get_xticklabels():
+            label.set_rotation(30)
+            label.set_ha('right')
+
     # Set main plot title
     g.set_axis_labels('Method', 'Number of Mutations')
     g.figure.suptitle("Mutation Counts Across All Predictions by Method", fontsize='x-large', fontweight='bold')
-    g.figure.subplots_adjust(top=0.9)  # Adjust to fit title
+    g.figure.subplots_adjust(top=0.25, bottom=0.88)  # Adjust to fit title
 
     # Save the plot
     plt.savefig(snakemake.output.boxplot_combined)
