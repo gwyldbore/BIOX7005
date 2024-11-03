@@ -333,6 +333,7 @@ rule perform_statistical_testing:
         qqplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_qqplot.png",
         shapiro="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_shapiro.txt",
         kruskal="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_kruskal.txt",
+        boxplot_combined="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_combined.png"
     script:
         "scripts/statistical_testing.py"
 
