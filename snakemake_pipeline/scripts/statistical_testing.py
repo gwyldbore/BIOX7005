@@ -500,7 +500,7 @@ def main():
     # Set main plot title
     g.set_axis_labels('Method', 'Number of Mutations')
     g.figure.suptitle("Mutation Counts Across All Predictions by Method", fontsize='x-large', fontweight='bold')
-    g.figure.subplots_adjust(top=0.25, bottom=0.88)  # Adjust to fit title
+    g.figure.subplots_adjust(top=0.88, bottom=0.25)  # Adjust to fit title
 
     # Save the plot
     plt.savefig(snakemake.output.boxplot_combined)
