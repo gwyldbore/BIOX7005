@@ -328,11 +328,14 @@ rule perform_statistical_testing:
     output:
         boxplot_first="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_first.png",
         first_df="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_firstchanges.csv",
+        qqplot_first="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_qqplot_first.png",
+        shapiro_first="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_shapiro_first.txt",
+        kruskal_first="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_kruskal_first.txt",
         multi_df="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_multichanges.csv",
         boxplot_multi="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_multi.png",
-        qqplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_qqplot.png",
-        shapiro="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_shapiro.txt",
-        kruskal="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_kruskal.txt",
+        qqplot="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_qqplot_grouped.png",
+        shapiro="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_shapiro_grouped.txt",
+        kruskal="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_kruskal_grouped.txt",
         boxplot_combined="workflows/{dataset_name}/results/{dataset_name}_{datafile_name}_boxplot_combined.png"
     script:
         "scripts/statistical_testing.py"

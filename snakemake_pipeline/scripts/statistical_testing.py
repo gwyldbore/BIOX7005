@@ -456,6 +456,16 @@ def main():
 
 
 
+    # get the stats for the first change method too:
+    plot_qq_grid(grouped_first_df, snakemake.output.qqplot_first)
+
+    # Run Shapiro-Wilk tests and write the results to a text file
+    run_shapiro_tests(grouped_first_df, snakemake.output.shapiro_first)
+
+    run_kruskal_wallis(grouped_first_df, snakemake.output.kruskal_first)
+
+
+
 
 
     # CREATE A VERSION THAT PLOTS ALL OF THE VALUES FOR A FAMILY NOT JUST WHERE IT CHANGES
